@@ -1,0 +1,42 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+}
+
+.nav-links {
+    display: flex; /* Arrange items in a row */
+    gap: 15px; /* Adds space between links */
+    list-style: none; /* Remove default bullets */
+    padding: 0; /* Remove default padding */
+  }
+  
+  .nav-links li {
+    margin: 0;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+  }
+  
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+.navbar-right a{
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-left a{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}

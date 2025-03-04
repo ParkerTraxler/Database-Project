@@ -12,6 +12,7 @@ import Exhibits from './pages/Exhibits'
 import Collections from './pages/Collections'
 import AccountDetails from './pages/AccountDetails'
 import ReportProblem from './pages/ReportProblem'
+import Navbar from "./Navbar.js"
 
 import {
   BrowserRouter,
@@ -23,6 +24,8 @@ import {
 function App() {
   return (
     <div className="App">
+      <Navbar />
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<FrontPage/>}/>

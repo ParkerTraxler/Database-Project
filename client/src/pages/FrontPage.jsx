@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const FrontPage = () => {
     console.log("FrontPage")
@@ -6,6 +7,8 @@ const FrontPage = () => {
     return(
         <div>
             Front Page
+
+            
         </div>
     )
 }
