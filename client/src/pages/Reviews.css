@@ -1,0 +1,9 @@
+.mirroredStar {
+    transform: scaleX(-1);
+    margin-left: -24px;
+}
+
+.starReview{
+    display: flex;
+    gap: 0px;
+}
