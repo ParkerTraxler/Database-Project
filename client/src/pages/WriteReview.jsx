@@ -23,6 +23,10 @@ const WriteReview = () => {
         setHover(0);
     };
 
+    const handleSubmit = () => {
+
+    };
+
     return (
         <div className="container">
             <div className="Review-box">
@@ -89,10 +93,12 @@ const WriteReview = () => {
                         onChange={(e) => setReview({ ...review, description: e.target.value })}
                     ></textarea>
                 </div>
+                <button onClick={handleClick}>Submit Review</button> {/*TEMPORARY - Button does not work, needs backend*/ }
 
                 <div className="no-account">
                     Don't have an account? <a href="/sign-up">Sign Up</a>
                 </div>
+                <a href = "/edit-review">Edit a Review</a>
             </div>
         </div>
     );
