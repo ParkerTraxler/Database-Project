@@ -30,8 +30,9 @@ const Reviews = () => {
                     );
                 })}
             </div>
+            <p></p>
             
-            
+            <a href = "/write-review">Review Us!</a>
         </div>
     )
 }
