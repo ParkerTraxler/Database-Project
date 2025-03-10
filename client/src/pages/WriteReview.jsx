@@ -93,7 +93,7 @@ const WriteReview = () => {
                         onChange={(e) => setReview({ ...review, description: e.target.value })}
                     ></textarea>
                 </div>
-                <button onClick={handleClick}>Submit Review</button> {/*TEMPORARY - Button does not work, needs backend*/ }
+                <button onClick={handleClick}>Submit Review</button> {/*TEMPORARY*/ }
 
                 <div className="no-account">
                     Don't have an account? <a href="/sign-up">Sign Up</a>
