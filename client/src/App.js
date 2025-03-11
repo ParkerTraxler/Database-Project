@@ -13,6 +13,7 @@ import Collections from './pages/Collections'
 import AccountDetails from './pages/AccountDetails'
 import ReportProblem from './pages/ReportProblem'
 import Navbar from "./Navbar.js"
+import Footer from "./Footer.jsx"
 
 import {
   BrowserRouter,
@@ -43,6 +44,7 @@ function App() {
           <Route path="/report-problem" element={<ReportProblem/>}/>
         </Routes>
       </BrowserRouter>
+      <Footer/>
     </div>
   );
 }
