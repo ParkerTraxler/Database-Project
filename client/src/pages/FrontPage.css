@@ -119,8 +119,114 @@
     line-height: 1.5;    
     margin-bottom: 10px;   
 }
+
+
+/* Rules Page */
+.rules-container {
+    display: flex;           
+    height: 100vh;           
+}
+
+.imageRules-section {
+    flex: 1;                
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    background-image: url('../assets/rules.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;          
+    height: auto;           
+    max-height: 100%; 
+}
+
+.rules-section {
+    flex: 1;                 
+    padding: 20px;           
+    background-color: rgb(106, 139, 149);
+    color: white;             
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    overflow-y: auto;        
+}
   
 
+.rules-section h1 {
+    margin-bottom: 20px;     
+    font-size: 2rem;
+    text-align: center;
+}
+  
+.rules-section h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+  
+.rules-section ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+  
+.rules-section ul li {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    line-height: 1.6;
+}
+  
+.rules-section section {
+    margin-bottom: 20px;
+}
+
+/*map page*/
+.map-container {
+    padding: 20px;
+    text-align: center;
+}
+  
+.map-container h1 {
+    font-size: 2rem;
+    margin-bottom: 50px;
+}
+  
+.floor-maps {
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px; 
+    justify-items: center; 
+    max-width: 1200px;
+    margin: 0 auto;
+}
+  
+.map-item {
+    text-align: center;
+}
+  
+.floor-image {
+    max-width: 100%;
+    height: auto; 
+    border-radius: 10px; 
+}
+  
+.description {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #f9f9f9; 
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+  
+.description h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+  
+.description p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
 
 
 
