@@ -69,6 +69,7 @@
     color: black;
     font-size: 1.5rem;
     text-align: left;
+    overflow-y: auto;  
 }
 
 .white-box h2 {
@@ -230,4 +231,47 @@
 
 
 
-  
+/*parking*/
+.parking-page-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-image: url('../assets/park.jpg'); 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay-box {
+    background-color: rgba(255, 255, 255, 0.8); 
+    padding: 20px;
+    width: 80%;  
+    max-width: 800px;  
+    box-sizing: border-box;
+    border-radius: 10px;
+    overflow-y: auto;  
+}
+
+.overlay-box h1 {
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.overlay-box h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.overlay-box ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.overlay-box ul li {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}

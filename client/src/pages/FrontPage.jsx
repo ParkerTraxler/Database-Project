@@ -5,6 +5,7 @@ import floor1Image from "../assets/floor1.png"
 import floor2Image from "../assets/floor2.png"
 import floor3Image from "../assets/floor3.png"
 import legendImage from "../assets/map_legend.png"
+import FAQPage from './FAQPage'
 
 
 const FrontPage = () => {
@@ -91,6 +92,7 @@ const FrontPage = () => {
                         <ul>
                             <li>The museum is fully wheelchair accessible.</li>
                             <li>Service animals are welcome in all areas of the museum.</li>
+                            <li>Sign language interpreters are available upon request.</li>
                         </ul>
                     </section>
 
@@ -184,6 +186,33 @@ const FrontPage = () => {
 
             
 
+
+            <div className="parking-page-container">
+                <div className="overlay-box">
+                    <h1>Parking Information</h1>
+                    <ul>
+                        <li>We offer a plethora of parking choices based on your needs.</li>
+                        <li>Payment methods accepted: Credit/Debit cards, Cash, and Text to Pay.</li>
+                    </ul>
+                    <h2>Shasta's Parking Garage</h2>
+                    <ul>
+                        <li>Located across the museum entrance.</li>
+                        <li>Open Monday to Friday: 8:30 AM - 11 PM.</li>
+                        <li>Open Saturday: 9:30 AM - 8 PM.</li>
+                        <li>Rate: $5 per hour.</li>
+                    </ul>
+                    <h2>Additional Parking Choices</h2>
+                    <ul>
+                        <li>Parking Lot Zone A (0.1 miles away): $3 per hour.</li>
+                        <li>Parking Lot Zone B (0.15 miles away): $2.75 per hour.</li>
+                        <li>Street Parking: Free from 6:00 PM - 6:00 AM, otherwise $2 per hour.</li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <FAQPage/>
+            
 
         </div>
     );
