@@ -1,12 +1,9 @@
 const http = require('http');
-const db = require('./db');
-const PORT = 3000;
+const handleRoutes = require('./routes');
+const PORT = 3001;
 
-const server = http.createServer(async (req, res) => {
-    // ...
-});
+const server = http.createServer(handleRoutes);
 
 server.listen(PORT, () => {
-    console.log(`Servering is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
-
