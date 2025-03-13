@@ -209,6 +209,20 @@ const FrontPage = () => {
                     </ul>
                 </div>
             </div>
+            
+
+
+            <div className="contact-container">
+                <div className="imageContact-section"></div>
+
+                <div className="infoContact-section">
+                    <h2>Contact Us</h2>
+                    <p><strong>Address:</strong> 1008 Josie St, Houston, TX 77005</p>
+                    <p><strong>Email:</strong> shastasfamuseum@gmail.com</p>
+                    <p><strong>Phone:</strong> 281-529-3380</p>
+                </div>
+            </div>
+
 
 
             <FAQPage/>

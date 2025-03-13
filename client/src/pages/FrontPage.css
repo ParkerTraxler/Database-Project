@@ -275,3 +275,44 @@
     font-size: 1.1rem;
     margin-bottom: 10px;
 }
+
+
+/* Contact Page */
+.contact-container {
+    display: flex;           
+    height: 100vh;           
+}
+
+.imageContact-section {
+    flex: 1;                
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    background-image: url('../assets/contact.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;          
+    height: auto;           
+    max-height: 100%; 
+}
+
+.infoContact-section {
+    flex: 1;      
+    padding: 20px;        
+    color: white;             
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: rgb(74, 37, 6);
+}
+
+.infoContact-section h2 {
+    margin-bottom: 20px;    
+    font-size: 2rem;
+}
+
+.infoContact-section p {
+    font-size: 1.2rem;
+    line-height: 1.5;    
+    margin-bottom: 10px;   
+}
