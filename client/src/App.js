@@ -12,6 +12,7 @@ import Exhibits from './pages/Exhibits'
 import Collections from './pages/Collections'
 import AccountDetails from './pages/AccountDetails'
 import ReportProblem from './pages/ReportProblem'
+import EditAccount from './pages/EditAccount.jsx'
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 
@@ -42,6 +43,7 @@ function App() {
           <Route path="/collections" element={<Collections/>}/>
           <Route path="/account-details" element={<AccountDetails/>}/>
           <Route path="/report-problem" element={<ReportProblem/>}/>
+          <Route path="/account-details/edit" element={<EditAccount/>}/>
         </Routes>
       </BrowserRouter>
       <Footer/>
