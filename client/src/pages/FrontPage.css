@@ -37,39 +37,39 @@
     height: 100vh;
     color: white;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     position: relative;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .heading {
-    position: absolute;
-    top: 7%; 
-    left: 50%; 
-    transform: translateX(-50%); 
     font-size: 3rem; 
     color: black; 
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
     font-family: Playfair Display, sans-serif;
+    margin-bottom: 20px;
 }
 
 .white-box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     width: 60%; 
-    height: 500px; 
+    max-width: 800px;
+    max-height: 80vh;
+    height: auto; 
     padding: 20px;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px; 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     color: black;
     font-size: 1.5rem;
     text-align: left;
     overflow-y: auto;  
+    box-sizing: border-box;
 }
 
 .white-box h2 {
@@ -108,6 +108,7 @@
     flex-direction: column;
     justify-content: center;
     background-color: rgb(110, 109, 84);
+    overflow-y: auto;  
 }
 
 .info-section h2 {
