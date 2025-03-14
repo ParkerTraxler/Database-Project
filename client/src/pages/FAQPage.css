@@ -29,6 +29,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    text-align: center;     
     color: black;
     overflow-y: auto;  
     box-sizing: border-box;
