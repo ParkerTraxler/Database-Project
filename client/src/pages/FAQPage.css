@@ -6,19 +6,32 @@
     background-size: cover;
     background-position: center;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-.faq-wrapper h1 {
+.faqheader {
+    font-size: 3rem;
     color: white;
+    margin-bottom: 20px;
 }
 
 .faq-container {
     padding: 20px;
-    min-width: 500px;
-    max-width: 900px;
-    margin: 0 auto;
+    width: 60%; 
+    max-width: 600px;
+    max-height: 80vh;
+    height: auto; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: black;
+    overflow-y: auto;  
+    box-sizing: border-box;
 }
 
 .faq-list {

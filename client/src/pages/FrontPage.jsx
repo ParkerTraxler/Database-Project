@@ -24,7 +24,7 @@ const FrontPage = () => {
             </div>
 
             <div className="aboutStyle">
-                <div class="heading">
+                <div className="heading">
                     About Us
                 </div>
                 <div className="white-box">

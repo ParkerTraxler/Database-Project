@@ -21,8 +21,10 @@ const FAQPage = () => {
 
     return (
         <div className = "faq-wrapper">
+             <div className="faqheader">
+                    FAQs
+            </div>
             <div className="faq-container">
-                <h1>FAQs</h1>
                 <div className="faq-list">
                     {faqData.map((faq, index) => (
                         <div key={index} className="faq-item">
