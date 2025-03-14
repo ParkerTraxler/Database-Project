@@ -241,8 +241,11 @@
     background-size: cover;
     background-position: center;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .overlay-box {
@@ -250,6 +253,12 @@
     padding: 20px;
     width: 80%;  
     max-width: 800px;  
+    max-height: 80vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     box-sizing: border-box;
     border-radius: 10px;
     overflow-y: auto;  
