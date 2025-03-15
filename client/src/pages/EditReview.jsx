@@ -28,9 +28,9 @@ const EditReview = () => {
             <div className="Review-box">
                 <h1 className="Header">Edit your Review</h1>
                 <div className="input-group">
-                    First Name:
+                    <label>First Name:</label>
                     <input className="names" type="text" placeholder="First Name" maxLength="30" name="firstname" />
-                    Last Name:
+                    <label>Last Name:</label>
                     <input className="names" type="text" placeholder="Last Name" maxLength="30" name="lastname" />
 
                     {/* Star Rating Section */}
@@ -81,7 +81,7 @@ const EditReview = () => {
                     </div>
 
                     {/* Review Input */}
-                    Write a Review:
+                    <label>Write a Review:</label>
                     <textarea className="Review"
                         placeholder="What should other customers know?" 
                         maxLength="300"
