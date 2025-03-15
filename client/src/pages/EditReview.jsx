@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
-import "./WriteReview.css";
+import "./EditReview.css";
 
-const WriteReview = () => {
+const EditReview = () => {
     const [review, setReview] = useState({
         rating: 0,
         description: "",
