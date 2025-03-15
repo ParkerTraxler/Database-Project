@@ -32,9 +32,9 @@ const WriteReview = () => {
             <div className="Review-box">
                 <h1 className="Header">Write a Review</h1>
                 <div className="input-group">
-                    First Name:
+                    <label>First Name:</label>
                     <input className="names" type="text" placeholder="First Name" maxLength="30" name="firstname" />
-                    Last Name:
+                    <label>Last Name:</label>
                     <input className="names" type="text" placeholder="Last Name" maxLength="30" name="lastname" />
 
                     {/* Star Rating Section */}
@@ -45,7 +45,7 @@ const WriteReview = () => {
 
                             return (
                                 <span key={index} style={{ cursor: "pointer", position: "relative" }}>
-                                    {/* Left Half Star, Click for half rating */}
+                                    {/* left half star, click for half rating */}
                                     <span
                                         style={{
                                             position: "absolute",
@@ -58,7 +58,7 @@ const WriteReview = () => {
                                         onMouseEnter={() => handleHover(index, true)}
                                     />
 
-                                    {/* Right Half Star, Click for full rating */}
+                                    {/* right half star, click for full rating */}
                                     <span
                                         style={{
                                             position: "absolute",
@@ -71,7 +71,7 @@ const WriteReview = () => {
                                         onMouseEnter={() => handleHover(index, false)}
                                     />
 
-                                    {/* Render full or half-star */}
+                                    {/* render full/half star */}
                                     {fullStar ? (
                                         <FaStar size={24} color="gold" />
                                     ) : halfStar ? (
@@ -85,7 +85,7 @@ const WriteReview = () => {
                     </div>
 
                     {/* Review Input */}
-                    Write a Review:
+                    <label>Write a Review:</label>
                     <textarea className="Review"
                         placeholder="What should other customers know?" 
                         maxLength="300"
