@@ -95,4 +95,4 @@ const EditReview = () => {
     );
 };
 
-export default WriteReview;
+export default EditReview;
