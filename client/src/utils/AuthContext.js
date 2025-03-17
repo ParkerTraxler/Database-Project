@@ -1,7 +1,3 @@
-//NONE OF THIS DUMB CHAT GPT CODE WORKS 
-//PROBABLY NEED TO SCRAP AND FIND A NEW APPROACH
-
-
 import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
