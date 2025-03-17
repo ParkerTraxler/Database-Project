@@ -1,14 +1,17 @@
 import React from 'react'
 import { useState } from 'react'
 import axios from 'axios' //api calls
+import { useAuth } from '../utils/AuthContext'
+import { useNavigate } from 'react-router-dom'
 import './LogIn.css' // SignUp.jsx also uses LogIn.css
 
 
 const LogIn = () => {
     console.log("LogIn")
+    const { login } = useAuth()
     const invalidChars = /[+=*\/<>"'|~`()^_{}[\]?]/;
 
-    const [login, setLogin] = useState({ //login json inialized to be empty
+    const [data, setLogin] = useState({ //login json inialized to be empty
         email:"",
         password:"",
     })
@@ -17,21 +20,25 @@ const LogIn = () => {
 
     const handleChange = (e) =>{ // given target to given value
         setLogin(prev=>({...prev, [e.target.name]: e.target.value}))
-        console.log(login)
+        console.log(data)
     }
 
+    const navigate = useNavigate()
+
     const handleClick = async (e) => {
-        console.log(login)
-        if (invalidChars.test(login.email)) {
+        console.log(data)
+        if (invalidChars.test(data.email)) {
             setErrorMessage("Email has invalid characters.");
             return;
         }
-        else if (invalidChars.test(login.password)) {
+        else if (invalidChars.test(data.password)) {
             setErrorMessage("Password has invalid characters.");
             return;
         }
         else{
             e.preventDefault()  //prevents page refresh on button click
+            login(data.email, 'customer')
+            navigate('/')
             try{
                 await axios.post("http://localhost:3000/log-in", login)
             }

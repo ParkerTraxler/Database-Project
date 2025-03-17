@@ -1,0 +1,37 @@
+.managerView {
+    display: flex;
+}
+
+.managerDashboard {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #333;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-right: 6px  #5e5858;
+    border-right-style: inset;
+}
+
+.managerDashboard h1{
+    color: white;
+    font-size: x-large;
+    text-decoration: underline;
+}
+
+
+.dashLinks {
+    list-style: none;
+    gap: 25px;
+    
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.dashLinks a {
+    text-decoration: none;
+    color: white;
+    
+}
