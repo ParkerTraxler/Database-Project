@@ -45,6 +45,7 @@ const Navbar = () => {
                     <a href="/" onClick={logout}>Log Out</a>
                     <a href="/account-details">Account</a>
                 </>)}
+                
                 {role == 'manager' && (<>
                     <a href="/" onClick={logout}>Log Out</a>
                     <a href="/manager-dashboard">Dashboard</a>

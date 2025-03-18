@@ -22,16 +22,6 @@ const ProtectedRoutes = () => {
         }
     }, [user, loading, isLoggingOut]);
     
-    useEffect(() => {
-        if (!loading && user && (role ==='manager' || role === 'employee') && !hasAlerted.current){
-            alert("Only customers have access to these pages");
-            hasAlerted.current = true; // Prevents further alerts
-        }
-        else if (!loading && role !== 'customer' && !hasAlerted.current) {
-            alert("You do not have access to this page");
-            hasAlerted.current = true; // Prevents further alerts
-        }
-    }, [user]);
 
     if (loading) {
         return <div>Loading...</div>;  // Render loading state if user is being fetched
