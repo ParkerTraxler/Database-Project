@@ -15,7 +15,7 @@ import ReportProblem from './pages/ReportProblem'
 import EditAccount from './pages/EditAccount.jsx'
 import ManagerDashboard from './managerPages/ManagerDashboard.jsx';
 import EditManagerAccount from './managerPages/EditManagerAccount.jsx';
-import ManageCollections from './managerPages/ManageCollections.jsx';
+import ManageSpecialExhibits from './managerPages/ManageSpecialExhibits.jsx'
 import ManageEmployees from './managerPages/ManageEmployees.jsx';
 import ManageEvents from './managerPages/ManageEvents.jsx';
 import ManageExhibits from './managerPages/ManageExhibits.jsx';
@@ -67,7 +67,7 @@ function App() {
 
           <Route element={<ProtectedManagerRoutes/>}>
             <Route path="/manager-dashboard" element={<ManagerDashboard/>}/>
-            <Route path="/manage-collections" element={<ManageCollections/>}/>
+            <Route path="/manage-special-exhibits" element={<ManageSpecialExhibits/>}/>
             <Route path="/manage-events" element={<ManageEvents/>}/>
             <Route path="/manage-exhibits" element={<ManageExhibits/>}/>
             <Route path="/manage-employees" element={<ManageEmployees/>}/>

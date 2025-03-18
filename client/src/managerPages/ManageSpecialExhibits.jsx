@@ -2,20 +2,22 @@ import React from 'react'
 import ManagerDashboard from './ManagerNav'
 import './ManagerDashboard.css'
 
-const ManageCollections = () => {
-    console.log("ManageCollections")
+const ManageSpecialExhibits = () => {
+    console.log("ManageSpecialExhibits")
 
     return(
+        
+        
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
             <div>
-                Manage Collections
+                Manage Special Exhibits
             </div>
             
         </div>
     )
 }
 
-export default ManageCollections
+export default ManageSpecialExhibits
