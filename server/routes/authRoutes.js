@@ -2,7 +2,7 @@
 const http = require('http');
 const { loginUser, registerUser } = require('../controllers/authController');
 
-const handleRoutes = (req, res) => {
+const authRoutes = (req, res) => {
 
     if (req.url === '/auth/login' && req.method === 'POST') {
         loginUser(req, res);
@@ -16,4 +16,4 @@ const handleRoutes = (req, res) => {
     }
 };
 
-module.exports = handleRoutes;
+module.exports = authRoutes;

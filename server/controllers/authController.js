@@ -2,7 +2,6 @@ const db = require('../db/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-
 loginUser = async (req, res) => {
     let body = '';
     
@@ -108,7 +107,7 @@ registerUser = async (req, res) => {
         });
     } catch (err) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ error: 'Failed to register account.'}))
+        return res.end(JSON.stringify({ error: 'Failed to register account.'}));
     }
 };
 
