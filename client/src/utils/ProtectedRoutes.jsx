@@ -3,43 +3,48 @@ import { useEffect, useRef, useState } from "react";
 import { useAuth } from "./AuthContext.js";
 
 const ProtectedRoutes = () => {
-    const { user } = useAuth();
+    const { user, isLoggingOut } = useAuth(); //remove isLoggingOut
     const [loading, setLoading] = useState(true);  // Track loading state
     const role = user?.role;
     const hasAlerted = useRef(false);
+    
 
     useEffect(() => {
         if (user === null) {
             setLoading(false);  // Set loading to false if no user is logged in
+            if (!loading && !hasAlerted.current && !isLoggingOut) {
+                alert("You must log in to a customer account to see this page");
+                hasAlerted.current = true;  // Prevents further alerts
+            }
         } 
         else if (user) {
             setLoading(false);  // Set loading to false once user is available
         }
-    }, [user]);
-
+    }, [user, loading, isLoggingOut]);
+    
     useEffect(() => {
-        if (role && (role =='manager' || role == 'employee') && !hasAlerted.current){
+        if (!loading && user && (role ==='manager' || role === 'employee') && !hasAlerted.current){
             alert("Only customers have access to these pages");
             hasAlerted.current = true; // Prevents further alerts
         }
-        else if (role && role !== 'customer' && !hasAlerted.current) {
-            alert("You are not logged in");
+        else if (!loading && role !== 'customer' && !hasAlerted.current) {
+            alert("You do not have access to this page");
             hasAlerted.current = true; // Prevents further alerts
         }
-    }, [role]);
+    }, [user]);
 
     if (loading) {
         return <div>Loading...</div>;  // Render loading state if user is being fetched
     }
     
     if (!user){
-        return <Navigate to="/"/>
+        return <Navigate to="/log-in"/>
     }
-    else if(role == 'employee' || role == 'manager'){
+    else if(role === 'employee' || role === 'manager'){
         return <Navigate to="/"/>
     }
 
-    return role === 'customer' ? <Outlet /> : <Navigate to="/login" />;
+    return role === 'customer' ? <Outlet /> : <Navigate to="/log-in" />;
 };
 
 export default ProtectedRoutes

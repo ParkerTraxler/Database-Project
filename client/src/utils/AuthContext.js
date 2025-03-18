@@ -4,6 +4,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     // Load user from localStorage on app start
     useEffect(() => {
@@ -18,8 +19,8 @@ export const AuthProvider = ({ children }) => {
         }
     }, []);
     // Login function
-    const login = (email, role) => {
-        const userData = { email, role };
+    const login = (email, role, token) => {
+        const userData = { email, role, token };
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData)); // Save as JSON
     };
@@ -27,11 +28,13 @@ export const AuthProvider = ({ children }) => {
     // Logout function
     const logout = () => {
         localStorage.removeItem("user"); // Remove user completely
+        setIsLoggingOut(true)
         setUser(null); // Update state
+        setTimeout(() => setIsLoggingOut(false), 500)
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, isLoggingOut }}>
             {children}
         </AuthContext.Provider>
     );

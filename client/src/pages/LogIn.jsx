@@ -37,7 +37,7 @@ const LogIn = () => {
         }
         else{
             e.preventDefault()  //prevents page refresh on button click
-            login(data.email, 'customer')
+            login(data.email, 'manager', 'placeholder token')
             navigate('/')
             try{
                 await axios.post("http://localhost:3000/log-in", login)
