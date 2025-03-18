@@ -45,7 +45,10 @@ const Navbar = () => {
                     <a href="/" onClick={logout}>Log Out</a>
                     <a href="/account-details">Account</a>
                 </>)}
-                
+                {role == 'employee' && (<>
+                    <a href="/" onClick={logout}>Log Out</a>
+                    <a href="/employee-account-details">Dashboard</a>
+                </>)}
                 {role == 'manager' && (<>
                     <a href="/" onClick={logout}>Log Out</a>
                     <a href="/manager-dashboard">Dashboard</a>

@@ -20,10 +20,15 @@ import ManageEmployees from './managerPages/ManageEmployees.jsx';
 import ManageEvents from './managerPages/ManageEvents.jsx';
 import ManageExhibits from './managerPages/ManageExhibits.jsx';
 import ManagerAccountDetails from './managerPages/ManagerAccountDetails.jsx';
+import EditAccountEmployee from './employeePages/EditAccountEmployee'
+import ViewAccountEmployee from './employeePages/AccountDetailsEmployee'
+import EmployeeManageExhibits from './employeePages/ManageExhibits'
+import ManageGiftShop from './employeePages/ManageGiftShop'
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
 import ProtectedManagerRoutes from './utils/ProtectedManagerRoutes.jsx';
+import ProtectedEmployeeRoutes from './utils/ProtectedEmployeeRoutes.jsx';
 import { AuthProvider } from './utils/AuthContext.js';
 
 
@@ -63,6 +68,13 @@ function App() {
             <Route path="/edit-review" element={<EditReview/>}/>
             <Route path="/account-details" element={<AccountDetails/>}/>
             <Route path="/account-details/edit" element={<EditAccount/>}/>
+          </Route>
+
+          <Route element={<ProtectedEmployeeRoutes/>}>
+            <Route path="/edit-employee-account" element={<EditAccountEmployee/>}/>
+            <Route path="/employee-account-details" element={<ViewAccountEmployee/>}/>
+            <Route path="/employee-exhibits" element={<EmployeeManageExhibits/>}/>
+            <Route path="/employee-gift-shop" element={<ManageGiftShop/>}/>
           </Route>
 
           <Route element={<ProtectedManagerRoutes/>}>
