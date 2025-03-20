@@ -11,7 +11,7 @@ const LogIn = () => {
     const { login } = useAuth()
     const invalidChars = /[+=*\/<>"'|~`()^_{}[\]?]/;
 
-    const [data, setLogin] = useState({ //login json inialized to be empty
+    const [userData, setLogin] = useState({ //login json inialized to be empty
         email:"",
         password:"",
     })
@@ -20,27 +20,32 @@ const LogIn = () => {
 
     const handleChange = (e) =>{ // given target to given value
         setLogin(prev=>({...prev, [e.target.name]: e.target.value}))
-        console.log(data)
+        console.log(userData)
     }
 
     const navigate = useNavigate()
 
     const handleClick = async (e) => {
-        console.log(data)
-        if (invalidChars.test(data.email)) {
+        console.log(userData)
+        if (invalidChars.test(userData.email)) {
             setErrorMessage("Email has invalid characters.");
             return;
         }
-        else if (invalidChars.test(data.password)) {
+        else if (invalidChars.test(userData.password)) {
             setErrorMessage("Password has invalid characters.");
             return;
         }
         else{
             e.preventDefault()  //prevents page refresh on button click
-            login(data.email, 'employee', 'placeholder token')
-            navigate('/')
+            
             try{
-                await axios.post("http://localhost:3000/log-in", login)
+                const res = await axios.post("http://localhost:3002/auth/login", userData)
+                const { message, token } = res.data
+                console.log(res.data)
+                console.log(message)
+                
+                login(userData.email, 'Customer', token)
+                navigate('/')
             }
             catch(err){
                 console.log(err);

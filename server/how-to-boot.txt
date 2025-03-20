@@ -1,0 +1,2 @@
+Keeping this here b/c I keep forgeting how to boot the server -Alec
+nodemon --env-file=.env
