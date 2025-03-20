@@ -3,6 +3,7 @@ import { useState } from 'react'
 import axios from 'axios' //api calls
 import { useAuth } from '../utils/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { jwtDecode } from "jwt-decode";
 import './LogIn.css' // SignUp.jsx also uses LogIn.css
 
 
@@ -43,8 +44,11 @@ const LogIn = () => {
                 const { message, token } = res.data
                 console.log(res.data)
                 console.log(message)
+                const decoded = jwtDecode(token)
+                const role = decoded.role
+                console.log("Role: " + role)
                 
-                login(userData.email, 'Customer', token)
+                login(userData.email, role, token)
                 navigate('/')
             }
             catch(err){
