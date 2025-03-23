@@ -1,14 +1,14 @@
 const http = require('http');
 const db = require('../db/db');
+const queries = require('../querylist.js');
 const bcrypt = require('bcrypt');
 
-// Note: queries are empty.
+// Note: entries in both the [customer/employee/manager] and logininfo.
 
-getAllEmployees = async (req, res) => {
+const getAllEmployees = async (req, res) => {
     try {
-        // Get employees from the database
-        const query = "";
-        const [rows] = await db.query(query);
+        // SQL Query - Get employees from the database
+        const [ rows ] = await db.query(queries.get_employee_query);
 
         // Return employees to frontend
         res.writeHead(200, {'Content-Type': 'application/json' });
@@ -20,50 +20,71 @@ getAllEmployees = async (req, res) => {
     }
 }
 
-getEmployee = async (req, res, email) => {
-    try {
-        // Get the employee
-        const query = "";
-        const [rows] = await db.query(query);
+const getEmployee = async (req, res) => {
+    let body = '';
+    req.on('data', (chunk) => {
+        body += chunk.toString();
+    });
+    
+    req('end', async () => {
+        try {
+            const { empEmail } = JSON.parse(body);
+            // Ensure an email was provided
+            if (!empEmail) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Please provide an email pointing to the employee to get.' }))
+            }
 
-        // If employee exists, get employee
-        if (!rows.length) {
-            res.writeHead(404, {'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Employee not found' }));
-        } else {
+            // SQL QUERY - get employee based off email (we assume we don't have their ID)
+            const[ rows ] = await db.query(queries.get_email_specific_emp, [empEmail]);
+            
+            if(!rows.length){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Specified employee does not exist! It may have been deleted.'}));
+            }
+
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(rows[0]));
+        } catch (err) {
+            console.error('Error while fetching employee: ', err);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Failed to retrieve employee. '}));
         }
-
-    } catch (err) {
-        console.error('Error while fetching employee: ', err);
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Failed to retrieve employee. '}));
-    }
+    });
 }
 
-deleteEmployee = async (req, res, email) => {
-    try {
-        // Delete, then check if the employee exists
-        const query = "";
-        const [result] = db.query(query);
+const deleteEmployee = async (req, res) => {
+    let body = '';
+    req.on('data', (chunk) => {
+        body += chunk.toString();
+    });
+    
+    req('end', async () => {
+        try {
+            const { empEmail } = JSON.parse(body);
 
-        if (!result.affectedRows) {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Employee not found.' }));
-        } else {
-            res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Employee deleted.' }));
+            // Ensure an email was provided
+            if (!empEmail) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Please specify an email pointing to the employee to delete' }))
+            }
+            // SQL QUERY - get employee based off email (we assume we don't have their ID)
+            const result = await db.query(queries.mark_emp_for_deletion, [empEmail]);
+            
+            if(!result || result.rowCount == 0){
+                throw err("No active employee with that email found.")
+            }
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(rows[0]));
+        } catch (err) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Error deleting employee.' }));
         }
-
-    } catch (err) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Error deleting employee.' }));
-    }
+    });
 }
 
-createEmployee = (req, res) => {
-
+const createEmployee = (req, res) => {
     let body = '';
     req.on('data', (chunk) => {
         body += chunk.toString();
@@ -71,33 +92,28 @@ createEmployee = (req, res) => {
 
     try {
         req.on('end', async () => {
-            const { email, password, role } = JSON.parse(body);
+            // the way we're gonna do this is, employee makes their acc via normal login, we update enum.
+            // we're also going to assume that the manager knows name, role, managerID, and all other non-null values
+            const { email, firstName, lastName, position, managerID } = JSON.parse(body);
 
-            // Ensure at email, password, and role were all provided
+            // Ensure all of these were provided
             if (!email) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'You must provide an email.'}));
-            } else if (!password) {
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'You must provide a password.'}));
-            } else if (!role) {
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'You must provide a role.'}));
             }
+            else if (!firstName || !lastName) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'You must provide the employee\'s full name'}));
+            }
+
+            // SQL QUERY
 
             // Check if the user exists before creating it
-            const user_exists_query = "";
-            const [rows] = await db.query(user_exists_query, [email]);
 
-            if (rows.length) {
-                res.writeHead(409, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'User already exists. Please login.' }));
-            }
-
-            // If the user does not exist, create the new user
-            const create_user_query = "";
-            const hash = await bcrypt.hash(password, 10);
-            await db.query(create_user_query, [email, hash, role]);
+            // If the user does not exist, create the new user.
+            // Remember to hash password
+            
+            // END SQL QUERY
 
             // Return user creation success
             res.writeHead(201, {'Content-Type': 'application/json'});
@@ -126,53 +142,17 @@ updateEmployee = (req, res) => {
                 return res.end(JSON.stringify({ error: 'You must provide an email to update the employee.' }));
             }
 
+            // SQL QUERY
             // Check that the employee exists
-            const check_query = "";
-            const [rows] = await db.query(check_query, [email]);
-
-            if (!rows.length) {
-                res.writeHead(404, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'Employee not found.' }));
-            }
 
             // Create the query to update only provided fields.
-            const allowedFields = [];
 
-            const updateValues = [];
-            const setClauses = [];
 
-            for (const field in updateFields) {
-                if (allowedFields.includes(field)) {
-                    if (field === 'password') {
-                        // Hash password before updating
-                        const hash = await bcrypt.hash(updateFields[field], 10);
-                        setClauses.push(`${field} = ?`);
-                        updateValues.push(hash);
-                    } else {
-                        setClauses.push(`${field} = ?`);
-                        updateValues.push(updateFields[field]);
-                    }
-                }
-            }
-
-            // If no valid fields were provided, return error
-            if (!setClauses.length) {
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'No valid fields to update.' }));
-            }
-
-             // Add email for WHERE clause
-             updateValues.push(email);
-
-             // Construct update query
-             const update_query = `UPDATE employees SET ${setClauses.join(', ')} WHERE email = ?`;
+            // END SQL QUERY
  
-             // Execute the update query
-             await db.query(update_query, updateValues);
- 
-             // Return success message
-             res.writeHead(200, { 'Content-Type': 'application/json' });
-             return res.end(JSON.stringify({ message: 'Employee updated successfully.' }));
+            // Return success message
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ message: 'Employee updated successfully.' }));
 
         } catch (err) {
             console.log('Error updating employee: ', err);

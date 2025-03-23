@@ -41,7 +41,7 @@ const SignUp = () => {
         else{
             e.preventDefault()  //prevents page refresh on button click
             try{
-                await axios.post("http://localhost:3000/sign-up", signup)
+                await axios.post("http://localhost:3001/auth/register", signup)
             }
             catch(err){
                 console.log(err);

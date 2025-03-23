@@ -34,6 +34,7 @@ const AccountDetails = () => {
     }
 
     return(
+        <div className="AccountPage">
         <div className="AccountDetails">
             
             <h1>Account Details</h1>
@@ -50,6 +51,7 @@ const AccountDetails = () => {
             <div>
                 <button className="saveButton" onClick={handleClick}>Edit Account</button>
             </div>
+        </div>
         </div>
     )
 }

@@ -1,7 +1,12 @@
 import react from 'react'
+import { useState } from 'react';
+import { useAuth } from "./utils/AuthContext.js"
 import './Navbar.css'
 
 const Navbar = () => {
+    const {user, logout} = useAuth()
+    const role = user?.role
+
     return (
 
         <nav className="navbar">
@@ -32,9 +37,25 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-right">
-                <a href="/log-in">Log In</a>
-                <a href="/sign-up">Sign Up</a>
-                <a href="/account-details">Account</a>
+                {!user && (<>
+                    <a href="/log-in">Log In</a>
+                    <a href="/sign-up">Sign Up</a>
+                </>)}
+                {role == 'customer' && (<>
+                    <a href="/" onClick={logout}>Log Out</a>
+                    <a href="/account-details">Account</a>
+                </>)}
+                {role == 'employee' && (<>
+                    <a href="/" onClick={logout}>Log Out</a>
+                    <a href="/employee-account-details">Dashboard</a>
+                </>)}
+                {role == 'manager' && (<>
+                    <a href="/" onClick={logout}>Log Out</a>
+                    <a href="/manager-dashboard">Dashboard</a>
+                </>)}
+                
+                
+                
             </div>
         </nav>
     );

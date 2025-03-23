@@ -6,6 +6,7 @@ const EditAccount = () => {
     
 
     return(
+        <div className='AccountPage'>
         <div className="AccountDetails">
             <h1>Edit Account</h1>
             <div className="detailsBox">
@@ -38,6 +39,7 @@ const EditAccount = () => {
             <div>
                 <button className="saveButton">Save Changes</button>
             </div>
+        </div>
         </div>
     )
 }

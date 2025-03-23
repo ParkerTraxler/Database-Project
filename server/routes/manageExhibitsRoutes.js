@@ -25,3 +25,5 @@ const manageExhibitsRoutes = (req, res) => {
         });
     }
 }
+
+module.exports = manageExhibitsRoutes;

@@ -7,7 +7,7 @@ const manageCollectionsRoutes = require('./routes/manageCollectionsRoute');
 const manageEventsRoutes = require('./routes/manageEventsRoute');
 const manageExhibitsRoutes = require('./routes/manageExhibitsRoutes');
 // Port
-const PORT = 3002;
+const PORT = 3001;
 
 const server = http.createServer((req, res) => {
     corsMiddleware(req, res);

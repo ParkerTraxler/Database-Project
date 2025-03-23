@@ -1,4 +1,5 @@
 const db = require('../db/db');
+const queries = require('../querylist.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -21,8 +22,7 @@ loginUser = async (req, res) => {
             }
 
             // Ensure user exists in database
-            const user_exists_query = "SELECT UserPass, UserRole FROM logininfo WHERE Email = ?";
-            const [rows] = await db.query(user_exists_query, [email]);
+            const [rows] = await db.query(queries.user_exists_query, [email]);
 
             if (!rows.length) {
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -66,19 +66,21 @@ registerUser = async (req, res) => {
 
     try {
         req.on('end', async() => {
-            const { email, password } = JSON.parse(body);
+            const { email, password1 } = JSON.parse(body);
+            console.log(email)
+            console.log(password1);
+            console.log(body);
 
             // Ensure both email and password were provided
             if (!email) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'You must provide an email.'}));
-            } else if (!password) {
+            } else if (!password1) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'You must provide a password.'}));
             }
 
-            const user_exists_query = "SELECT UserPass, UserRole FROM logininfo WHERE Email = ?";
-            const [rows] = await db.query(user_exists_query, [email]);
+            const [rows] = await db.query(queries.user_exists_query, [email]);
             
             // If the user already exists, return 409 CONFLICT
             if (rows.length) {
@@ -88,9 +90,8 @@ registerUser = async (req, res) => {
 
             // If not, create the user
             // Will have to also create an entry in the customer table and get first, last name, etc. from a registration form
-            const create_user_query = "INSERT INTO logininfo (Email, UserPass, UserRole) VALUES (?, ?, ?)";
-            const hash = await bcrypt.hash(password, 10);
-            await db.query(create_user_query, [email, hash, "Customer"]);
+            const hash = await bcrypt.hash(password1, 10);
+            await db.query(queries.create_user_query, [email, hash, "Customer"]);
 
             // Create JWT token to authenticate new user account (assume role is customer)
             const user = {

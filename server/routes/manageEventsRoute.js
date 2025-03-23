@@ -1,27 +1,25 @@
 const http = require('http');
+const { getAllEvents, getEvent, createEvent, deleteEvent, updateEvent } = require('../controllers/manageEventsController');
 const verifyToken = require('../controllers/authController');
-// Include controllers later...
 
-const manageEventsRoute = (req, res) => {
+const manageEventsRoutes = (req, res) => {
     if (req.url === '/events' && req.method === 'GET') {
-        verifyToken('Manager')(req, res, () => {
-            // Read all events
-        });
+        getAllEvents(req, res);
     } else if (req.url === '/events/:event' && req.method === 'GET') {
-        verifyToken('Manager')(req, res, () => {
-            // Read a specific event
-        });
+        getEvent(req, res);
     } else if (req.url === '/events' && req.method === 'POST') {
         verifyToken('Manager')(req, res, () => {
-            // Create a new event
+            createEvent(req, res);
         });
     } else if (req.url === '/events/:event' && req.method === 'PUT') {
         verifyToken('Manager')(req, res, () => {
-            // Update an event
+            updateEvent(req, res);
         });
     } else if (req.url === '/events/:event' && req.method === 'DELETE') {
         verifyToken('Manager')(req, res, () => {
-            // Delete an event
+            deleteEvent(req, res);
         });
     }
 }
+
+module.exports = manageEventsRoutes;

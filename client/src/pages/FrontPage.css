@@ -1,0 +1,331 @@
+/* First Page */
+
+.frontPageStyle {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.imageStyle {
+    background-image: url('../assets/homepage1.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.textStyle {
+    color: white;
+    display: flex;
+    padding-left: 2.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    font-family: Playfair Display, sans-serif;
+    line-height: 0.5;
+}
+
+/* About Page */
+.aboutStyle {
+    background-image: url('../assets/aboutus.jpg');
+    background-size: cover;
+    width: 100%;
+    background-position: center;
+    height: 100vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.heading {
+    font-size: 3rem; 
+    color: black; 
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+    font-family: Playfair Display, sans-serif;
+    margin-bottom: 20px;
+}
+
+.white-box {
+    width: 60%; 
+    max-width: 800px;
+    max-height: 80vh;
+    height: auto; 
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: black;
+    font-size: 1.5rem;
+    text-align: left;
+    overflow-y: auto;  
+    box-sizing: border-box;
+}
+
+.white-box h2 {
+    font-size: 2rem; 
+    margin-bottom: 15px; 
+}
+
+.white-box p {
+    margin: 10px 0; 
+}
+
+/* Hours Page */
+.home-container {
+    display: flex;           
+    height: 100vh;           
+}
+
+.image-section {
+    flex: 1;                
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    background-image: url('../assets/hours.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;          
+    height: auto;           
+    max-height: 100%; 
+}
+
+.info-section {
+    flex: 1;      
+    padding: 20px;        
+    color: white;             
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;     
+    background-color: rgb(110, 109, 84);
+    overflow-y: auto;  
+}
+
+.info-section h2 {
+    margin-bottom: 20px;    
+    font-size: 2rem;
+}
+
+.info-section p {
+    font-size: 1.2rem;
+    line-height: 1.5;    
+    margin-bottom: 10px;   
+}
+
+
+/* Rules Page */
+.rules-container {
+    display: flex;           
+    height: 100vh;           
+}
+
+.imageRules-section {
+    flex: 1;                
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    background-image: url('../assets/rules.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;          
+    height: auto;           
+    max-height: 100%; 
+}
+
+.rules-section {
+    flex: 1;                 
+    padding: 20px;           
+    background-color: rgb(106, 139, 149);
+    color: white;             
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    text-align: center;     
+    overflow-y: auto;        
+}
+  
+
+.rules-section h1 {
+    margin-bottom: 20px;     
+    font-size: 2rem;
+}
+  
+.rules-section h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+  
+.rules-section ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+  
+.rules-section ul li {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    line-height: 1.6;
+}
+  
+.rules-section section {
+    margin-bottom: 20px;
+}
+
+/*map page*/
+.map-container {
+    padding: 20px;
+    text-align: center;
+}
+  
+.map-container h1 {
+    font-size: 2rem;
+    margin-bottom: 50px;
+}
+  
+.floor-maps {
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px; 
+    justify-items: center; 
+    max-width: 1200px;
+    margin: 0 auto;
+}
+  
+.map-item {
+    text-align: center;
+}
+  
+.floor-image {
+    max-width: 100%;
+    height: auto; 
+    border-radius: 10px; 
+}
+  
+.description {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #f9f9f9; 
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+  
+.description h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+  
+.description p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+
+
+/*parking*/
+.parking-page-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-image: url('../assets/park.jpg'); 
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.overlay-box {
+    background-color: rgba(255, 255, 255, 0.8); 
+    padding: 20px;
+    width: 80%;  
+    max-width: 800px;  
+    max-height: 80vh;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 10px;
+    overflow-y: auto;  
+}
+
+.overlay-box h1 {
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.overlay-box h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.overlay-box ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.overlay-box ul li {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+
+/* Contact Page */
+.contact-container {
+    display: flex;           
+    height: 100vh;           
+}
+
+.imageContact-section {
+    flex: 1;                
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    background-image: url('../assets/contact.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;          
+    height: auto;           
+    max-height: 100%; 
+}
+
+.infoContact-section {
+    flex: 1;      
+    padding: 20px;        
+    color: white;             
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;     
+    background-color: rgb(74, 37, 6);
+    overflow-y: auto;
+}
+
+.infoContact-section h2 {
+    margin-bottom: 20px;    
+    font-size: 2rem;
+}
+
+.infoContact-section p {
+    font-size: 1.2rem;
+    line-height: 1.5;    
+    margin-bottom: 10px;   
+}
