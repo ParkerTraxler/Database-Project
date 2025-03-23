@@ -22,6 +22,13 @@ const get_manager_query = "SELECT ManagerID FROM managers, logininfo WHERE login
 const insert_employee_info = "INSERT INTO employees (FirstName, LastName, EPosition, ManagerID, Email) VALUES (?, ?, ?, ?, ?)";
 const update_employee_info = "UPDATE employees SET HourlyWage = ?, WeeklyHours = ?, FirstName = ?, LastName = ?, BirthDate = ?, EPosition = ?, ExhibitID = ?, GiftShopName = ?, ManagerID = ?, Gender = ? WHERE Email = ? AND isDeleted = false";
 
+// Collections Management Controller
+const get_collections_query = "SELECT * FROM collections WHERE isDeleted = false";
+const get_specific_collection = "SELECT * FROM collections WHERE Title = ? AND isDeleted = false";
+const insert_new_collection = "INSERT INTO collections (Title, CollectDesc, CollectPic, ExhibitID) VALUES (?, ?, ?, ?)";
+const mark_collection_delete = "UPDATE collections SET isDeleted = true WHERE Title = ? AND isDeleted = false";
+const update_collection_query = "UPDATE collections SET CollectDesc = ?, CollectPic = ?, ExhibitID = ? WHERE Title = ? AND isDeleted = false";
+
 // all the queries exported out
 module.exports = {
     user_exists_query,
@@ -40,4 +47,9 @@ module.exports = {
     get_manager_query,
     insert_employee_info,
     update_employee_info,
+    get_collections_query,
+    get_specific_collection,
+    insert_new_collection,
+    mark_collection_delete,
+    update_collection_query,
 };

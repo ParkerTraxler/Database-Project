@@ -1,13 +1,11 @@
 const http = require('http');
+const queries = require('../querylist.js')
 const db = require('../db/db');
 
 const getAllCollections = async (req, res) => {
     try {
-        // SQL QUERY
-        // Retrieve collections from database
-
-
-        // END SQL QUERY
+        // SQL QUERY - Retrieve collections from database
+        const [rows] = await db.query(queries.get_collections_query);
 
         // Return collections to the frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -20,20 +18,21 @@ const getAllCollections = async (req, res) => {
 }
 
 const getCollection = async (req, res) => {
-    
     let body = '';
     req.on('data', (chunk) => {
         body += chunk.toString();
     });
     
     req('end', async () => {
+        const { title } = JSON.parse(body);
         try {
-            // SQL QUERY
-            // Check if the collection exists
+            // SQL QUERY - Retrieve collection from database
+            const [rows] = await db.query(queries.get_specific_collection, [title]);
 
-            // Retrieve collection from database
-    
-            // END SQL QUERY
+            if(!rows.length){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Specified collection does not exist! It may have been deleted.'}));
+            }
     
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(rows[0]));
@@ -53,20 +52,26 @@ const createCollection = async (req, res) => {
     });
 
     req.on('end', async () => {
-
-        // FILL IN: get fields from frontend
-
+        const { title, collectdesc, collectpic, exhibitid } = JSON.parse(body);
         try {
-            // Ensure necessary details were provided
+            if(!title){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Collections are required to have a title.'}));
+            }
 
-            // SQL QUERY
+            const [rows] = await db.query(queries.get_specific_collection, [title]);
+            if(rows.length){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'A collection already exists by that title!'}));
+            }
+            // SQL QUERY - input new collection assuming all above pass
 
-            // Check if the collection exists
+            const result = await db.query(queries.insert_new_collection, [title, collectdesc, collectpic, exhibitid]);
 
-            // SQL QUERY
-            // Insert new collection into database
-
-            // END SQL QUERY
+            if(!result || result.rowCount == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not accept entry. Invalid input?' }));
+            }
 
             // Return success message
             res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -89,28 +94,30 @@ const deleteCollection = async (req, res) => {
 
     req.on('end', async () => {
         try {
-            // FILL IN: get fields from frontend
+            const { title } = JSON.parse(body);
 
             // Ensure a name was provided
-            if (!collectionName) {
+            if (!title) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({}))
+                return res.end(JSON.stringify({error: 'No title provided to delete collection'}))
             }
 
-            // SQL QUERY
-            // Delete collection in the database with the same name
+            // SQL QUERY - Delete collection in the database with the same name
+            const result = db.query(queries.mark_collection_delete, [title]);
 
-
-            // END SQL QUERY
+            if(!result || result.rowCount == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Failed to delete the entry. Is it already deleted?' }));
+            }
 
             // Return success message
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ message: 'collection deleted successfully.' }));
+            return res.end(JSON.stringify({ message: 'Collection deleted successfully.' }));
 
         } catch (err) {
             console.error('Error creating collection: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Failed to create collection.' }));
+            return res.end(JSON.stringify({ error: 'Failed to delete collection.' }));
         }
     });
 }
@@ -123,20 +130,39 @@ const updateCollection = (req, res) => {
 
     req.on('end', async () => {
         try {
-            // FILL IN: get fields from frontend
+            const { title, collectdesc, collectpic, exhibitid } = JSON.parse(body);
 
             // If no collection name is provided, halt
-            if (!collectionName) {
+            if (!title) {
                 res.writeHead(400, { 'Content-Type':  'application/json' });
                 return res.end(JSON.stringify({ error: 'You must provide a name to update the collection.' }));
             }
+            // check that an exhibit even exists to be updated
+            const curr_col = await db.query(queries.get_specific_collection, [title]);
+            if(!curr_col || curr_col.length == 0){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'No collection found to be updated. Did you mean insert?'}));
+            }
 
-            // SQL QUERY
-            // Check that the collection exists
-            
-            // Create the query to update only provided fields.
+            if(collectdesc == null || collectdesc == ""){
+                collectdesc = curr_col[0].CollectDesc;
+            }
 
-            // END SQL QUERY
+            if(collectpic == null || collectpic == ""){
+                collectpic = curr_col[0].CollectPic;
+            }
+
+            if(exhibitid == null || exhibitid == ""){
+                exhibitid = curr_col[0].ExhibitID;
+            }
+
+            // SQL QUERY - Create the query to update provided fields
+            const result = await db.query(update_collection_query, [collectdesc, collectpic, exhibitid]);
+
+            if(!result || result.rowCount == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
+            }
  
              // Return success message
              res.writeHead(200, { 'Content-Type': 'application/json' });
