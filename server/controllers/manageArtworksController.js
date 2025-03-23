@@ -39,11 +39,11 @@ const getArtwork = async (req, res) => {
             }
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(rows[0]));
+            return res.end(JSON.stringify(rows[0]));
         } catch (err) {
             console.error('Error fetching artwork.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Failed to retrieve artworks.' }));
+            return res.end(JSON.stringify({ error: 'Failed to retrieve artworks.' }));
         }
     });
 }
@@ -63,10 +63,10 @@ const createArtwork = async (req, res) => {
             // Ensure artName and onDisplay were provided.
             if (!artName) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'Art name not provided.'}));
+                return res.end(JSON.stringify({ error: 'Art name not provided.'}));
             } else if (!onDisplay) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'Display status not provided.' }));
+                return res.end(JSON.stringify({ error: 'Display status not provided.' }));
             }
 
             // SQL QUERY - Check if the artwork exists. If yes, prompt. If no, add it
@@ -74,13 +74,15 @@ const createArtwork = async (req, res) => {
             const [rows] = await db.query(queries.get_name_specific_art, [artName]);
             if(rows.length && rows[0].Artist == artist & rows[0].DateMade == dateMade){
                 // this is enough information to prompt that maybe this piece already exists. Note: if the piece was deleted and is being re-added, then allow for that.
-                console.log("This art piece might already exist! Are you sure?"); // change this to be a real prompt?
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'This art piece seems to already exist!' }));
             }
             // SQL Query - Insert new artwork into database
             const result = await db.query(queries.insert_art_piece, [artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay]);
 
             if(!result || result.rowCount == 0){
-                throw err("Database could not accept entry. Invalid input?")
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not accept entry. Invalid input?' }));
             }
 
             // Return success message
@@ -115,7 +117,8 @@ const deleteArtwork = async (req, res) => {
             const result = await db.query(queries.mark_art_for_deletion, [artID]);
 
             if (!result || result.rowCount == 0) {
-                throw err("No artwork by that ID found.")
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Failed to delete art piece into the database.' }))
             }
 
             // Return success message
@@ -150,7 +153,8 @@ const updateArtwork = (req, res) => {
             // SQL QUERY - Update art, if it exists. Filter art by ID. Fill nulls in with what was already in the DB
             const [ rows ] = await db.query(queries.get_specific_art, [artID]);
             if(!rows.length){
-                throw err("Art piece not found. Is it already deleted?");
+                res.writeHead(400, { 'Content-Type':  'application/json' });
+                return res.end(JSON.stringify({ error: 'No art piece found - has it been deleted?' }));
             }
 
             if(artName == null || artName == ""){
@@ -190,8 +194,13 @@ const updateArtwork = (req, res) => {
             }
 
             // okay that's a lot of if statements but now we can do the update - result not needed since earlier query
-            await db.query(queries.update_art_piece, [artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay, artID]);
+            const result = await db.query(queries.update_art_piece, [artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay, artID]);
  
+            if(!result || result.rowCount == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
+            }
+
              // Return success message
              res.writeHead(200, { 'Content-Type': 'application/json' });
              return res.end(JSON.stringify({ message: 'Artwork updated successfully.' }));

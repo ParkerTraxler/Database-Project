@@ -48,7 +48,7 @@ loginUser = async (req, res) => {
 
             // Return the token to the frontend
             res.writeHead(201, {'Content-Type': 'application/json'});
-            res.end(JSON.stringify({ message: 'Login successful.', token: token }));
+            return res.end(JSON.stringify({ message: 'Login successful.', token: token }));
         });
     } catch (err) {
         console.error('Error during login: ', error);
