@@ -2,7 +2,7 @@ const http = require('http');
 const verifyToken = require('../middleware/authMiddleware');
 const { getAllArtworks, getArtwork, createArtwork, deleteArtwork, updateArtwork } = require('../controllers/manageArtworksController');
 
-const manageArtworksRoute = (req, res) => {
+const manageArtworksRoutes = (req, res) => {
     if (req.url === '/artworks' && req.method === 'GET') {
         getAllArtworks(req, res);
     } else if (req.url === '/artworks' && req.method === 'POST') {
@@ -24,3 +24,5 @@ const manageArtworksRoute = (req, res) => {
         res.end(JSON.stringify({ error: 'Route not found.' }))
     }
 }
+
+module.exports = manageArtworksRoutes;

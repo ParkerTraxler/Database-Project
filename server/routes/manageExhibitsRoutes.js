@@ -1,7 +1,6 @@
 const http = require('http');
 const { getExhibits, getExhibit, createExhibit, deleteExhibit, updateExhibit } = require('../controllers/manageExhibitsController');
 const verifyToken = require('../controllers/authController');
-// Include controllers later...
 
 const manageExhibitsRoutes = (req, res) => {
     if (req.url === '/exhibits' && req.method === 'GET') {
