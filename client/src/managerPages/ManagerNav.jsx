@@ -28,6 +28,9 @@ const ManagerDashboard = () => {
                     <li>
                         <a href='/manage-events'>Manage Events</a>
                     </li>
+                    <li>
+                        <a href='/manage-collections'>Manage Collections</a>
+                    </li>
                 </ul>
             </div>
 

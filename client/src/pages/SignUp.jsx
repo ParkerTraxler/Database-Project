@@ -50,7 +50,7 @@ const SignUp = () => {
             try{
                 const res = await axios.post("http://localhost:3002/auth/register", {
                     email: signup.email,
-                    password: signup.password1
+                    password1: signup.password1
                 })
 
                 const { message, token } = res.data
