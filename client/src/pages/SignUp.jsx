@@ -25,17 +25,7 @@ const SignUp = () => {
         console.log(signup)
     }
 
-    // useEffect(()=>{
-    //     const fetchResponse = async ()=>{
-    //         try{
-    //             const res = await axios.get("http://localhost:3002/auth/register")
-    //             console.log(res)
-    //         }catch(err){
-    //             console.log(err)
-    //         }
-    //     }
-    //     fetchResponse()
-    // },[])
+    
 
     const handleClick = async (e) => {
         console.log(signup)
@@ -69,7 +59,7 @@ const SignUp = () => {
                 console.log(message)
                 console.log("token: "+token)
 
-                login(signup.email, 'customer', token)
+                login(signup.email, 'Customer', token)
                 navigate("/")
             }
             catch(err){

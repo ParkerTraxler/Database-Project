@@ -41,12 +41,13 @@ const LogIn = () => {
             
             try{
                 const res = await axios.post("http://localhost:3002/auth/login", userData)
-                const { message, token } = res.data
+                const { message, token, error } = res.data
                 console.log(res.data)
                 console.log(message)
                 const decoded = jwtDecode(token)
                 const role = decoded.role
                 console.log("Role: " + role)
+                console.log(error)
                 
                 login(userData.email, role, token)
                 navigate('/')
