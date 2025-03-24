@@ -1,5 +1,9 @@
 const http = require('http');
+const queries = require('../querylist.js')
 const db = require('../db/db');
+
+// For this entire file, we assume tickets will always occupy the first 4 item IDs
+// That is, ItemIDs 1-4 will not be deletable and will display on a separate 
 
 const createItem = (req, res) => {
     // Get fields from request
@@ -9,12 +13,25 @@ const createItem = (req, res) => {
     });
 
     req.on('end', async () => {
+        const { itemname, itemprice, amountinstock } = JSON.parse(body);
         try {
-            // Store necessary fields from frontend to create the entity.
+            if(!itemname){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Please supply a name for the new item'}));
+             }
 
-            /* SQL QUERY */
+             if(itemname.toLowerCase().includes("ticket")){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Reserved word detected - please refrain from naming items with the word ticket.'}));
+             }
 
-            /* END SQL QUERY */
+            // SQL Query - Create a new item
+             const [ result ] = await db.query(queries.insert_new_item, [itemname, itemprice, amountinstock]);
+
+            if(!result || result.affectedRows == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not input new item. Invalid input?' }));
+            }
 
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
@@ -36,22 +53,30 @@ const deleteItem = (req, res) => {
 
     // Process the request once it is received, send response
     req.on('end', async () => {
+        const { itemid } = JSON.parse(body);
         try {
-            // Store the necessary field to delete the review
+            if(!itemid){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Please supply an item ID for deletion'}));  
+            }
 
-            // Check that the necessary field was provided, return error if not
+            if([1, 2, 3, 4].includes(itemid)){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Attempted deletion on ticket is disallowed.'}));                  
+            }
+            // SQL QUERY - check to see if itemid is valid, check to see if it's a ticket, etc.
+            const [ result ] = await db.query(queries.delete_item, [itemid]);
 
-            // Check if the item was a ticket
-
-            /* SQL QUERY */
-
-            /* END SQL QUERY */
+            if(!result || result.affectedRows == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not delete the item. Is it already deleted?' }));
+            }
 
             // Return successful delete message
             res.writeHead(204, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: 'Item successfully deleted.' }));
         } catch (err) {
-            console.error('Error deleting review.');
+            console.error('Error deleting item: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: 'Error deleting item.' }));
         }
@@ -67,14 +92,34 @@ const updateItem = (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async () => {
+        const { itemid, itemname, itemprice, giftshopname } = JSON.parse(body);
         try {
-            // Get necessary fields from the request
+            if(!itemid){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Please supply an item ID for updating'}));  
+            }
 
-            // Check that at least one (or some?) fields were provided
+            // get the item from the DB / confirm it exists
+            const [ curr_item ] = await db.query(get_a_normal_item, [itemid]);
 
-            /* SQL QUERY */
+            // SQL QUERY - update the item 
+            if(itemname == null || itemname == ""){
+                itemname = curr_item[0].ItemName;
+            }
 
-            /* END SQL QUERY */
+            if(itemprice == null || itemprice == ""){
+                itemprice = curr_item[0].ItemPrice;
+            }
+
+            if(giftshopname == null || giftshopname == ""){
+                giftshopname = curr_item[0].GiftShopName;
+            }
+
+            const [ results ] = await db.query(queries.update_item, [itemname, itemprice, giftshopname, itemid]);
+            if(!results || results.affectedRows == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not update item. Invalid input?' }));
+            }
 
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });
@@ -96,14 +141,24 @@ const updateItemQuantity = (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async () => {
+        const { itemid, amounttoadd } = JSON.parse(body);
         try {
-            // Get item and item update value fromt frontend
+            if(!itemid){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Please supply an item ID for restocking!'}));  
+            }
 
-            // Check  that both fields were provided
+            if(!amounttoadd){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Please specify how much to increase the stock by!'}));  
+            }
+            // SQL Query - update the amount of an item in stock. it's an addition so, add it to the previous number
+            const [ results ] = await db.query(queries.restock_item, [amounttoadd, itemid]);
 
-            /* SQL QUERY */
-
-            /* END SQL QUERY */
+            if(!results || results.affectedRows == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Failed to restock item. Has it been deleted?' }));
+            }
 
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });
@@ -116,43 +171,56 @@ const updateItemQuantity = (req, res) => {
     });
 }
 
-const getTickets = async (req, res) => {
-    try {
-        /* SQL QUERY */
+// get all non-ticket items
+const getItems = async(req, res) =>{
+    req.on('end', async () => {
+        try {
+            // SQL Query - get all non-ticket items
+            const [ result ] = await db.query(queries.get_all_normal_items);
 
-        /* END SQL QUERY */
-
-        // Return tickets
-    } catch (err) {
-        console.error('Error getting tickets.');
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Error getting tickets.' }));
-    }
+            // Return success message
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(JSON.stringify(result)));
+        } catch (err) {
+            console.error('Error retrieving all items: ', err);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Error retrieving all items' }));
+        }
+    });
 }
 
-const getTicket = (req, res) => {
-    // Get fields from request
+const getItem = async(req, res) =>{
+    // Get field from request
     let body = '';
     req.on('data', (chunk) => {
         body += chunk.toString();
-    });
-    
+    }); 
+
     // Process the request once it is received, send response 
     req.on('end', async () => {
+        const { itemID } = JSON.parse(body);
         try {
-            // Get field from request
+            if(!itemID){
+                res.writeHead(400, { 'Content-Type':  'application/json' });
+                return res.end(JSON.stringify({ error: 'No item ID supplied to search for' }));
+            }
 
-            // Check that the field was provided
+            if([1, 2, 3, 4].includes(itemID)){
+                res.writeHead(400, { 'Content-Type':  'application/json' });
+                return res.end(JSON.stringify({ error: 'It seems you\'re trying to get a ticket. Did you mean getTicket?' }));
+            }
 
-            /* SQL QUERY */
+            // SQL QUERY - Get item itself if checks are passed
+            const [ result ] = await db.query(get_a_normal_item, itemID);
 
-            // Get ticket from database
+            if(result.affectedRows == 0){
+                res.writeHead(400, { 'Content-Type':  'application/json' });
+                return res.end(JSON.stringify({ error: 'No item by that ID found! Was it deleted?' }));
+            }
 
-            // Check that the ticket exists
-
-            /* SQL QUERY */
-
-            // Return ticket to the frontend
+            // Return success message
+            res.writeHead(204, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(JSON.stringify(result)));
         } catch (err) {
             console.error('Error updating item quantity.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -161,4 +229,61 @@ const getTicket = (req, res) => {
     });
 }
 
-module.exports = { createItem, deleteItem, updateItem, updateItemQuantity, getTickets, getTicket };
+const getTickets = async (req, res) => {
+    req.on('end', async () => {
+        try {
+            // SQL Query - get all ticket_items
+            const [ result ] = await db.query(queries.get_all_tickets);
+
+            // Return success message
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(JSON.stringify(result)));
+        } catch (err) {
+            console.error('Error retrieving tickets: ', err);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Error retrieving tickets' }));
+        }
+    });
+}
+
+const getTicket = (req, res) => {
+    // Get field from request
+    let body = '';
+    req.on('data', (chunk) => {
+        body += chunk.toString();
+    }); 
+
+    // Process the request once it is received, send response 
+    req.on('end', async () => {
+        const { itemID } = JSON.parse(body);
+        try {
+            if(!itemID){
+                res.writeHead(400, { 'Content-Type':  'application/json' });
+                return res.end(JSON.stringify({ error: 'No item ID supplied to search for' }));
+            }
+
+            if(!([1, 2, 3, 4].includes(itemid))){
+                res.writeHead(400, { 'Content-Type':  'application/json' });
+                return res.end(JSON.stringify({ error: 'Item being asked for is not a ticket' }));
+            }
+
+            // SQL QUERY - Get ticket itself if checks are passed
+            const [ result ] = await db.query(get_specific_ticket, itemID);
+
+            if(result.affectedRows == 0){
+                res.writeHead(400, { 'Content-Type':  'application/json' });
+                return res.end(JSON.stringify({ error: 'No ticket by that ID found!' }));
+            }
+
+            // Return success message
+            res.writeHead(204, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(JSON.stringify(result)));
+        } catch (err) {
+            console.error('Error updating item quantity.');
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
+        }
+    });
+}
+
+module.exports = { createItem, deleteItem, updateItem, updateItemQuantity, getItems, getItem, getTickets, getTicket };

@@ -12,6 +12,7 @@ const ManagerEditCollection = () => {
     const { user } = useAuth()
     const token = user.token
     const [collection, setCollection] = useState({
+
         CollectDesc:"",
         CollectPic:"",
         ExhibitID: null,

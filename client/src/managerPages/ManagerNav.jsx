@@ -20,9 +20,6 @@ const ManagerDashboard = () => {
                         <a href='/manage-employees'>Manage Employees</a>
                     </li>
                     <li>
-                        <a href='/manage-special-exhibits'>Manage Special Exhibits</a>
-                    </li>
-                    <li>
                         <a href='/manage-exhibits'>Manage Exhibits</a>
                     </li>
                     <li>
@@ -30,6 +27,9 @@ const ManagerDashboard = () => {
                     </li>
                     <li>
                         <a href='/manage-collections'>Manage Collections</a>
+                    </li>
+                    <li>
+                        <a href='/view-donations'>View Donations</a>
                     </li>
                 </ul>
             </div>
