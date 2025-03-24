@@ -27,6 +27,8 @@ import ManageGiftShop from './employeePages/ManageGiftShop'
 import ManageCollections from './managerPages/ManageCollections.jsx';
 import ManagerAddCollection from './managerPages/ManagerAddCollection.jsx'
 import ManagerEditCollection from './managerPages/ManagerEditCollection.jsx';
+import AddEmployee from './managerPages/AddEmployee.jsx';
+import EditEmployee from './managerPages/EditEmployee.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -91,6 +93,8 @@ function App() {
             <Route path="/manage-collections" element={<ManageCollections/>}/>
             <Route path="/add-collection" element={<ManagerAddCollection/>}/>
             <Route path="/edit-collection/:Title" element={<ManagerEditCollection/>}/>
+            <Route path="/add-employee" element={<AddEmployee/>}/>
+            <Route path="/edit-employee/:Email" element={<EditEmployee/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,51 +1,55 @@
 const http = require('http');
+const queries = require('../querylist.js');
 const db = require('../db/db');
 
 const getExhibits = async (req, res) => {
     try {
-        /* SQL QUERY */
-        // Get all exhibits, notice the list returned is called 'rows' in the last line of the try statement
-
-        /* END SQL QUERY */
+        // SQL QUERY  - Get all exhibits, yippee!
+        const [ rows ] = await db.query(queries.get_all_exhibits);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(rows));
+        return res.end(JSON.stringify(rows));
     } catch (err) {
         console.error('Error fetching exhibits.');
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Error fetching exhibits.'}));
+        return res.end(JSON.stringify({ error: 'Error fetching exhibits.'}));
     }
 }
 
+// Get an exhibit, can be normal or special - return all the information either way
 const getExhibit = async (req, res) => {
-    // Get fields from request
     let body = '';
     req.on('data', (chunk) => {
         body += chunk.toString();
     });
 
-    // Process the request once it is received, send response
-    req.on('end', () => {
+    req.on('end', async() => {
+        const { exhibitid } = JSON.parse(body);
         try {
-            // Store necessary field
+            if(!exhibitid){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'No Exhibit ID provided to search for.'}));
+            }
+            // SQL Query - Get the exhibit (if it is exists)
+            const [ row ] = await db.query(queries.get_specific_exhibit, exhibitid);
 
-            // Check that an id/name/etc. was provided
-
-            /* SQL QUERY */
-            
-            // Get the exhibit and check if it exists
-
-            /* END SQL QUERY */
+            if(!row.length){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Specified exhibit does not exist! Was it created successfully?'}));
+            }
 
             // Return the exhibit
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify(row[0]));
         } catch (err) {
             console.error('Error fetching exhibit.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error fetching exhibit.' }));
+            return res.end(JSON.stringify({ error: 'Error fetching exhibit.' }));
         }
     });
 }
 
+// allow creation of an exhibit, special or otherwise. 
 const createExhibit = async (req, res) => {
     // Get fields from request
     let body = '';
@@ -53,55 +57,42 @@ const createExhibit = async (req, res) => {
         body += chunk.toString();
     });
 
-    req.on('end', () => {
+    req.on('end', async() => {
+        const { exhibitname, exhibitdesc, exhibitpic, startdate, enddate, fee, isSpecial } = JSON.parse(body);
         try {
-            // Store necessary fields from frontend to create the entity.
+             // SQL Query - Inserting a new exhibit. If is special, insert it into that table too.
+             if(!exhibitname){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Exhibits are required to have a name.'}));
+             }
+             if(isSpecial && !startdate){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Special exhibits are required to have a starting date.'}));
+             }
 
-            /* SQL QUERY */
+             // no matter if special or not, insert into base table
+             const [ results ] = await db.query(queries.create_exhibit, [exhibitname, exhibitdesc, exhibitpic]);
+             if(!results || results[0].affectedRows == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not input exhibit. Invalid input?' }));
+            }
 
-            // Check if the exhibit already exists
-
-            // If not, create the database entry
-
-            /* END SQL QUERY */
+            if(isSpecial){
+                const exhibitID = results[0].ExhibitID;
+                const [ special_results ] = await db.query(queries.create_special_exhibit, [exhibitID, startdate, enddate, fee]);
+                if(!special_results || special_results[0].affectedRows == 0){
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ error: 'Database could not input special exhibit. Invalid input?' }));
+                }
+            }
 
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Successfully created exhibit.' }));
+            return res.end(JSON.stringify({ message: 'Successfully created exhibit.' }));
         } catch (err) {
             console.error('Error creating exhibit.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error creating exhibit.' }));
-        }
-    });
-}
-
-const deleteExhibit = async (req, res) => {
-    // Get fields from request
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    }); 
-
-    // Process the request once it is received, send response
-    req.on('end', () => {
-        try {
-            // Store the necessary field to delete the exhibit
-
-            // Check that the necessary field was provided, return error if not
-
-            /* SQL QUERY */
-
-
-            /* END SQL QUERY */
-
-            // Return successful delete message
-            res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Exhibit successfully deleted.' }));
-        } catch (err) {
-            console.error('Error deleting exhibit.');
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error deleting exhibit.' }));
+            return res.end(JSON.stringify({ error: 'Error creating exhibit.' }));
         }
     });
 }
@@ -114,29 +105,97 @@ const updateExhibit = async (req, res) => {
     }); 
 
     // Process the request once it is received, send response 
-    req.on('end', () => {
+    req.on('end', async() => {
+        var { exhibitid, exhibitname, exhibitdesc, exhibitpic, startdate, enddate, fee } = JSON.parse(body);
         try {
-            // Get necessary fields from the request
+            // Check that fields were provided
+            if(!exhibitid){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'No Exhibit ID provided to update'}));
+            }
 
-            // Check that at least one (or some?) fields were provided
+            // SQL Query - check to see if exhibit exists, if yes then update it 
+            const [ curr_exh ] = await db.query(queries.get_specific_exhibit, exhibitid);
 
-            /* SQL QUERY */
+            // first, we check all the normal exhibit parts out, no matter what
+            if(exhibitname == null || exhibitname == ""){
+                exhibitname = curr_exh[0].ExhibitName;
+            }
 
-            // Ensure the exhibit exists in the database before updating, return error if not
+            if(exhibitdesc == null || exhibitdesc == ""){
+                exhibitdesc = curr_exh[0].ExhibitDesc;
+            }
 
-            // Update necessary exhibit attributes
+            if(exhibitpic == null || exhibitpic == ""){
+                exhibitpic = curr_exh[0].ExhibitPic;
+            }
 
-            /* END SQL QUERY */
+            // if it's a special exhibit, we do more things with it
+            if(curr_exh[0].IsSpecial){
+                if(startdate == null || startdate == ""){
+                    startdate = curr_exh[0].StartDate
+                }
+                if(enddate == null || enddate == ""){
+                    enddate = curr_exh[0].EndDate
+                }
+                if(fee == null || fee == ""){
+                    fee = curr_exh[0].Fee
+                }
+
+                const special_results = await db.query(queries.update_special_exhibit, [ startdate, enddate, fee, exhibitid]);
+                if(!special_results || special_results[0].affectedRows == 0){
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
+                }
+            }
+
+            const results = await db.query(queries.update_exhibit, [exhibitname, exhibitdesc, exhibitpic, exhibitid,])
+
+            if(!results || results[0].affectedRows == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
+            }
 
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Exhibit successfully updated.' }));
+            return res.end(JSON.stringify({ message: 'Exhibit successfully updated.' }));
         } catch (err) {
             console.error('Error updating exhibit.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error deleting exhibit.' }));
+            return res.end(JSON.stringify({ error: 'Error editing exhibit.' }));
         }
     });
 }
 
-module.exports = { getExhibits, getExhibits, createExhibit, deleteExhibit, updateExhibit };
+/*
+Alec and I decided exhibits cannot be deletable - therefore, this has been commented out
+
+const deleteExhibit = async (req, res) => {
+    // Get fields from request
+    let body = '';
+    req.on('data', (chunk) => {
+        body += chunk.toString();
+    }); 
+
+    // Process the request once it is received, send response
+    req.on('end', async() => {
+        try {
+            // Store the necessary field to delete the exhibit
+
+            // Check that the necessary field was provided, return error if not
+            
+            // SQL QUERY GOES HERE
+
+            // Return successful delete message
+            res.writeHead(204, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ message: 'Exhibit successfully deleted.' }));
+        } catch (err) {
+            console.error('Error deleting exhibit.');
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Error deleting exhibit.' }));
+        }
+    });
+}
+*/
+
+module.exports = { getExhibits, getExhibit, createExhibit, updateExhibit };

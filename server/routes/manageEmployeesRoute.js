@@ -5,7 +5,6 @@ const { getAllEmployees, getEmployee, deleteEmployee, createEmployee, updateEmpl
 
 const manageEmployeeRoutes = async (req, res) => {
 
-    const email = req.url.split('/')[2];
     console.log(req.url);
 
     if (req.url === '/employees' && req.method === 'GET') {
@@ -16,22 +15,18 @@ const manageEmployeeRoutes = async (req, res) => {
         verifyToken('Manager')(req, res, () => {
             createEmployee(req, res);
         });
-    } else if (req.url.startsWith('/employees/') && req.method === 'GET' && email) {      
+    } else if (req.url.startsWith('/employees/') && req.method === 'GET') {      
         verifyToken('Manager')(req, res, () => {
-            getEmployee(req, res, email);
+            getEmployee(req, res);
         }); 
-    } else if (req.url.startsWith('/employees/') && req.method === 'PUT' && email) {
+    } else if (req.url.startsWith('/employees/') && req.method === 'PUT') {
         verifyToken('Manager')(req, res, () => {
             updateEmployee(req, res);
         });
-    } else if (req.url.startsWith('/employees/') && req.method === 'DELETE' && email) {
+    } else if (req.url.startsWith('/employees/') && req.method === 'DELETE') {
         verifyToken('Manager')(req, res, () => {
-            deleteEmployee(req, res, email);
+            deleteEmployee(req, res);
         });
-    }
-    else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Route not found.' }));
     }
 }
 
