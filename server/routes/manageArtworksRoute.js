@@ -9,7 +9,7 @@ const manageArtworksRoutes = (req, res) => {
         verifyToken('Manager')(req, res, () => {
             createArtwork(req, res);
         });
-    } else if (req.url.startsWith('/artworks/') && req.method === 'GET') {
+    } else if (req.url.startsWith('/artworks/collection/') && req.method === 'GET') {
         getCollectionArtwork(req, res);
     } else if (req.url === '/artworks/' && req.method === 'PUT') {
         verifyToken('Manager')(req, res, () => {

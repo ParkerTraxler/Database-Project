@@ -26,15 +26,15 @@ const getDonationsForUser = (req, res) => {
 
     // Process request and return response
     req.on('end', async () => {
-        const { customerid } = JSON.parse(body);
+        const { email } = JSON.parse(body);
         try {
             // Confirm that a customer was supplied
-            if (!customerid) {
+            if (!email) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Please supply which customer\'s donations to view' }))
             }
             // SQL QUERY - Return all the donations given by that user - MIGHT BE NONE.  
-            const [ rows ] = await db.query(queries.get_specific_dons, [customerid]);
+            const [ rows ] = await db.query(queries.get_specific_dons, [email]);
 
             // Return donations to frontend
             res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -55,11 +55,11 @@ const createDonation = (req, res) => {
     });
 
     req.on('end', async () => {
-        const { customerid, donatedate, donateamt, donatedesc } = JSON.parse(body);
+        const { email, donatedate, donateamt, donatedesc } = JSON.parse(body);
         try {
-            if(!customerid){
+            if(!email){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'Identity required for user making the donation (no customerID supplied)' }))
+                return res.end(JSON.stringify({ error: 'Identity required for user making the donation (no email supplied)' }))
             }
 
             if(!donateamt){
@@ -69,10 +69,10 @@ const createDonation = (req, res) => {
 
             if(!donatedate){
                 donatedate = new Date();
-                console.log("Automatically filled the current date as donation date for User with ID: " + customerid);
+                console.log("Automatically filled the current date as donation date for User with email: " + email);
             }
             // SQL QUERY - create the donation in the table assuming it all is good
-            const [ results ] = await db.query(queries.add_new_donation, [customerid, donatedate, donateamt, donatedesc]);
+            const [ results ] = await db.query(queries.add_new_donation, [email, donatedate, donateamt, donatedesc]);
 
             if(results.affectedRows == 0){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -83,7 +83,7 @@ const createDonation = (req, res) => {
             res.writeHead(201, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: 'Successfully created donation.' }));
         } catch (err) {
-            console.error('Error creating donation.');
+            console.error('Error creating donation: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: 'Error creating donation.' }));
         }

@@ -29,6 +29,7 @@ const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = 
 // Collections Management Controller
 const get_collections_query = "SELECT * FROM collections WHERE isDeleted = false";
 const get_specific_collection = "SELECT * FROM collections WHERE Title = ? AND isDeleted = false";
+const get_exhibit_collections = "SELECT * FROM artworks WHERE ExhibitID = ? AND isDeleted = false";
 const insert_new_collection = "INSERT INTO collections (Title, CollectDesc, CollectPic, ExhibitID) VALUES (?, ?, ?, ?)";
 const mark_collection_delete = "UPDATE collections SET isDeleted = true WHERE Title = ? AND isDeleted = false";
 const update_collection_query = "UPDATE collections SET CollectDesc = ?, CollectPic = ?, ExhibitID = ? WHERE Title = ? AND isDeleted = false";
@@ -72,8 +73,9 @@ const update_special_exhibit = "UPDATE specialexhibits SET StartDate = ?, EndDat
 
 // Donations Controller
 const get_all_donations = "SELECT DonationID, CONCAT(customers.FirstName, ' ', customers.LastName) AS DonatorName, DonateDate, DonateAmt, DonateDesc FROM donations, customers WHERE customers.CustomerID = donations.CustomerID";
-const get_specific_dons = "SELECT DonateDate, DonateAmt, DonateDesc FROM donations WHERE CustomerID = ?";
-const add_new_donation = "INSERT INTO donations (CustomerID, DonateDate, DonateAmt, DonateDesc) VALUES (?, ?, ?, ?)";
+const get_specific_dons = "SELECT DonateDate, DonateAmt, DonateDesc FROM donations, logininfo, customers WHERE logininfo.email = ? AND logininfo.UserID = customers.userID AND customers.customerID = donations.customerID";
+const add_new_donation = `INSERT INTO donations (CustomerID, DonateDate, DonateAmt, DonateDesc) 
+                            VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.email = ? AND logininfo.userID = customers.userID), ?, ?, ?)`;
 
 // Item and Ticket Controller : )
 const get_all_normal_items = "SELECT * FROM items WHERE isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
@@ -85,16 +87,19 @@ const delete_item = "UPDATE items SET isDeleted = true WHERE ItemID = ? AND isDe
 const update_item = "UPDATE items SET ItemName = ?, ItemPrice = ?, GiftShopName = ? WHERE ItemID = ? AND isDeleted = false";
 const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE ItemID = ? AND isDeleted = false";
 
+// Transaction Controller - one query + the all_sales_report
+const new_transaction = "INESRT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo WHERE logininfo.email = ? AND logininfo.userID = customers.userID) ?, ?, ?"
+
 // REPORT QUERIES - three queries that result in three beautiful reports (I hope)
 
 // a report that gets all transactions, including tickets. 
 const all_sales_report = `SELECT
-            s.PurchaseID as Transaction_ID,
-			CONCAT(c.FirstName, ' ', c.LastName) as Customer_Name, 
-			i.ItemName as Item_Name,
-			s.Quantity as Item_Quantity,
-			s.Price as Total_Price,
-			s.DatePurchased as Date_of_Sale
+            s.PurchaseID as TransactionID,
+			CONCAT(c.FirstName, ' ', c.LastName) as CustomerName, 
+			i.ItemName as ItemName,
+			s.Quantity as ItemQuantity,
+			s.Price as TotalPrice,
+			s.DatePurchased as DateofSale
 			FROM 
 			customers AS c,
 			items AS i,
@@ -145,6 +150,7 @@ module.exports = {
     reinstate_employee_info,
     get_collections_query,
     get_specific_collection,
+    get_exhibit_collections,
     insert_new_collection,
     mark_collection_delete,
     update_collection_query,
@@ -165,7 +171,7 @@ module.exports = {
     delete_item,
     update_item,
     restock_item,
-
+    new_transaction,
     all_sales_report,
     employee_exhibit_report,
 };
