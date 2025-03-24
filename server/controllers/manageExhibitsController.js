@@ -72,15 +72,15 @@ const createExhibit = async (req, res) => {
 
              // no matter if special or not, insert into base table
              const [ results ] = await db.query(queries.create_exhibit, [exhibitname, exhibitdesc, exhibitpic]);
-             if(!results || results[0].affectedRows == 0){
+             if(!results || results.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not input exhibit. Invalid input?' }));
             }
 
             if(isSpecial){
-                const exhibitID = results[0].ExhibitID;
+                const exhibitID = results.insertId;
                 const [ special_results ] = await db.query(queries.create_special_exhibit, [exhibitID, startdate, enddate, fee]);
-                if(!special_results || special_results[0].affectedRows == 0){
+                if(!special_results || special_results.affectedRows == 0){
                     res.writeHead(400, { 'Content-Type': 'application/json' });
                     return res.end(JSON.stringify({ error: 'Database could not input special exhibit. Invalid input?' }));
                 }
@@ -90,7 +90,7 @@ const createExhibit = async (req, res) => {
             res.writeHead(201, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Successfully created exhibit.' }));
         } catch (err) {
-            console.error('Error creating exhibit.');
+            console.error('Error creating exhibit: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error creating exhibit.' }));
         }
@@ -117,6 +117,7 @@ const updateExhibit = async (req, res) => {
             // SQL Query - check to see if exhibit exists, if yes then update it 
             const [ curr_exh ] = await db.query(queries.get_specific_exhibit, exhibitid);
 
+            console.log(curr_exh[0]);
             // first, we check all the normal exhibit parts out, no matter what
             if(exhibitname == null || exhibitname == ""){
                 exhibitname = curr_exh[0].ExhibitName;
@@ -143,7 +144,7 @@ const updateExhibit = async (req, res) => {
                 }
 
                 const special_results = await db.query(queries.update_special_exhibit, [ startdate, enddate, fee, exhibitid]);
-                if(!special_results || special_results[0].affectedRows == 0){
+                if(!special_results || special_results.affectedRows == 0){
                     res.writeHead(400, { 'Content-Type': 'application/json' });
                     return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
                 }
@@ -151,7 +152,7 @@ const updateExhibit = async (req, res) => {
 
             const results = await db.query(queries.update_exhibit, [exhibitname, exhibitdesc, exhibitpic, exhibitid,])
 
-            if(!results || results[0].affectedRows == 0){
+            if(!results || results.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
             }
@@ -160,7 +161,7 @@ const updateExhibit = async (req, res) => {
             res.writeHead(204, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Exhibit successfully updated.' }));
         } catch (err) {
-            console.error('Error updating exhibit.');
+            console.error('Error updating exhibit: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error editing exhibit.' }));
         }

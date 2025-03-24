@@ -59,11 +59,9 @@ const get_specific_exhibit = //coalesce checks to see if the value IS NOT null, 
             ELSE TRUE
         END AS IsSpecial
     FROM
-        exhibits,
-        specialexhibits
+        exhibits
+    LEFT JOIN specialexhibits ON exhibits.ExhibitID = specialexhibits.ExhibitID
     WHERE
-        exhibits.ExhibitID = specialexhibits.ExhibitID
-        AND
         exhibits.ExhibitID = ?`
 
 const create_exhibit = "INSERT INTO exhibits (ExhibitName, ExhibitDesc, ExhibitPic) VALUES (?, ?, ?)";
@@ -78,6 +76,11 @@ const add_new_donation = "INSERT INTO donations (CustomerID, DonateDate, DonateA
 
 // Item and Ticket Controller : )
 const get_all_normal_items = "SELECT * FROM items WHERE isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
+const get_a_normal_item = "SELECT * FROM items WHERE isDeleted = false AND ItemID = ?";
+const get_all_tickets = "SELECT * FROM items WHERE ItemID IN (1, 2, 3, 4)";
+const get_specific_ticket = "SELECT * FROM items WHERE ItemID = ? AND ItemID IN (1, 2, 3, 4)";
+const insert_new_item = "INSERT INTO items (ItemName, AmountSold, ItemPrice, AmountInStock, GiftShopName) VALUES (?, 0, ?, ?, 'Gift Shop Museum')";
+const delete_item = "UPDATE items SET isDeleted = true WHERE ItemID = ? AND isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
 
 // REPORT QUERIES - three queries that result in three beautiful reports (I hope)
 
@@ -151,6 +154,11 @@ module.exports = {
     get_specific_dons,
     add_new_donation,
     get_all_normal_items,
+    get_a_normal_item,
+    get_all_tickets,
+    get_specific_ticket,
+    insert_new_item,
+    delete_item,
 
     all_sales_report,
     employee_exhibit_report,
