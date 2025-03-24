@@ -1,6 +1,6 @@
 const http = require('http');
 const verifyToken = require('../middleware/authMiddleware');
-const { getAllArtworks, getArtwork, createArtwork, deleteArtwork, updateArtwork } = require('../controllers/manageArtworksController');
+const { getAllArtworks, getCollectionArtwork, createArtwork, deleteArtwork, updateArtwork } = require('../controllers/manageArtworksController');
 
 const manageArtworksRoutes = (req, res) => {
     if (req.url === '/artworks' && req.method === 'GET') {
@@ -9,8 +9,8 @@ const manageArtworksRoutes = (req, res) => {
         verifyToken('Manager')(req, res, () => {
             createArtwork(req, res);
         });
-    } else if (req.url === '/artworks/' && req.method === 'GET') {
-        getArtwork(req, res);
+    } else if (req.url.startsWith('/artworks/') && req.method === 'GET') {
+        getCollectionArtwork(req, res);
     } else if (req.url === '/artworks/' && req.method === 'PUT') {
         verifyToken('Manager')(req, res, () => {
             updateArtwork(req, res);

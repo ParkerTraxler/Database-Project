@@ -18,8 +18,7 @@ const getAllArtworks = async (req, res) => {
     }
 }
 
-const getArtwork = async (req, res) => {
-    
+const getCollectionArtwork = async (req, res) => {
     let body = '';
     req.on('data', (chunk) => {
         body += chunk.toString();
@@ -27,19 +26,15 @@ const getArtwork = async (req, res) => {
     
     req('end', async () => {
         try {
-            // ASSUMPTION: getArtwork uses an ID (the primary key) to retrieve an artwork - easy to change if needed
-            const { artID } = JSON.parse(body);
-            // SQL Query - Check if the artwork exists, if yes, return its information
-            // ASSUMPTION: We return ALL of the artwork information - can filter what info
-            const [rows] = await db.query(queries.get_specific_art, [artID]);
+            // get all the art pieces in a collection
+            const { collection } = JSON.parse(body);
+            // SQL Query - Return ALL artwork part of a collection
+            // ASSUMPTION: We return ALL of the artwork information - frontend can decide what to show
+            const [rows] = await db.query(queries.get_collection_art, [collection]);
 
-            if(!rows.length){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'Specified artwork does not exist! It may have been deleted.'}));
-            }
-
+            // can return 0 artwork, just as a worry
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify(rows[0]));
+            return res.end(JSON.stringify(rows));
         } catch (err) {
             console.error('Error fetching artwork.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -213,4 +208,4 @@ const updateArtwork = (req, res) => {
     });
 }
 
-module.exports = { getAllArtworks, getArtwork, createArtwork, deleteArtwork, updateArtwork };
+module.exports = { getAllArtworks, getCollectionArtwork, createArtwork, deleteArtwork, updateArtwork };

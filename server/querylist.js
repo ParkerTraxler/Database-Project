@@ -9,6 +9,7 @@ const downgrade_employee = "UPDATE logininfo SET UserRole = 'Customer' WHERE Ema
 // Artwork Management Controller - artwork oriented queries
 const get_artwork_query = "SELECT * FROM artworks WHERE isDeleted = false";
 const get_specific_art = "SELECT * FROM artworks WHERE ArtID = ? AND isDeleted = false";
+const get_collection_art = "SELECT * FROM artworks WHERE Collection = ? AND isDeleted = false";
 const get_name_specific_art = "SELECT * FROM artworks WHERE ArtName = ? AND isDeleted = false";
 const insert_art_piece = "INSERT INTO artworks (ArtName, Artist, DateMade, ArtRype, ArtVal, Collection, ArtDesc, ArtPic, OnDisplay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 const mark_art_for_deletion = "UPDATE artworks SET isDeleted = true WHERE ArtID = ? AND isDeleted = false";
@@ -129,6 +130,7 @@ module.exports = {
     downgrade_employee,
     get_artwork_query,
     get_specific_art,
+    get_collection_art,
     get_name_specific_art,
     insert_art_piece,
     mark_art_for_deletion,
