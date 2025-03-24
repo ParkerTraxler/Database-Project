@@ -1,27 +1,25 @@
 const http = require('http');
+const { getExhibits, getExhibit, createExhibit, deleteExhibit, updateExhibit } = require('../controllers/manageExhibitsController');
 const verifyToken = require('../controllers/authController');
-// Include controllers later...
 
 const manageExhibitsRoutes = (req, res) => {
     if (req.url === '/exhibits' && req.method === 'GET') {
-        verifyToken('Manager')(req, res, () => {
-            // Read all exhibit
-        });
-    } else if (req.url === '/exhibits/:exhibit' && req.method === 'GET') {
-        verifyToken('Manager')(req, res, () => {
-            // Read a specific exhibit
-        });
+        getExhibits(req, res);  
+    } else if (req.url.startsWith('/exhibits/') && req.method === 'GET') {
+        getExhibit(req, res);
     } else if (req.url === '/exhibits' && req.method === 'POST') {
         verifyToken('Manager')(req, res, () => {
-            // Create a new exhibit
+            createExhibit(req, res);
         });
-    } else if (req.url === '/exhibits/:exhibit' && req.method === 'PUT') {
+    } else if (req.url.startsWith('/exhibits/') && req.method === 'PUT') {
         verifyToken('Manager')(req, res, () => {
-            // Update an exhibit
+            updateExhibit(req, res);
         });
-    } else if (req.url === '/exhibits/:exhibit' && req.method === 'DELETE') {
+    } else if (req.url.startsWith('/exhibits/') && req.method === 'DELETE') {
         verifyToken('Manager')(req, res, () => {
-            // Delete an exhibit
+            deleteExhibit(req, res);
         });
     }
 }
+
+module.exports = manageExhibitsRoutes;

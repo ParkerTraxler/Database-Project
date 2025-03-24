@@ -6,11 +6,17 @@ const manageEmployeesRoutes = require('./routes/manageEmployeesRoute');
 const manageCollectionsRoutes = require('./routes/manageCollectionsRoute');
 const manageEventsRoutes = require('./routes/manageEventsRoute');
 const manageExhibitsRoutes = require('./routes/manageExhibitsRoutes');
+const manageArtworksRoutes = require('./routes/manageArtworksRoute');
+const manageItemsRoutes = require('./routes/manageItemsRoute');
+const manageDonationsRoutes = require('./routes/manageDonationsRoute');
+const manageReviewsRoutes = require('./routes/manageReviewsRoute');
 // Port
 const PORT = 3002;
 
 const server = http.createServer((req, res) => {
+
     corsMiddleware(req, res);
+
     if (req.url.startsWith('/auth'))
         authRoutes(req, res);
     else if (req.url.startsWith('/employees'))
@@ -21,6 +27,14 @@ const server = http.createServer((req, res) => {
         manageEventsRoutes(req, res);
     else if (req.url.startsWith('/exhibits'))
         manageExhibitsRoutes(req, res);
+    else if (req,url.startsWith('/artworks'))
+        manageArtworksRoutes(req, res);
+    else if (req.url.startsWith('/items'))
+        manageItemsRoutes(req, res);
+    else if (req.url.startsWith('/donations'))
+        manageDonationsRoutes(req, res);
+    else if (req.url.startsWith('/reviews'))
+        manageReviewsRoutes(req, res);
     else {
         res.writeHead(404, {'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Route not found' }));

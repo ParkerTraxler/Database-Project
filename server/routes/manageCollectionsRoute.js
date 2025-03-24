@@ -1,28 +1,26 @@
 const http = require('http');
+const { getAllCollections, getCollection, createCollection, deleteCollection, updateCollection } = require('../controllers/manageCollectionsController');
 const verifyToken = require('../middleware/authMiddleware');
-// Require controllers later...
 
 const manageCollectionsRoutes = (req, res) => {
     // Collection management
     if (req.url === '/collections' && req.method === 'GET') {
-        verifyToken('Manager')(req, res, () => {
-            // Read all collections
-        });
-    } else if (req.url === '/collections/:title' && req.method === 'GET') {
-        verifyToken('Manager')(req, res, () => {
-            // Read a specific collection
-        });
+        getAllCollections(req, res);
+    } else if (req.url.startsWith('/collections/') && req.method === 'GET') {
+        getCollection(req, res);
     } else if (req.url === '/collections' && req.method === 'POST') {
         verifyToken('Manager')(req, res, () => {
-            // Create a new collection
+            createCollection(req, res);
         });
-    } else if (req.url === '/collections/:title' && req.method === 'PUT') {
+    } else if (req.url.startsWith('/collections/') && req.method === 'PUT') {
         verifyToken('Manager')(req, res, () => {
-            // Update a pre-existing collection
+            updateCollection(req, res);
         });
-    } else if (req.url === '/collections/:title' && req.method === 'DELETE') {
+    } else if (req.url.startsWith('/collections/') && req.method === 'DELETE') {
         verifyToken('Manager')(req, res, () => {
-            // Delete a pre-existing collection
+            deleteCollection(req, res);
         });
     }
 };
+
+module.exports = manageCollectionsRoutes;
