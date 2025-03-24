@@ -26,6 +26,10 @@ const getCollection = async (req, res) => {
     req('end', async () => {
         const { title } = JSON.parse(body);
         try {
+            if(!title){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'No Collection Title supplied to search for'}));
+            }
             // SQL QUERY - Retrieve collection from database
             const [rows] = await db.query(queries.get_specific_collection, [title]);
 
@@ -130,7 +134,7 @@ const updateCollection = (req, res) => {
 
     req.on('end', async () => {
         try {
-            const { title, collectdesc, collectpic, exhibitid } = JSON.parse(body);
+            var { title, collectdesc, collectpic, exhibitid } = JSON.parse(body);
 
             // If no collection name is provided, halt
             if (!title) {
@@ -138,7 +142,7 @@ const updateCollection = (req, res) => {
                 return res.end(JSON.stringify({ error: 'You must provide a name to update the collection.' }));
             }
             // check that an exhibit even exists to be updated
-            const curr_col = await db.query(queries.get_specific_collection, [title]);
+            const [ curr_col ] = await db.query(queries.get_specific_collection, [title]);
             if(!curr_col || curr_col.length == 0){
                 res.writeHead(400, {'Content-Type': 'application/json'});
                 return res.end(JSON.stringify({ error: 'No collection found to be updated. Did you mean insert?'}));
@@ -152,12 +156,14 @@ const updateCollection = (req, res) => {
                 collectpic = curr_col[0].CollectPic;
             }
 
+            console.log("New collectpic value " + collectpic);
+
             if(exhibitid == null || exhibitid == ""){
                 exhibitid = curr_col[0].ExhibitID;
             }
 
             // SQL QUERY - Create the query to update provided fields
-            const result = await db.query(update_collection_query, [collectdesc, collectpic, exhibitid]);
+            const result = await db.query(queries.update_collection_query, [collectdesc, collectpic, exhibitid, title]);
 
             if(!result || result.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });

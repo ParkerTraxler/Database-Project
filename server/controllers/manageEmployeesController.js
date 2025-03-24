@@ -84,7 +84,7 @@ const deleteEmployee = async (req, res) => {
             }
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(rows[0]));
+            res.end(JSON.stringify({ message: 'Employee deleted successfully' }));
         } catch (err) {
             res.writeHead(500, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: 'Error deleting employee.' }));
@@ -168,7 +168,7 @@ const updateEmployee = (req, res) => {
 
     req.on('end', async () => {
         try {
-            const { hourlywage, weeklyhours, firstname, lastname, birthdate, ePosition, exhibitID, giftshopname, managerID, gender, email } = JSON.parse(body);
+            var { hourlywage, weeklyhours, firstname, lastname, birthdate, ePosition, exhibitID, giftshopname, managerID, gender, email } = JSON.parse(body);
 
             // If no email is provided, halt
             if (!email) {

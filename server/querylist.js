@@ -29,6 +29,82 @@ const insert_new_collection = "INSERT INTO collections (Title, CollectDesc, Coll
 const mark_collection_delete = "UPDATE collections SET isDeleted = true WHERE Title = ? AND isDeleted = false";
 const update_collection_query = "UPDATE collections SET CollectDesc = ?, CollectPic = ?, ExhibitID = ? WHERE Title = ? AND isDeleted = false";
 
+// Exhibits Management Controller (very very long)
+const get_all_exhibits = 
+    `SELECT exhibits.ExhibitID, ExhibitName, ExhibitDesc, ExhibitPic, NULL as StartDate, NULL as EndDate, NULL as Fee, FALSE as IsSpecial
+    FROM exhibits 
+    LEFT JOIN specialexhibits ON exhibits.ExhibitID = specialexhibits.ExhibitID 
+    WHERE specialexhibits.ExhibitID IS NULL
+
+    UNION
+
+    SELECT exhibits.ExhibitID, ExhibitName, ExhibitDesc, ExhibitPic, StartDate, EndDate, Fee, TRUE as IsSpecial
+    FROM exhibits, specialexhibits 
+    WHERE exhibits.ExhibitID = specialexhibits.ExhibitID`;
+
+    const get_specific_exhibit = //coalesce checks to see if the value IS NOT null, and uses it if it is indeed not null
+    `SELECT 
+        exhibits.ExhibitID,
+        ExhibitName,
+        ExhibitDesc,
+        ExhibitPic,
+        COALESCE(specialexhibits.StartDate, NULL) AS StartDate,
+        COALESCE(specialexhibits.EndDate, NULL) AS EndDate,
+        COALESCE(specialexhibits.Fee, NULL) AS Fee,
+        CASE
+            WHEN specialexhibits.ExhibitID IS NULL THEN FALSE
+            ELSE TRUE
+        END AS IsSpecial
+    FROM
+        exhibits,
+        specialexhibits
+    WHERE
+        exhibits.ExhibitID = specialexhibits.ExhibitID
+        AND
+        exhibits.ExhibitID = ?`
+
+    const create_exhibit = "INSERT INTO exhibits (ExhibitName, ExhibitDesc, ExhibitPic) VALUES (?, ?, ?)";
+    const create_special_exhibit = "INSERT INTO specialexhibits (ExhibitID, StartDate, EndDate, Fee) VALUES (?, ?, ?, ?)";
+    const update_exhibit = "UPDATE exhibits SET ExhibitName = ?, ExhibitDesc = ?, ExhibitPic = ? WHERE ExhibitID = ?";
+    const update_special_exhibit = "UPDATE specialexhibits SET StartDate = ?, EndDate = ?, Fee = ? WHERE ExhibitID = ?";
+
+// REPORT QUERIES - three queries that result in three beautiful reports (I hope)
+
+// a report that gets all transactions, including tickets. 
+const all_sales_report = `SELECT
+            s.PurchaseID as Transaction_ID,
+			CONCAT(c.FirstName, ' ', c.LastName) as Customer_Name, 
+			i.ItemName as Item_Name,
+			s.Quantity as Item_Quantity,
+			s.Price as Total_Price,
+			s.DatePurchased as Date_of_Sale
+			FROM 
+			customers AS c,
+			items AS i,
+			sales AS s
+			WHERE
+			s.CustomerID = c.CustomerID
+			AND
+			s.ItemID = i.ItemID
+            ORDER BY s.DatePurchased DESC`;
+
+// A report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
+const employee_exhibit_report = `SELECT 
+            e.EmployeeID as Employee_ID,
+            CONCAT(e.FirstName + ' ' + e.LastName) as Employee_Name,
+            e.Email as Employee_Email,
+            ex.ExhibitName as Exhibit_Name,
+            CASE
+                WHEN e.isDeleted = FALSE THEN TRUE
+                WHEN e.isDeleted = TRUE THEN FALSE
+            END AS Employee_Active
+            FROM
+            employees as e,
+            exhibits as ex
+            WHERE
+            e.ExhibitID = ex.ExhibitID
+            ORDER BY ex.ExhibitID ASC, e.isDeleted ASC`;
+
 // all the queries exported out
 module.exports = {
     user_exists_query,
@@ -52,4 +128,13 @@ module.exports = {
     insert_new_collection,
     mark_collection_delete,
     update_collection_query,
+    get_all_exhibits,
+    get_specific_exhibit,
+    create_exhibit,
+    create_special_exhibit,
+    update_exhibit,
+    update_special_exhibit,
+
+    all_sales_report,
+    employee_exhibit_report,
 };

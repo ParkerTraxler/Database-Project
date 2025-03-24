@@ -142,7 +142,7 @@ const updateArtwork = (req, res) => {
     req.on('end', async () => {
         try {
             // Store all the updated fields
-            const {artID, artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay } = JSON.parse(body);
+            var {artID, artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay } = JSON.parse(body);
 
             // If no art ID is provided, halt
             if (!artID) {
