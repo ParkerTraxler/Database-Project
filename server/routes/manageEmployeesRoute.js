@@ -29,10 +29,6 @@ const manageEmployeeRoutes = async (req, res) => {
             deleteEmployee(req, res, email);
         });
     }
-    else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Route not found.' }));
-    }
 }
 
 module.exports = manageEmployeeRoutes;

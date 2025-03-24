@@ -8,7 +8,7 @@ const manageReviewsRoutes = (req, res) => {
     } else if (req.url.startsWith('/reviews/') && req.method === 'GET') {
         getReview(req, res);
     } else if (req.url === '/reviews' && req.method === 'POST') {
-            createReview(req, res);
+        createReview(req, res);
     } else if (req.url.startsWith('/reviews/') && req.method === 'PUT') {
         updateReview(req, res);
     } else if (req.url.startsWith('/reviews/') && req.method === 'DELETE') {

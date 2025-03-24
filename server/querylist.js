@@ -3,8 +3,8 @@
 // First up, login/auth-controller - user oriented queries
 const user_exists_query = "SELECT UserPass, UserRole FROM logininfo WHERE Email = ?";
 const create_user_query = "INSERT INTO logininfo (Email, UserPass, UserRole) VALUES (?, ?, ?)";
-const create_new_employee = "UPDATE logininfo SET UserRole = 'Employee' WHERE Email = ? AND isDeleted = false";
-const downgrade_employee = "UPDATE logininfo SET UserRole = 'Customer' WHERE Email = ? AND isDeleted = false";
+const create_new_employee = "UPDATE logininfo SET UserRole = 'Employee' WHERE Email = ?";
+const downgrade_employee = "UPDATE logininfo SET UserRole = 'Customer' WHERE Email = ?";
 
 // Artwork Management Controller - artwork oriented queries
 const get_artwork_query = "SELECT * FROM artworks WHERE isDeleted = false";
@@ -40,9 +40,9 @@ const get_all_exhibits =
 
     SELECT exhibits.ExhibitID, ExhibitName, ExhibitDesc, ExhibitPic, StartDate, EndDate, Fee, TRUE as IsSpecial
     FROM exhibits, specialexhibits 
-    WHERE exhibits.ExhibitID = specialexhibits.ExhibitID`;
+    WHERE exhibits.ExhibitID = specialexhibits.ExhibitID AND specialexhibits.EndDate IS NOT NULL AND specialexhibits.EndDate >= CURDATE()`;
 
-    const get_specific_exhibit = //coalesce checks to see if the value IS NOT null, and uses it if it is indeed not null
+const get_specific_exhibit = //coalesce checks to see if the value IS NOT null, and uses it if it is indeed not null
     `SELECT 
         exhibits.ExhibitID,
         ExhibitName,
@@ -63,13 +63,15 @@ const get_all_exhibits =
         AND
         exhibits.ExhibitID = ?`
 
-    const create_exhibit = "INSERT INTO exhibits (ExhibitName, ExhibitDesc, ExhibitPic) VALUES (?, ?, ?)";
-    const create_special_exhibit = "INSERT INTO specialexhibits (ExhibitID, StartDate, EndDate, Fee) VALUES (?, ?, ?, ?)";
-    const update_exhibit = "UPDATE exhibits SET ExhibitName = ?, ExhibitDesc = ?, ExhibitPic = ? WHERE ExhibitID = ?";
-    const update_special_exhibit = "UPDATE specialexhibits SET StartDate = ?, EndDate = ?, Fee = ? WHERE ExhibitID = ?";
+const create_exhibit = "INSERT INTO exhibits (ExhibitName, ExhibitDesc, ExhibitPic) VALUES (?, ?, ?)";
+const create_special_exhibit = "INSERT INTO specialexhibits (ExhibitID, StartDate, EndDate, Fee) VALUES (?, ?, ?, ?)";
+const update_exhibit = "UPDATE exhibits SET ExhibitName = ?, ExhibitDesc = ?, ExhibitPic = ? WHERE ExhibitID = ?";
+const update_special_exhibit = "UPDATE specialexhibits SET StartDate = ?, EndDate = ?, Fee = ? WHERE ExhibitID = ?";
 
 // Donations Controller
-
+const get_all_donations = "SELECT DonationID, CONCAT(customers.FirstName, ' ', customers.LastName) AS DonatorName, DonateDate, DonateAmt, DonateDesc FROM donations, customers WHERE customers.CustomerID = donations.CustomerID";
+const get_specific_dons = "SELECT DonateDate, DonateAmt, DonateDesc FROM donations WHERE CustomerID = ?";
+const add_new_donation = "INSERT INTO donations (CustomerID, DonateDate, DonateAmt, DonateDesc) VALUES (?, ?, ?, ?)";
 
 // REPORT QUERIES - three queries that result in three beautiful reports (I hope)
 
@@ -137,6 +139,9 @@ module.exports = {
     create_special_exhibit,
     update_exhibit,
     update_special_exhibit,
+    get_all_donations,
+    get_specific_dons,
+    add_new_donation,
 
     all_sales_report,
     employee_exhibit_report,

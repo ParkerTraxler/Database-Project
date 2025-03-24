@@ -69,16 +69,16 @@ const deleteEmployee = async (req, res) => {
                 return res.end(JSON.stringify({ error: 'Please specify an email pointing to the employee to delete' }))
             }
             // SQL QUERY - get employee based off email (we assume we don't have their ID)
-            const result = await db.query(queries.mark_emp_for_deletion, [empEmail]);
+            const [ result ] = await db.query(queries.mark_emp_for_deletion, [empEmail]);
             
-            if(!result || result.rowCount == 0){
+            if(!result || result.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'No employee with that email found!' }))
             }
 
-            const downgrade = await db.query(queries.downgrade_employee, [empEmail]);
+            const [ downgrade ] = await db.query(queries.downgrade_employee, [empEmail]);
 
-            if(!downgrade || result.rowCount == 0){
+            if(!downgrade || downgrade.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Employee user account failed to be downgraded to customer. Contact a DBA admin immediately.' })) 
             }
@@ -126,22 +126,22 @@ const createEmployee = (req, res) => {
             }
             
             // get the managerID based off their email
-            const manager_query = await db.query(queries.get_manager_query, [managerEmail]);
-            if(!manager_query || manager_query.rowCount == 0){
+            const [ manager_query ] = await db.query(queries.get_manager_query, [managerEmail]);
+            if(!manager_query || manager_query.length == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'This email is not related to a manager account!'}));
             }
             let managerID = manager_query[0].ManagerID;
-            const user_row = await db.query(queries.create_new_employee, [email]);
-            if(!user_row || user_row.rowCount == 0){
+            const [ user_row ] = await db.query(queries.create_new_employee, [email]);
+            if(!user_row || user_row.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'The employee\'s email does not have a user account! Have them create one.'}));
             }
 
             // SQL QUERY - Create an entry in the employee table for the user. If it fails, reset the state
             try {
-                const result = await db.query(queries.insert_employee_info, [firstName, lastName, position, managerID, email]);
-                if(!result || result.rowCount == 0){
+                const [ result ] = await db.query(queries.insert_employee_info, [firstName, lastName, position, managerID, email]);
+                if(!result || result.affectedRows == 0){
                     throw ("Unable to add employee info into employee table");
                 }
             } catch (err){
