@@ -19,8 +19,11 @@ const get_employee_query = "SELECT * FROM employees WHERE isDeleted = false";
 const get_email_specific_emp = "SELECT * FROM employees WHERE Email = ? AND isDeleted = false";
 const mark_emp_for_deletion = "UPDATE employees SET isDeleted = true WHERE Email = ? AND isDeleted = false";
 const get_manager_query = "SELECT ManagerID FROM managers, logininfo WHERE logininfo.Email = ? AND logininfo.UserID = managers.UserID";
-const insert_employee_info = "INSERT INTO employees (FirstName, LastName, EPosition, ManagerID, Email) VALUES (?, ?, ?, ?, ?)";
+const insert_employee_info = "INSERT INTO employees (FirstName, LastName, EPosition, GiftShopName, ManagerID, Email) VALUES (?, ?, ?, ?, ?, ?)";
 const update_employee_info = "UPDATE employees SET HourlyWage = ?, WeeklyHours = ?, FirstName = ?, LastName = ?, BirthDate = ?, EPosition = ?, ExhibitID = ?, GiftShopName = ?, ManagerID = ?, Gender = ? WHERE Email = ? AND isDeleted = false";
+// if an employee is being reinstated, use these two commands
+const check_employee_exist = "SELECT * FROM employees WHERE Email = ? AND isDeleted = TRUE";
+const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = ?, EPosition = ?, GiftShopName = ?, ManagerID = ?, isDeleted = FALSE WHERE Email = ?";
 
 // Collections Management Controller
 const get_collections_query = "SELECT * FROM collections WHERE isDeleted = false";
@@ -56,11 +59,9 @@ const get_specific_exhibit = //coalesce checks to see if the value IS NOT null, 
             ELSE TRUE
         END AS IsSpecial
     FROM
-        exhibits,
-        specialexhibits
+        exhibits
+    LEFT JOIN specialexhibits ON exhibits.ExhibitID = specialexhibits.ExhibitID
     WHERE
-        exhibits.ExhibitID = specialexhibits.ExhibitID
-        AND
         exhibits.ExhibitID = ?`
 
 const create_exhibit = "INSERT INTO exhibits (ExhibitName, ExhibitDesc, ExhibitPic) VALUES (?, ?, ?)";
@@ -72,6 +73,16 @@ const update_special_exhibit = "UPDATE specialexhibits SET StartDate = ?, EndDat
 const get_all_donations = "SELECT DonationID, CONCAT(customers.FirstName, ' ', customers.LastName) AS DonatorName, DonateDate, DonateAmt, DonateDesc FROM donations, customers WHERE customers.CustomerID = donations.CustomerID";
 const get_specific_dons = "SELECT DonateDate, DonateAmt, DonateDesc FROM donations WHERE CustomerID = ?";
 const add_new_donation = "INSERT INTO donations (CustomerID, DonateDate, DonateAmt, DonateDesc) VALUES (?, ?, ?, ?)";
+
+// Item and Ticket Controller : )
+const get_all_normal_items = "SELECT * FROM items WHERE isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
+const get_a_normal_item = "SELECT * FROM items WHERE isDeleted = false AND ItemID = ?";
+const get_all_tickets = "SELECT * FROM items WHERE ItemID IN (1, 2, 3, 4)";
+const get_specific_ticket = "SELECT * FROM items WHERE ItemID = ? AND ItemID IN (1, 2, 3, 4)";
+const insert_new_item = "INSERT INTO items (ItemName, AmountSold, ItemPrice, AmountInStock, GiftShopName) VALUES (?, 0, ?, ?, 'Gift Shop Museum')";
+const delete_item = "UPDATE items SET isDeleted = true WHERE ItemID = ? AND isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
+const update_item = "UPDATE items SET ItemName = ?, ItemPrice = ?, GiftShopName = ? WHERE ItemID = ? AND isDeleted = false";
+const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE ItemID = ? AND isDeleted = false";
 
 // REPORT QUERIES - three queries that result in three beautiful reports (I hope)
 
@@ -128,6 +139,8 @@ module.exports = {
     get_manager_query,
     insert_employee_info,
     update_employee_info,
+    check_employee_exist,
+    reinstate_employee_info,
     get_collections_query,
     get_specific_collection,
     insert_new_collection,
@@ -142,6 +155,14 @@ module.exports = {
     get_all_donations,
     get_specific_dons,
     add_new_donation,
+    get_all_normal_items,
+    get_a_normal_item,
+    get_all_tickets,
+    get_specific_ticket,
+    insert_new_item,
+    delete_item,
+    update_item,
+    restock_item,
 
     all_sales_report,
     employee_exhibit_report,

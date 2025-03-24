@@ -1,6 +1,6 @@
 const http = require('http');
 const { getAllEvents, getEvent, createEvent, deleteEvent, updateEvent } = require('../controllers/manageEventsController');
-const verifyToken = require('../controllers/authController');
+const verifyToken = require('../middleware/authMiddleware');
 
 const manageEventsRoutes = (req, res) => {
     if (req.url === '/events' && req.method === 'GET') {

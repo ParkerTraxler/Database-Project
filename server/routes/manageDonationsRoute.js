@@ -8,9 +8,7 @@ const manageDonationsRoutes = (req, res) => {
     } else if (req.url.startsWith('/donations/') && req.method === 'GET') {
         getDonationsForUser(req, res);
     } else if (req.url === '/donations' && req.method === 'POST') {
-        verifyToken('Manager')(req, res, () => {
-            createDonation(req, res);
-        });
+        createDonation(req, res);
     }
 };
 

@@ -1,6 +1,6 @@
 const http = require('http');
 const { getExhibits, getExhibit, createExhibit, updateExhibit } = require('../controllers/manageExhibitsController');
-const verifyToken = require('../controllers/authController');
+const verifyToken = require('../middleware/authMiddleware');
 
 const manageExhibitsRoutes = (req, res) => {
     if (req.url === '/exhibits' && req.method === 'GET') {

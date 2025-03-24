@@ -25,8 +25,8 @@ const getEmployee = async (req, res) => {
     req.on('data', (chunk) => {
         body += chunk.toString();
     });
-    
-    req('end', async () => {
+
+    req.on('end', async () => {
         try {
             const { empEmail } = JSON.parse(body);
             // Ensure an email was provided
@@ -58,8 +58,8 @@ const deleteEmployee = async (req, res) => {
     req.on('data', (chunk) => {
         body += chunk.toString();
     });
-    
-    req('end', async () => {
+
+    req.on('end', async () => {
         try {
             const { empEmail } = JSON.parse(body);
 
@@ -98,8 +98,8 @@ const createEmployee = (req, res) => {
         body += chunk.toString();
     });
 
-    try {
-        req.on('end', async () => {
+    req.on('end', async () => {
+        try {
             // the way we're gonna do this is, employee makes their acc via normal login, we update enum.
             // we're also going to assume that the manager knows name, role, managerID, and all other non-null values
             // make sure getting managerID makes logical sense - might need to change this later
@@ -125,6 +125,11 @@ const createEmployee = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Please provide which manager the employee will be working under.'})); 
             }
             
+            let giftshopname = null;
+            if(position == "GiftShopTeam"){
+                giftshopname = "Museum Gift Shop";
+            }
+
             // get the managerID based off their email
             const [ manager_query ] = await db.query(queries.get_manager_query, [managerEmail]);
             if(!manager_query || manager_query.length == 0){
@@ -138,26 +143,34 @@ const createEmployee = (req, res) => {
                 return res.end(JSON.stringify({ error: 'The employee\'s email does not have a user account! Have them create one.'}));
             }
 
-            // SQL QUERY - Create an entry in the employee table for the user. If it fails, reset the state
-            try {
-                const [ result ] = await db.query(queries.insert_employee_info, [firstName, lastName, position, managerID, email]);
+            // SQL QUERY - Reinstate the currently existing row instead of creating a new one
+            const [ wasHeDeleted ] = await db.query(queries.check_employee_exist, [email]);
+            if(wasHeDeleted.affectedRows > 0){
+                const [ result ] = await db.query(queries.reinstate_employee_info, [firstName, lastName, position, giftshopname, managerID, email]);
                 if(!result || result.affectedRows == 0){
-                    throw ("Unable to add employee info into employee table");
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ error: 'Unable to reinstate employee.'}));
                 }
-            } catch (err){
-                db.query(queries.downgrade_employee, [email]);
-                throw err;
+            }
+
+            // SQL QUERY - Create an entry in the employee table for the user. If it fails, reset the state
+            else{
+                const [ result ] = await db.query(queries.insert_employee_info, [firstName, lastName, position, giftshopname, managerID, email]);
+                if(!result || result.affectedRows == 0){
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ error: 'Unable to create employee.'}));
+                }
             }
 
             // Return user creation success
             res.writeHead(201, {'Content-Type': 'application/json'});
             return res.end(JSON.stringify({ message: 'Employee creation successful. '}));
-        });
     } catch (err) {
         console.log('Error creating employee: ', err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'Failed to create the employee account.'}));
-    }
+        }
+    });
 }
 
 const updateEmployee = (req, res) => {
@@ -168,7 +181,7 @@ const updateEmployee = (req, res) => {
 
     req.on('end', async () => {
         try {
-            var { hourlywage, weeklyhours, firstname, lastname, birthdate, ePosition, exhibitID, giftshopname, managerID, gender, email } = JSON.parse(body);
+            var { hourlywage, weeklyhours, firstname, lastname, birthdate, ePosition, exhibitID, managerID, gender, email } = JSON.parse(body);
 
             // If no email is provided, halt
             if (!email) {
@@ -177,11 +190,17 @@ const updateEmployee = (req, res) => {
             }
 
             // SQL QUERY - Update an employee's information, by first checking if they exist
-            const [rows] = await db.query(queries.get_specific_art, [artID]);
+            const [rows] = await db.query(queries.get_email_specific_emp, [email]);
 
-            if(!rows.length){
+            if(rows.length == 0){
                 res.writeHead(400, {'Content-Type': 'application/json'});
                 return res.end(JSON.stringify({ error: 'Specified employee does not exist!'}));
+            }
+
+            let giftshopname = null;
+
+            if(ePosition = "GiftShopTeam"){
+                giftshopname = "Museum Gift Shop";
             }
 
             // my favorite part - guaranteeing all the fields
@@ -194,7 +213,7 @@ const updateEmployee = (req, res) => {
             }
 
             if(firstname == null || firstname == ""){
-                firstname = rows[0].Firstname;
+                firstname = rows[0].FirstName;
             }
 
             if(lastname == null || lastname == ""){
@@ -213,10 +232,6 @@ const updateEmployee = (req, res) => {
                 exhibitID = rows[0].ExhibitID;
             }
 
-            if(giftshopname == null || giftshopname == ""){
-                giftshopname = rows[0].GiftShopName;
-            }
-
             if(managerID == null || managerID == ""){
                 managerID = rows[0].ManagerID;
             }
@@ -225,9 +240,9 @@ const updateEmployee = (req, res) => {
                 gender = rows[0].Gender;
             }
             // Create the query to update the actual entry yippee
-            const result = await db.query(queries.update_employee_info, [hourlywage, weeklyhours, firstname, lastname, birthdate, ePosition, exhibitID, giftshopname, managerID, gender, email]);
+            const [ result ] = await db.query(queries.update_employee_info, [hourlywage, weeklyhours, firstname, lastname, birthdate, ePosition, exhibitID, giftshopname, managerID, gender, email]);
 
-            if(!result || result.rowCount == 0){
+            if(!result || result.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
             }
