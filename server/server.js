@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
         manageEventsRoutes(req, res);
     else if (req.url.startsWith('/exhibits'))
         manageExhibitsRoutes(req, res);
-    else if (req,url.startsWith('/artworks'))
+    else if (req.url.startsWith('/artworks'))
         manageArtworksRoutes(req, res);
     else if (req.url.startsWith('/items'))
         manageItemsRoutes(req, res);

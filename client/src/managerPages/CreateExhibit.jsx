@@ -9,8 +9,8 @@ import './ManagerDashboard.css'
 const CreateExhibit = () => {
     console.log("CreateExhibit")
     const { user } = useAuth()
-        const token = user.token
-        console.log(token)
+    const token = user.token
+    console.log(token)
         
     const [exhibit, setExhibit] = useState({
         exhibitname:"", 
@@ -55,7 +55,7 @@ const CreateExhibit = () => {
                 <ManagerDashboard/>
             </div>
             <div>
-            <div className="form">
+                <div className="form">
                     <h1>Create Exhibit</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
                     <input type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>

@@ -13,6 +13,7 @@ import Collections from './pages/Collections'
 import AccountDetails from './pages/AccountDetails'
 import ReportProblem from './pages/ReportProblem'
 import EditAccount from './pages/EditAccount.jsx'
+import MakeDonation from './pages/MakeDonation.jsx';
 import ManagerDashboard from './managerPages/ManagerDashboard.jsx';
 import EditManagerAccount from './managerPages/EditManagerAccount.jsx';
 import ManageEmployees from './managerPages/ManageEmployees.jsx';
@@ -32,6 +33,7 @@ import CreateExhibit from './managerPages/CreateExhibit.jsx';
 import CreateSpecialExhibit from './managerPages/CreateSpecialExhibit.jsx';
 import EditExhibit from './managerPages/EditExhibit.jsx';
 import EditSpecialExhibit from './managerPages/EditSpecialExhibits.jsx';
+import ViewDonations from './managerPages/ViewDonations.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -76,6 +78,7 @@ function App() {
             <Route path="/edit-review" element={<EditReview/>}/>
             <Route path="/account-details" element={<AccountDetails/>}/>
             <Route path="/account-details/edit" element={<EditAccount/>}/>
+            <Route path="/make-donation" element={<MakeDonation/>}/>
           </Route>
 
           <Route element={<ProtectedEmployeeRoutes/>}>
@@ -101,6 +104,7 @@ function App() {
             <Route path="/add-special-exhibit" element={<CreateSpecialExhibit/>}/>
             <Route path="/edit-exhibit/:ExhibitID" element={<EditExhibit/>}/>
             <Route path="/edit-special-exhibit/:ExhibitID" element={<EditSpecialExhibit/>}/>
+            <Route path="/view-donations" element={<ViewDonations/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

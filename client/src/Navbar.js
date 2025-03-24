@@ -34,6 +34,11 @@ const Navbar = () => {
                     <li>
                         <a href="/reviews">Reviews</a>
                     </li>
+                    {role == 'Customer' && (<>
+                        <li>
+                            <a href="/make-donation">Donate</a>
+                        </li>
+                    </>)}
                 </ul>
             </div>
             <div className="navbar-right">
