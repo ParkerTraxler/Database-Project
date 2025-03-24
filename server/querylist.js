@@ -68,6 +68,9 @@ const get_all_exhibits =
     const update_exhibit = "UPDATE exhibits SET ExhibitName = ?, ExhibitDesc = ?, ExhibitPic = ? WHERE ExhibitID = ?";
     const update_special_exhibit = "UPDATE specialexhibits SET StartDate = ?, EndDate = ?, Fee = ? WHERE ExhibitID = ?";
 
+// Donations Controller
+
+
 // REPORT QUERIES - three queries that result in three beautiful reports (I hope)
 
 // a report that gets all transactions, including tickets. 

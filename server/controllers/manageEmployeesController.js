@@ -12,11 +12,11 @@ const getAllEmployees = async (req, res) => {
 
         // Return employees to frontend
         res.writeHead(200, {'Content-Type': 'application/json' });
-        res.end(JSON.stringify(rows));
+        return res.end(JSON.stringify(rows));
     } catch (err) {
         console.error('Error while fetching employees: ');
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Failed to retrieve employees.' }));
+        return res.end(JSON.stringify({ error: 'Failed to retrieve employees.' }));
     }
 }
 
@@ -44,11 +44,11 @@ const getEmployee = async (req, res) => {
             }
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(rows[0]));
+            return res.end(JSON.stringify(rows[0]));
         } catch (err) {
             console.error('Error while fetching employee: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Failed to retrieve employee. '}));
+            return res.end(JSON.stringify({ error: 'Failed to retrieve employee. '}));
         }
     });
 }
@@ -84,10 +84,10 @@ const deleteEmployee = async (req, res) => {
             }
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Employee deleted successfully' }));
+            return res.end(JSON.stringify({ message: 'Employee deleted successfully' }));
         } catch (err) {
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error deleting employee.' }));
+            return res.end(JSON.stringify({ error: 'Error deleting employee.' }));
         }
     });
 }

@@ -8,11 +8,11 @@ const getExhibits = async (req, res) => {
         const [ rows ] = await db.query(queries.get_all_exhibits);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(rows));
+        return res.end(JSON.stringify(rows));
     } catch (err) {
         console.error('Error fetching exhibits.');
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Error fetching exhibits.'}));
+        return res.end(JSON.stringify({ error: 'Error fetching exhibits.'}));
     }
 }
 
@@ -40,11 +40,11 @@ const getExhibit = async (req, res) => {
 
             // Return the exhibit
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(row[0]));
+            return res.end(JSON.stringify(row[0]));
         } catch (err) {
             console.error('Error fetching exhibit.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error fetching exhibit.' }));
+            return res.end(JSON.stringify({ error: 'Error fetching exhibit.' }));
         }
     });
 }
@@ -88,11 +88,11 @@ const createExhibit = async (req, res) => {
 
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Successfully created exhibit.' }));
+            return res.end(JSON.stringify({ message: 'Successfully created exhibit.' }));
         } catch (err) {
             console.error('Error creating exhibit.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error creating exhibit.' }));
+            return res.end(JSON.stringify({ error: 'Error creating exhibit.' }));
         }
     });
 }
@@ -158,11 +158,11 @@ const updateExhibit = async (req, res) => {
 
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Exhibit successfully updated.' }));
+            return res.end(JSON.stringify({ message: 'Exhibit successfully updated.' }));
         } catch (err) {
             console.error('Error updating exhibit.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error editing exhibit.' }));
+            return res.end(JSON.stringify({ error: 'Error editing exhibit.' }));
         }
     });
 }
@@ -188,11 +188,11 @@ const deleteExhibit = async (req, res) => {
 
             // Return successful delete message
             res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Exhibit successfully deleted.' }));
+            return res.end(JSON.stringify({ message: 'Exhibit successfully deleted.' }));
         } catch (err) {
             console.error('Error deleting exhibit.');
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error deleting exhibit.' }));
+            return res.end(JSON.stringify({ error: 'Error deleting exhibit.' }));
         }
     });
 }
