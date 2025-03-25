@@ -1,6 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import './Collections.css'
 
 const Collections = () => {
@@ -29,7 +30,11 @@ const Collections = () => {
                 <div className="collections">
                 {collections.map(collection=>(
                     <div className="collection" key={collection.Title}>
-                        {collection.CollectPic && <img src={collection.CollectPic} alt="" />}
+                        {collection.CollectPic && 
+                            <Link to={`/collection-art/${collection.Title}`}>
+                                <img src={collection.CollectPic} alt="" />
+                            </Link>
+                        }
                         <h2>{collection.Title}</h2>
                         <p>{collection.CollectDesc}</p>
                     </div>

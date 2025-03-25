@@ -37,6 +37,7 @@ import ViewDonations from './managerPages/ViewDonations.jsx';
 import ManageCollectionArt from './managerPages/ManageCollectionArt.jsx';
 import CreateArtwork from './managerPages/CreateArtwork.jsx';
 import EditArtwork from './managerPages/EditArtwork.jsx';
+import CollectionArt from './pages/CollectionArt.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -73,6 +74,7 @@ function App() {
           <Route path="/collections" element={<Collections/>}/>
           
           <Route path="/report-problem" element={<ReportProblem/>}/>
+          <Route path="/collection-art/:Title" element={<CollectionArt/>}/>
           
           
 
