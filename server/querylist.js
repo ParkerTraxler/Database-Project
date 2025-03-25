@@ -3,7 +3,7 @@
 // First up, login/auth-controller - user oriented queries
 const user_exists_query = "SELECT UserPass, UserRole FROM logininfo WHERE Email = ?";
 const create_user_query = "INSERT INTO logininfo (Email, UserPass, UserRole) VALUES (?, ?, ?)";
-const create_customer_acc = "INSERT INTO customers (FirstName, LastName, UserID) VALUES (?, ?, ?)"
+const create_customer_acc = "INSERT INTO customers (FirstName, LastName, UserID) VALUES (?, ?, ?)";
 const create_new_employee = "UPDATE logininfo SET UserRole = 'Employee' WHERE Email = ?";
 const downgrade_employee = "UPDATE logininfo SET UserRole = 'Customer' WHERE Email = ?";
 
@@ -111,15 +111,16 @@ const all_sales_report = `SELECT
 
 
 // User Profile Queries
-const get_user_profile = "";
-const update_user_profile = "";
-const update_membership = "";
+const get_user_profile = "SELECT Membership, FirstName, LastName, BirthDate, Gender FROM customers, logininfo WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID";
+const update_user_profile = "UPDATE customers JOIN login ON login.UserID = customers.UserID SET FirstName = ?, LastName = ?, BirthDate = ?, Gender = ? WHERE logininfo.Email = ?";
+const update_membership = "UPDATE customers JOIN login ON login.UserID = customers.UserID SET Membership = NOT Membership WHERE logininfo.Email = ?";
 
 // A report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
             e.EmployeeID as Employee_ID,
-            CONCAT(e.FirstName + ' ' + e.LastName) as Employee_Name,
+            CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
             e.Email as Employee_Email,
+            e.HourlyWage * e.WeeklyHours as Employee_Weekly_Wage,
             ex.ExhibitName as Exhibit_Name,
             CASE
                 WHEN e.isDeleted = FALSE THEN TRUE
@@ -131,6 +132,8 @@ const employee_exhibit_report = `SELECT
             WHERE
             e.ExhibitID = ex.ExhibitID
             ORDER BY ex.ExhibitID ASC, e.isDeleted ASC`;
+
+// A report that gets information on exhibits 
 
 // all the queries exported out
 module.exports = {

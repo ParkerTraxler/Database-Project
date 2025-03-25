@@ -31,6 +31,10 @@ const ManagerDashboard = () => {
                     <li>
                         <a href='/view-donations'>View Donations</a>
                     </li>
+                    <li>
+                        <a href='/employee-exhibit-report'>Employee Exhibit Report</a>
+                    </li>
+                    
                 </ul>
             </div>
 
