@@ -9,7 +9,8 @@ var pool = mysql.createPool({
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
     ssl: {
-        ca: process.env.SSL_CERTIFICATE
+        ca: process.env.SSL_CERTIFICATE,
+        rejectUnauthorized: false
     }
 }).promise();
 
