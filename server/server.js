@@ -10,6 +10,7 @@ const manageArtworksRoutes = require('./routes/manageArtworksRoute');
 const manageItemsRoutes = require('./routes/manageItemsRoute');
 const manageDonationsRoutes = require('./routes/manageDonationsRoute');
 const manageReviewsRoutes = require('./routes/manageReviewsRoute');
+const manageSalesRoutes = require('./routes/manageSalesRoute')
 // Port
 const PORT = 3002;
 
@@ -35,9 +36,11 @@ const server = http.createServer((req, res) => {
         manageDonationsRoutes(req, res);
     else if (req.url.startsWith('/reviews'))
         manageReviewsRoutes(req, res);
+    else if (req.url.startsWith('/transactions'))
+        manageSalesRoutes(req, res);
     else {
         res.writeHead(404, {'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Route not found' }));
+        return res.end(JSON.stringify({ error: 'Route not found' }));
     }
 });
 

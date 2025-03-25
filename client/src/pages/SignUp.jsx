@@ -11,6 +11,8 @@ const SignUp = () => {
     const { login } = useAuth()
 
     const [signup, setSignUp] = useState({
+        firstName:"",
+        lastName:"",
         email: "",
         password1: "",
         password2: "",
@@ -49,6 +51,8 @@ const SignUp = () => {
             e.preventDefault()  //prevents page refresh on button click
             try{
                 const res = await axios.post("http://localhost:3002/auth/register", {
+                    firstname: signup.firstName,
+                    lastname: signup.lastName,
                     email: signup.email,
                     password1: signup.password1
                 })
@@ -74,6 +78,14 @@ const SignUp = () => {
                 
                 <h1>Sign Up</h1>
                 <div className="error">{errorMessage}</div>
+                <div className="input-group">
+                    First Name
+                    <input type="text" onChange={handleChange} maxLength="30" placeholder="First Name" name="firstName"/>
+                </div>
+                <div className="input-group">
+                    Last Name
+                    <input type="text" onChange={handleChange} maxLength="30" placeholder="Last Name" name="lastName"/>
+                </div>
                 <div className="input-group">
                     Email
                     <input type="email" onChange={handleChange} maxLength="30" placeholder="Enter your email" name="email"/>

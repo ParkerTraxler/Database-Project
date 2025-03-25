@@ -7,7 +7,7 @@ const manageExhibitsRoutes = (req, res) => {
         getExhibits(req, res);  
     } else if (req.url.startsWith('/exhibits/') && req.method === 'GET') {
         getExhibit(req, res);
-    } else if (req.url === '/exhibits' && req.method === 'POST') {
+    } else if (req.url.startsWith('/exhibits') && req.method === 'POST') {
         verifyToken('Manager')(req, res, () => {
             createExhibit(req, res);
         });
