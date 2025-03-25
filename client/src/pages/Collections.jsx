@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import './Collections.css'
+import "./Collections.css"
 
 const Collections = () => {
     console.log("Collections")
@@ -24,16 +24,18 @@ const Collections = () => {
 
     return(
         <div>
-            Collections
-            <h1>Collections</h1>
-                <div className="collections">
-                {collections.map(collection=>(
-                    <div className="collection" key={collection.Title}>
-                        {collection.CollectPic && <img src={collection.CollectPic} alt="" />}
-                        <h2>{collection.Title}</h2>
-                        <p>{collection.CollectDesc}</p>
-                    </div>
-                ))}
+            <div>
+                <h1>Collections</h1>
+                    <div className="collections">
+                    {collections.map(collection=>(
+                        <div className="collection" key={collection.Title}>
+                            {collection.CollectPic && <img src={collection.CollectPic} alt="" />}
+                            <h2>{collection.Title}</h2>
+                            <p>{collection.CollectDesc}</p>
+                        
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     )

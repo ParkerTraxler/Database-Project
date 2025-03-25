@@ -3,14 +3,14 @@ h1 {
     margin-bottom: 20px;
 }
 
-.collectionsM {
+.exhibitsM, .specialExhibitsM {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     padding: 20px;
 }
 
-.collectionM {
+.exhibitM {
     background-color: #f5f5f5;
     padding: 20px;
     border-radius: 8px;
@@ -18,33 +18,15 @@ h1 {
     text-align: center;
 }
 
-.collectionM img {
+.exhibitM img {
     width: 400px;
     height: 290px;
     border-radius: 5px;
     background-color: black;/*replace this with image*/
 }
 
-.delete{
-    border: none;
-    padding: 3px 6px;
-    background-color: white;
-    cursor: pointer;
-    border: 1px solid rgb(245, 191, 191);
-    color: red;
-}
-
-.update{
-    border: none;
-    padding: 3px 6px;
-    background-color: white;
-    cursor: pointer;
-    border: 1px solid rgb(245, 191, 191);
-    color: blueviolet;
-}
-
 @media (max-width: 1000px) {
-    .collectionsM {
+    .exhibitsM, .specialExhibitsM {
         grid-template-columns: repeat(1, 1fr);
     }
 }

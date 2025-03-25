@@ -17,33 +17,29 @@ const getAllCollections = async (req, res) => {
     }
 }
 
-const getCollection = async (req, res) => {
+const getExhibitCollections = async (req, res) => {
     let body = '';
     req.on('data', (chunk) => {
         body += chunk.toString();
     });
     
-    req('end', async () => {
-        const { title } = JSON.parse(body);
+    req.on('end', async () => {
+        const { exhibitID } = JSON.parse(body);
         try {
-            if(!title){
+            if(!exhibitID){
                 res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'No Collection Title supplied to search for'}));
+                return res.end(JSON.stringify({ error: 'No exhibit ID supplied to search for'}));
             }
             // SQL QUERY - Retrieve collection from database
-            const [rows] = await db.query(queries.get_specific_collection, [title]);
+            const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
 
-            if(!rows.length){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'Specified collection does not exist! It may have been deleted.'}));
-            }
-    
+            // may return empty if exhibit hsa no collections in it
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(rows[0]));
+            res.end(JSON.stringify(rows));
         } catch (err) {
-            console.error('Error fetching collection.');
+            console.error('Error fetching collection: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Failed to retrieve collections.' }));
+            res.end(JSON.stringify({ error: 'Failed to retrieve collections for specific exhibit.' }));
         }
     });
 }
@@ -182,4 +178,4 @@ const updateCollection = (req, res) => {
     });
 }
 
-module.exports = { getAllCollections, getCollection, createCollection, deleteCollection, updateCollection };
+module.exports = { getAllCollections, getExhibitCollections, createCollection, deleteCollection, updateCollection };

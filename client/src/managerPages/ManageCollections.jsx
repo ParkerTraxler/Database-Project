@@ -55,9 +55,9 @@ const ManageCollections = () => {
             <div>
                 Manage Collections
                 <h1>Collections</h1>
-                <div className="collections">
+                <div className="collectionsM">
                 {collections.map(collection=>(
-                    <div className="collection" key={collection.Title}>
+                    <div className="collectionM" key={collection.Title}>
                         {collection.CollectPic && <img src={collection.CollectPic} alt="" />}
                         <h2>{collection.Title}</h2>
                         <p>{collection.CollectDesc}</p>

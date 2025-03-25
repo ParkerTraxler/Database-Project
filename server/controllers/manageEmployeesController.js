@@ -145,7 +145,7 @@ const createEmployee = (req, res) => {
 
             // SQL QUERY - Reinstate the currently existing row instead of creating a new one
             const [ wasHeDeleted ] = await db.query(queries.check_employee_exist, [email]);
-            if(wasHeDeleted != 0){
+            if(wasHeDeleted.affectedRows > 0){
                 const [ result ] = await db.query(queries.reinstate_employee_info, [firstName, lastName, position, giftshopname, managerID, email]);
                 if(!result || result.affectedRows == 0){
                     res.writeHead(400, { 'Content-Type': 'application/json' });

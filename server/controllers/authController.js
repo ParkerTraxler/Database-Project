@@ -66,10 +66,7 @@ registerUser = async (req, res) => {
 
     try {
         req.on('end', async() => {
-            const { email, password1 } = JSON.parse(body);
-            console.log(email)
-            console.log(password1);
-            console.log(body);
+            const { email, password1, firstname, lastname} = JSON.parse(body);
 
             // Ensure both email and password were provided
             if (!email) {
@@ -91,7 +88,9 @@ registerUser = async (req, res) => {
             // If not, create the user
             // Will have to also create an entry in the customer table and get first, last name, etc. from a registration form
             const hash = await bcrypt.hash(password1, 10);
-            await db.query(queries.create_user_query, [email, hash, "Customer"]);
+            const [ results ] = await db.query(queries.create_user_query, [email, hash, "Customer"]);
+            assigned_USID = results.insertId;
+            await db.query(queries.create_customer_acc, [firstname, lastname, assigned_USID]);
 
             // Create JWT token to authenticate new user account (assume role is customer)
             const user = {

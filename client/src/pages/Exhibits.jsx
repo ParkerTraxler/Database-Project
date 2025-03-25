@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import "./Exhibits.css"
 
 const Exhibits = () => {
     console.log("Exhibits")
@@ -42,6 +43,7 @@ const Exhibits = () => {
                 ))}
                 </div>
 
+                <h1>Special Exhibits</h1>
                 <div className="specialExhibits">
                 {specialExhibits.map(specialExhibit=>(
                     <div className="exhibit" key={specialExhibit.ExhibitID}>

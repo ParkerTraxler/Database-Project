@@ -117,7 +117,6 @@ const updateExhibit = async (req, res) => {
             // SQL Query - check to see if exhibit exists, if yes then update it 
             const [ curr_exh ] = await db.query(queries.get_specific_exhibit, exhibitid);
 
-            console.log(curr_exh[0]);
             // first, we check all the normal exhibit parts out, no matter what
             if(exhibitname == null || exhibitname == ""){
                 exhibitname = curr_exh[0].ExhibitName;

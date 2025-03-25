@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import './ManagerDashboard.css'
+import './ManageExhibits.css'
 
 const ManageExhibits = () => {
     console.log("ManageExhibits")
@@ -41,9 +42,9 @@ const ManageExhibits = () => {
             <div>
                 Manage Exhibits
                 <h1>Exhibits</h1>
-                <div className="exhibits">
+                <div className="exhibitsM">
                 {exhibits.map(exhibit=>(
-                    <div className="exhibit" key={exhibit.ExhibitID}>
+                    <div className="exhibitM" key={exhibit.ExhibitID}>
                         {exhibit.ExhibitPic && <img src={exhibit.ExhibitPic} alt="" />}
                         <h2>{exhibit.ExhibitName}</h2>
                         <p>{exhibit.ExhibitDesc}</p>
@@ -55,9 +56,9 @@ const ManageExhibits = () => {
                     <Link to="/add-exhibit">Create Exhibit</Link>
                 </button>
 
-                <div className="specialExhibits">
+                <div className="specialExhibitsM">
                 {specialExhibits.map(specialExhibit=>(
-                    <div className="exhibit" key={specialExhibit.ExhibitID}>
+                    <div className="exhibitM" key={specialExhibit.ExhibitID}>
                         {specialExhibit.ExhibitPic && <img src={specialExhibit.ExhibitPic} alt="" />}
                         <h2>{specialExhibit.ExhibitName}</h2>
                         <p>{specialExhibit.ExhibitDesc}</p>
