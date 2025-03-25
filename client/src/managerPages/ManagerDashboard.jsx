@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import ManagerDashboard from './ManagerNav'
-import './ManagerDashboard.css'
+import ManagerNav from './ManagerNav'
+import './ManagerDashboard.css';
+import './ManagerNav.jsx';
 
 
-const ManagerDashboardScreen = () => {
+const ManagerDashboard = () => {
   const images = [
     '/images/background-img3.jpg',
     '/images/background-img4.jpg',
@@ -19,13 +20,12 @@ const ManagerDashboardScreen = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setFade(false);
- 
       setTimeout(() => {
         setCurrentImageIndex(nextImageIndex);
         setNextImageIndex((nextImageIndex + 1) % images.length);
         setFade(true);
-      }, 500);
-    }, 3000);
+      }, 7000);
+    }, 7000);
 
 
     return () => clearInterval(interval);
@@ -35,7 +35,7 @@ const ManagerDashboardScreen = () => {
   return (
     <div className="managerView-container">
       <div className="managerNav">
-        <ManagerDashboard/>
+        <ManagerNav />
       </div>
       <div className="mainContentWrapper">
         <div
@@ -60,4 +60,6 @@ const ManagerDashboardScreen = () => {
 };
 
 
-export default ManagerDashboardScreen;
+export default ManagerDashboard;
+
+
