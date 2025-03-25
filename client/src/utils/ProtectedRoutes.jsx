@@ -30,11 +30,11 @@ const ProtectedRoutes = () => {
     if (!user){
         return <Navigate to="/log-in"/>
     }
-    else if(role === 'employee' || role === 'manager'){
+    else if(role === 'Employee' || role === 'Manager'){
         return <Navigate to="/"/>
     }
 
-    return role === 'customer' ? <Outlet /> : <Navigate to="/log-in" />;
+    return role === 'Customer' ? <Outlet /> : <Navigate to="/log-in" />;
 };
 
 export default ProtectedRoutes

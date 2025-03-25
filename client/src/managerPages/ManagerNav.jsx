@@ -20,14 +20,21 @@ const ManagerDashboard = () => {
                         <a href='/manage-employees'>Manage Employees</a>
                     </li>
                     <li>
-                        <a href='/manage-special-exhibits'>Manage Special Exhibits</a>
-                    </li>
-                    <li>
                         <a href='/manage-exhibits'>Manage Exhibits</a>
                     </li>
                     <li>
                         <a href='/manage-events'>Manage Events</a>
                     </li>
+                    <li>
+                        <a href='/manage-collections'>Manage Collections</a>
+                    </li>
+                    <li>
+                        <a href='/view-donations'>View Donations</a>
+                    </li>
+                    <li>
+                        <a href='/employee-exhibit-report'>Employee Exhibit Report</a>
+                    </li>
+                    
                 </ul>
             </div>
 

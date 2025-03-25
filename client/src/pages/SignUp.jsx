@@ -1,17 +1,24 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../utils/AuthContext'
 import axios from 'axios' //api calls
 import './LogIn.css'
 
 const SignUp = () => {
     console.log("SignUp")
     const invalidChars = /[+=*\/<>"'|~`()^_{}[\]?]/;
+    const { login } = useAuth()
 
     const [signup, setSignUp] = useState({
+        firstName:"",
+        lastName:"",
         email: "",
         password1: "",
         password2: "",
     })
+    
+    const navigate = useNavigate()
 
     const [errorMessage, setErrorMessage] = useState("");
     
@@ -19,6 +26,8 @@ const SignUp = () => {
         setSignUp(prev=>({...prev, [e.target.name]: e.target.value}))
         console.log(signup)
     }
+
+    
 
     const handleClick = async (e) => {
         console.log(signup)
@@ -41,7 +50,21 @@ const SignUp = () => {
         else{
             e.preventDefault()  //prevents page refresh on button click
             try{
-                await axios.post("http://localhost:3001/auth/register", signup)
+                const res = await axios.post("http://localhost:3002/auth/register", {
+                    firstname: signup.firstName,
+                    lastname: signup.lastName,
+                    email: signup.email,
+                    password1: signup.password1
+                })
+
+                const { message, token } = res.data
+
+                console.log(res.data)
+                console.log(message)
+                console.log("token: "+token)
+
+                login(signup.email, 'Customer', token)
+                navigate("/")
             }
             catch(err){
                 console.log(err);
@@ -55,6 +78,14 @@ const SignUp = () => {
                 
                 <h1>Sign Up</h1>
                 <div className="error">{errorMessage}</div>
+                <div className="input-group">
+                    First Name
+                    <input type="text" onChange={handleChange} maxLength="30" placeholder="First Name" name="firstName"/>
+                </div>
+                <div className="input-group">
+                    Last Name
+                    <input type="text" onChange={handleChange} maxLength="30" placeholder="Last Name" name="lastName"/>
+                </div>
                 <div className="input-group">
                     Email
                     <input type="email" onChange={handleChange} maxLength="30" placeholder="Enter your email" name="email"/>

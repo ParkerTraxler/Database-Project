@@ -46,7 +46,7 @@ const get_all_exhibits =
 
     SELECT exhibits.ExhibitID, ExhibitName, ExhibitDesc, ExhibitPic, StartDate, EndDate, Fee, TRUE as IsSpecial
     FROM exhibits, specialexhibits 
-    WHERE exhibits.ExhibitID = specialexhibits.ExhibitID AND specialexhibits.EndDate IS NOT NULL AND specialexhibits.EndDate >= CURDATE()`;
+    WHERE exhibits.ExhibitID = specialexhibits.ExhibitID AND specialexhibits.EndDate >= CURDATE()`;
 
 const get_specific_exhibit = //coalesce checks to see if the value IS NOT null, and uses it if it is indeed not null
     `SELECT 
@@ -76,7 +76,7 @@ const update_special_exhibit = "UPDATE specialexhibits SET StartDate = ?, EndDat
 const get_all_donations = "SELECT DonationID, CONCAT(customers.FirstName, ' ', customers.LastName) AS DonatorName, DonateDate, DonateAmt, DonateDesc FROM donations, customers WHERE customers.CustomerID = donations.CustomerID";
 const get_specific_dons = "SELECT DonateDate, DonateAmt, DonateDesc FROM donations, logininfo, customers WHERE logininfo.email = ? AND logininfo.UserID = customers.userID AND customers.customerID = donations.customerID";
 const add_new_donation = `INSERT INTO donations (CustomerID, DonateDate, DonateAmt, DonateDesc) 
-                            VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.email = ? AND logininfo.userID = customers.userID), ?, ?, ?)`;
+                            VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)`;
 
 // Item and Ticket Controller : )
 const get_all_normal_items = "SELECT * FROM items WHERE isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";

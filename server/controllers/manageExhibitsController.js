@@ -18,7 +18,6 @@ const getExhibits = async (req, res) => {
 
 // Get an exhibit, can be normal or special - return all the information either way
 const getExhibit = async (req, res, exhibitid) => {
-    const { exhibitid } = JSON.parse(body);
     try {
         if(!exhibitid){
             res.writeHead(400, {'Content-Type': 'application/json'});
