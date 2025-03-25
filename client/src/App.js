@@ -34,6 +34,9 @@ import CreateSpecialExhibit from './managerPages/CreateSpecialExhibit.jsx';
 import EditExhibit from './managerPages/EditExhibit.jsx';
 import EditSpecialExhibit from './managerPages/EditSpecialExhibits.jsx';
 import ViewDonations from './managerPages/ViewDonations.jsx';
+import ManageCollectionArt from './managerPages/ManageCollectionArt.jsx';
+import CreateArtwork from './managerPages/CreateArtwork.jsx';
+import EditArtwork from './managerPages/EditArtwork.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -105,6 +108,10 @@ function App() {
             <Route path="/edit-exhibit/:ExhibitID" element={<EditExhibit/>}/>
             <Route path="/edit-special-exhibit/:ExhibitID" element={<EditSpecialExhibit/>}/>
             <Route path="/view-donations" element={<ViewDonations/>}/>
+            <Route path="/manage-collection-art/:Title" element={<ManageCollectionArt/>}/>
+            <Route path="/add-artwork/:Title" element={<CreateArtwork/>}/>
+            <Route path="/edit-artwork/:ArtID" element={<EditArtwork/>}/>
+             
           </Route>
         </Routes>
       </BrowserRouter>

@@ -58,7 +58,11 @@ const ManageCollections = () => {
                 <div className="collectionsM">
                 {collections.map(collection=>(
                     <div className="collectionM" key={collection.Title}>
-                        {collection.CollectPic && <img src={collection.CollectPic} alt="" />}
+                        {collection.CollectPic && 
+                            <Link to={`/manage-collection-art/${collection.Title}`}>
+                                <img src={collection.CollectPic} alt="" />
+                            </Link>
+                        }
                         <h2>{collection.Title}</h2>
                         <p>{collection.CollectDesc}</p>
                         <button className="delete" onClick={()=>handleDelete(collection.Title)}>Delete</button>

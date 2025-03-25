@@ -19,6 +19,7 @@ const CreateExhibit = () => {
     })
 
     const handleChange = (e) =>{ // given target to given value
+        console.log(e.target.name, e.target.value);
         
         setExhibit(prev=>({...prev, [e.target.name]: e.target.value}))
         console.log(exhibit)
@@ -28,6 +29,9 @@ const CreateExhibit = () => {
 
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
+
+        console.log("Exhibit object being sent:", exhibit);  // Debug the exhibit state before sending
+        
         try{
             const res = await axios.post("http://localhost:3002/exhibits/", {
                 exhibitname: exhibit.exhibitname, 
