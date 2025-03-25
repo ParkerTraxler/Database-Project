@@ -12,35 +12,31 @@ const getAllArtworks = async (req, res) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
     } catch (err) {
-        console.error('Error fetching all artworks.');
+        console.error('Error fetching all artworks: ', err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'Failed to retrieve artworks.' }));
     }
 }
 
-const getCollectionArtwork = async (req, res) => {
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    });
-    
-    req('end', async () => {
-        try {
-            // get all the art pieces in a collection
-            const { collection } = JSON.parse(body);
-            // SQL Query - Return ALL artwork part of a collection
-            // ASSUMPTION: We return ALL of the artwork information - frontend can decide what to show
-            const [rows] = await db.query(queries.get_collection_art, [collection]);
-
-            // can return 0 artwork, just as a worry
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify(rows));
-        } catch (err) {
-            console.error('Error fetching artwork.');
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Failed to retrieve artworks.' }));
+const getCollectionArtwork = async (req, res, title) => {
+    try {
+        if(!title){
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({error: 'No title provided for collection to retrieve'}))
         }
-    });
+
+        // SQL Query - Return ALL artwork part of a collection
+        // ASSUMPTION: We return ALL of the artwork information - frontend can decide what to show
+        const [rows] = await db.query(queries.get_collection_art, [title]);
+
+        // can return 0 artwork, just as a worry
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows));
+    } catch (err) {
+        console.error('Error fetching artwork: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Failed to retrieve artworks.' }));
+    }
 }
 
 const createArtwork = async (req, res) => {
@@ -51,7 +47,6 @@ const createArtwork = async (req, res) => {
     });
 
     req.on('end', async () => {
-
         const { artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay } = JSON.parse(body);
 
         try {
@@ -59,7 +54,8 @@ const createArtwork = async (req, res) => {
             if (!artName) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Art name not provided.'}));
-            } else if (!onDisplay) {
+            } 
+            if (!onDisplay) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Display status not provided.' }));
             }

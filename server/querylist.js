@@ -3,15 +3,16 @@
 // First up, login/auth-controller - user oriented queries
 const user_exists_query = "SELECT UserPass, UserRole FROM logininfo WHERE Email = ?";
 const create_user_query = "INSERT INTO logininfo (Email, UserPass, UserRole) VALUES (?, ?, ?)";
+const create_customer_acc = "INSERT INTO customers (FirstName, LastName, UserID) VALUES (?, ?, ?)";
 const create_new_employee = "UPDATE logininfo SET UserRole = 'Employee' WHERE Email = ?";
 const downgrade_employee = "UPDATE logininfo SET UserRole = 'Customer' WHERE Email = ?";
 
 // Artwork Management Controller - artwork oriented queries
 const get_artwork_query = "SELECT * FROM artworks WHERE isDeleted = false";
 const get_specific_art = "SELECT * FROM artworks WHERE ArtID = ? AND isDeleted = false";
-const get_collection_art = "SELECT * FROM artworks WHERE Collection = ? AND isDeleted = false";
+const get_collection_art = "SELECT * FROM artworks WHERE Collection = ? AND isDeleted = false AND OnDisplay = true";
 const get_name_specific_art = "SELECT * FROM artworks WHERE ArtName = ? AND isDeleted = false";
-const insert_art_piece = "INSERT INTO artworks (ArtName, Artist, DateMade, ArtRype, ArtVal, Collection, ArtDesc, ArtPic, OnDisplay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+const insert_art_piece = "INSERT INTO artworks (ArtName, Artist, DateMade, ArtType, ArtVal, Collection, ArtDesc, ArtPic, OnDisplay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 const mark_art_for_deletion = "UPDATE artworks SET isDeleted = true WHERE ArtID = ? AND isDeleted = false";
 const update_art_piece = "UPDATE artworks SET ArtName = ?, Artist = ?, DateMade = ?, ArtType = ?, ArtVal = ?, Collection = ?, ArtDesc = ?, ArtPic = ?, OnDisplay = ? WHERE ArtID = ? AND isDeleted = false";
 
@@ -90,9 +91,7 @@ const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE I
 // Transaction Controller - one query + the all_sales_report
 const new_transaction = "INESRT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo WHERE logininfo.email = ? AND logininfo.userID = customers.userID) ?, ?, ?"
 
-// REPORT QUERIES - three queries that result in three beautiful reports (I hope)
-
-// a report that gets all transactions, including tickets. 
+// REPORT QUERY -- gets all transactions, including tickets. 
 const all_sales_report = `SELECT
             s.PurchaseID as TransactionID,
 			CONCAT(c.FirstName, ' ', c.LastName) as CustomerName, 
@@ -110,11 +109,18 @@ const all_sales_report = `SELECT
 			s.ItemID = i.ItemID
             ORDER BY s.DatePurchased DESC`;
 
+
+// User Profile Queries
+const get_user_profile = "SELECT Membership, FirstName, LastName, BirthDate, Gender FROM customers, logininfo WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID";
+const update_user_profile = "UPDATE customers JOIN login ON login.UserID = customers.UserID SET FirstName = ?, LastName = ?, BirthDate = ?, Gender = ? WHERE logininfo.Email = ?";
+const update_membership = "UPDATE customers JOIN login ON login.UserID = customers.UserID SET Membership = NOT Membership WHERE logininfo.Email = ?";
+
 // A report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
             e.EmployeeID as Employee_ID,
-            CONCAT(e.FirstName + ' ' + e.LastName) as Employee_Name,
+            CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
             e.Email as Employee_Email,
+            e.HourlyWage * e.WeeklyHours as Employee_Weekly_Wage,
             ex.ExhibitName as Exhibit_Name,
             CASE
                 WHEN e.isDeleted = FALSE THEN TRUE
@@ -127,10 +133,13 @@ const employee_exhibit_report = `SELECT
             e.ExhibitID = ex.ExhibitID
             ORDER BY ex.ExhibitID ASC, e.isDeleted ASC`;
 
+// A report that gets information on exhibits 
+
 // all the queries exported out
 module.exports = {
     user_exists_query,
     create_user_query,
+    create_customer_acc,
     create_new_employee,
     downgrade_employee,
     get_artwork_query,
@@ -173,5 +182,8 @@ module.exports = {
     restock_item,
     new_transaction,
     all_sales_report,
+    get_user_profile,
+    update_user_profile,
+    update_membership,
     employee_exhibit_report,
 };

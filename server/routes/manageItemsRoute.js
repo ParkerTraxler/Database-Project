@@ -7,7 +7,9 @@ const manageItemsRoutes = (req, res) => {
     if (req.url === '/items' && req.method === 'GET') {
         getItems(req, res);
     } else if(req.url.startsWith('/items/') && req.method === 'GET'){
-        getItem(req, res);
+        const urlParts = req.url.split('/');
+        const itemID = parseInt(urlParts[urlParts.length - 1]);
+        getItem(req, res, itemID);
     } else if (req.url.startsWith('/items/') && req.url.method === 'POST') {
         verifyToken('Manager') (req, res, () => {
             createItem(req, res);
@@ -29,7 +31,9 @@ const manageItemsRoutes = (req, res) => {
     }  else if (req.url === '/items/tickets' && req.url.method === 'GET') {
         getTickets(req, res);
     } else if (req.url.startsWith('/items/tickets/') && req.url.method === 'GET') {
-        getTicket(req, res);
+        const urlParts = req.url.split('/');
+        const ticketID = parseInt(urlParts[urlParts.length - 1]);
+        getTicket(req, res, ticketID);
     }
 }
 

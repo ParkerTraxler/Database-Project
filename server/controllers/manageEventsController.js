@@ -26,7 +26,7 @@ const getEvent = async (req, res) => {
         body += chunk.toString();
     });
     
-    req('end', async () => {
+    req.on('end', async () => {
         // FILL IN: get field from frontend
         
         try {

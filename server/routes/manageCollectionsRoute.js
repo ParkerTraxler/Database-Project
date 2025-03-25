@@ -7,7 +7,9 @@ const manageCollectionsRoutes = (req, res) => {
     if (req.url === '/collections' && req.method === 'GET') {
         getAllCollections(req, res);
     } else if (req.url.startsWith('/collections/exhibit/') && req.method === 'GET') {
-        getExhibitCollections(req, res);
+        const urlParts = req.url.split('/');
+        const exhibitID = parseInt(urlParts[urlParts.length - 1]);
+        getExhibitCollections(req, res, exhibitID);
     } else if (req.url === '/collections' && req.method === 'POST') {
         verifyToken('Manager')(req, res, () => {
             createCollection(req, res);

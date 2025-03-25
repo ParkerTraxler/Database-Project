@@ -189,44 +189,35 @@ const getItems = async(req, res) =>{
     });
 }
 
-const getItem = async(req, res) =>{
-    // Get field from request
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    }); 
-
+const getItem = async(req, res, itemID) =>{
     // Process the request once it is received, send response 
-    req.on('end', async () => {
-        const { itemID } = JSON.parse(body);
-        try {
-            if(!itemID){
-                res.writeHead(400, { 'Content-Type':  'application/json' });
-                return res.end(JSON.stringify({ error: 'No item ID supplied to search for' }));
-            }
-
-            if([1, 2, 3, 4].includes(itemID)){
-                res.writeHead(400, { 'Content-Type':  'application/json' });
-                return res.end(JSON.stringify({ error: 'It seems you\'re trying to get a ticket. Did you mean getTicket?' }));
-            }
-
-            // SQL QUERY - Get item itself if checks are passed
-            const [ result ] = await db.query(get_a_normal_item, itemID);
-
-            if(result.affectedRows == 0){
-                res.writeHead(400, { 'Content-Type':  'application/json' });
-                return res.end(JSON.stringify({ error: 'No item by that ID found! Was it deleted?' }));
-            }
-
-            // Return success message
-            res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(JSON.stringify(result)));
-        } catch (err) {
-            console.error('Error updating item quantity.');
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
+    try {
+        if(!itemID){
+            res.writeHead(400, { 'Content-Type':  'application/json' });
+            return res.end(JSON.stringify({ error: 'No item ID supplied to search for' }));
         }
-    });
+
+        if([1, 2, 3, 4].includes(itemID)){
+            res.writeHead(400, { 'Content-Type':  'application/json' });
+            return res.end(JSON.stringify({ error: 'It seems you\'re trying to get a ticket. Did you mean getTicket?' }));
+        }
+
+        // SQL QUERY - Get item itself if checks are passed
+        const [ result ] = await db.query(get_a_normal_item, itemID);
+
+        if(result.affectedRows == 0){
+            res.writeHead(400, { 'Content-Type':  'application/json' });
+            return res.end(JSON.stringify({ error: 'No item by that ID found! Was it deleted?' }));
+        }
+
+        // Return success message
+        res.writeHead(204, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(JSON.stringify(result[0])));
+    } catch (err) {
+        console.error('Error updating item quantity.');
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
+    }
 }
 
 const getTickets = async (req, res) => {
@@ -246,44 +237,35 @@ const getTickets = async (req, res) => {
     });
 }
 
-const getTicket = (req, res) => {
-    // Get field from request
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    }); 
-
+const getTicket =  async(req, res, itemID) => {
     // Process the request once it is received, send response 
-    req.on('end', async () => {
-        const { itemID } = JSON.parse(body);
-        try {
-            if(!itemID){
-                res.writeHead(400, { 'Content-Type':  'application/json' });
-                return res.end(JSON.stringify({ error: 'No item ID supplied to search for' }));
-            }
-
-            if(!([1, 2, 3, 4].includes(itemid))){
-                res.writeHead(400, { 'Content-Type':  'application/json' });
-                return res.end(JSON.stringify({ error: 'Item being asked for is not a ticket' }));
-            }
-
-            // SQL QUERY - Get ticket itself if checks are passed
-            const [ result ] = await db.query(get_specific_ticket, itemID);
-
-            if(result.affectedRows == 0){
-                res.writeHead(400, { 'Content-Type':  'application/json' });
-                return res.end(JSON.stringify({ error: 'No ticket by that ID found!' }));
-            }
-
-            // Return success message
-            res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(JSON.stringify(result)));
-        } catch (err) {
-            console.error('Error updating item quantity.');
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
+    try {
+        if(!itemID){
+            res.writeHead(400, { 'Content-Type':  'application/json' });
+            return res.end(JSON.stringify({ error: 'No item ID supplied to search for' }));
         }
-    });
+
+        if(!([1, 2, 3, 4].includes(itemid))){
+            res.writeHead(400, { 'Content-Type':  'application/json' });
+            return res.end(JSON.stringify({ error: 'Item being asked for is not a ticket' }));
+        }
+
+        // SQL QUERY - Get ticket itself if checks are passed
+        const [ result ] = await db.query(get_specific_ticket, itemID);
+
+        if(result.affectedRows == 0){
+            res.writeHead(400, { 'Content-Type':  'application/json' });
+            return res.end(JSON.stringify({ error: 'No ticket by that ID found!' }));
+        }
+
+        // Return success message
+        res.writeHead(204, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(JSON.stringify(result[0])));
+    } catch (err) {
+        console.error('Error updating item quantity.');
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
+    }
 }
 
 module.exports = { createItem, deleteItem, updateItem, updateItemQuantity, getItems, getItem, getTickets, getTicket };
