@@ -74,7 +74,7 @@ const LogIn = () => {
                     <input type="password" placeholder="Enter your password" maxLength="16" onChange={handleChange} name="password"/>
                 </div>
                 <div className="no-account">
-                <a href="/sign-up" style={{textDecoration: "none", color: "inherit"}}>Don't have an account? Sign Up</a>
+                    <a href="/sign-up" style={{textDecoration: "none", color: "inherit"}}>Don't have an account? Sign Up</a>
                 </div>
                 <button onClick={handleClick} className="submit-button">Log In</button>
             </div>
