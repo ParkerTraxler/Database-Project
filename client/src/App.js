@@ -15,6 +15,7 @@ import ReportProblem from './pages/ReportProblem'
 import EditAccount from './pages/EditAccount.jsx'
 import MakeDonation from './pages/MakeDonation.jsx';
 import ManagerDashboard from './managerPages/ManagerDashboard.jsx';
+import EmployeeDashboard from './employeePages/EmployeeDashboard.jsx';
 import EditManagerAccount from './managerPages/EditManagerAccount.jsx';
 import ManageEmployees from './managerPages/ManageEmployees.jsx';
 import ManageEvents from './managerPages/ManageEvents.jsx';
@@ -88,6 +89,8 @@ function App() {
           </Route>
 
           <Route element={<ProtectedEmployeeRoutes/>}>
+            <Route path="/employee-dashboard" element={<EmployeeDashboard/>}/>
+            <Route path="/edit-employee-account" element={<EditAccountEmployee/>}/>
             <Route path="/edit-employee-account" element={<EditAccountEmployee/>}/>
             <Route path="/employee-account-details" element={<ViewAccountEmployee/>}/>
             <Route path="/employee-exhibits" element={<EmployeeManageExhibits/>}/>
