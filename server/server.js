@@ -13,7 +13,7 @@ const manageReviewsRoutes = require('./routes/manageReviewsRoute');
 const manageSalesRoutes = require('./routes/manageSalesRoute')
 const manageProfileRoutes = require('./routes/manageUserAccRoutes')
 // Port
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
 const server = http.createServer((req, res) => {
 
