@@ -1,59 +1,79 @@
-import React from 'react'
-import { useState } from 'react'
-import axios from 'axios' //api calls
-import './Account.css'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // API calls
+import './Account.css';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../utils/AuthContext';
+import { jwtDecode } from "jwt-decode";
 
 const AccountDetails = () => {
-    console.log("AccountDetails")
-    const [loginInfo, setLoginInfo] = useState({
-        email: "",
-        password: "",
-    })
+    console.log("AccountDetails");
+    const { user } = useAuth();
+    const token = user.token;
+    const decoded = jwtDecode(token);
+    const email = decoded.email;
 
-    const [details, setDetails] = useState({
-        membership: false,
-        firstName: "",
-        lastName: "",
-        birthDate: null,
-        gender: null,
-        address: null,
-    })
+    const [info, setInfo] = useState({
+        FirstName: null,
+        LastName: "",
+        Membership: "",
+        BirthDate: "",
+        Gender: "",
+    });
 
-    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(true); // Track loading status
 
-    const handleClick = e => {
-        try{
+    useEffect(() => {
+        const fetchAccount = async () => {
+            console.log(encodeURIComponent(email));
+            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`)
+                .then((res) => {
+                    console.log(res.data);
+                    setInfo(res.data);
+                    setIsLoading(false); // Set loading to false when done
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setIsLoading(false); // Even on error, stop loading
+                });
+        };
+        fetchAccount();
+    }, [email]);
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        try {
             navigate("/account-details/edit");
-        }
-        catch(err){
+        } catch (err) {
             console.log(err);
         }
+    };
 
+    if (isLoading) {
+        return <div>Loading account details...</div>; // Display while loading
     }
 
-    return(
+    return (
         <div className="AccountPage">
-        <div className="AccountDetails">
-            
-            <h1>Account Details</h1>
-
-            <div className="detailsBox">
-                <div className="detail"><strong>First Name:</strong> {details.firstName}</div>
-                <div className="detail"><strong>Last Name:</strong> {details.lastName}</div>
-                <div className="detail"><strong>Address:</strong> {details.address}</div>
-                <div className="detail"><strong>Date of Birth:</strong> {details.birthDate}</div>
-                <div className="detail"><strong>Gender:</strong> {details.gender}</div>
-                <div className="detail"><strong>Email:</strong> {details.email}</div>
-                <div className="detail"><strong>Password:</strong> ********</div>
-            </div>
-            <div>
-                <button className="saveButton" onClick={handleClick}>Edit Account</button>
+            <div className="AccountDetails">
+                <h1>Account Details</h1>
+                {!info.FirstName && (
+                    <div>Loading Info...</div>
+                )}
+                <div className="detailsBox">
+                    <div className="detail"><strong>First Name:</strong> {info.FirstName}</div>
+                    <div className="detail"><strong>Last Name:</strong> {info.LastName}</div>
+                    <div className="detail"><strong>Date of Birth:</strong> {info.BirthDate || "Not provided"}</div>
+                    <div className="detail"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
+                    <div className="detail"><strong>Email:</strong> {email}</div>
+                    <div className="detail"><strong>Password:</strong> ********</div>
+                </div>
+                <div>
+                    <button className="saveButton" onClick={handleClick}>Edit Account</button>
+                </div>
             </div>
         </div>
-        </div>
-    )
-}
+    );
+};
 
-export default AccountDetails
+export default AccountDetails;

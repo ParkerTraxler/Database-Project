@@ -31,7 +31,7 @@ const ProtectedManagerRoutes = () => {
         return <Navigate to="/"/>
     }
 
-    return role === 'manager' ? <Outlet /> : <Navigate to="/" />;
+    return role === 'Manager' ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedManagerRoutes;
