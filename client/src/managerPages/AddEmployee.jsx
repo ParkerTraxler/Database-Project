@@ -66,7 +66,15 @@ const AddEmployee = () => {
                     <input type="text" placeholder="email" onChange={handleChange} name="email"/>
                     <input type="text" placeholder="first name" onChange={handleChange} name="firstName"/>
                     <input type="text" placeholder="last name" onChange={handleChange} name="lastName"/>
-                    <input type="text" placeholder="position" onChange={handleChange} name="position"/>
+                    <div>
+                    Position:
+                    <select onChange={handleChange} name="position">
+                        <option value="">---Choose an option---</option>
+                        <option value="Curator">Curator</option>
+                        <option value="GiftShopTeam">GiftShopTeam</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    </div>
                     <input type="text" placeholder="manager email" onChange={handleChange} name="managerEmail"/>
                     <button className="formButton" onClick={handleClick} >Add</button>
                 </div>
