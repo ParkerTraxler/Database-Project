@@ -46,6 +46,7 @@ const LogIn = () => {
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer token_if_applicable',
                         },
+                        withCredentials: true,
                     }
                 )
                 const { message, token, error } = res.data
