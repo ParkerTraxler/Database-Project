@@ -42,7 +42,10 @@ const LogIn = () => {
             try{
                 const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/auth/login", userData,
                     {
-                        withCredentials: true, // Allows sending cookies and handling CORS credentials
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer token_if_applicable',
+                        },
                     }
                 )
                 const { message, token, error } = res.data
