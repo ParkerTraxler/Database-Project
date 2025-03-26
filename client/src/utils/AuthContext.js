@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 
     // Load user from localStorage on app start
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
+        const storedUser = sessionStorage.getItem("user");
         if (storedUser) {
             try {
                 const parsedUser = JSON.parse(storedUser);  // Parse the JSON string correctly
@@ -22,12 +22,12 @@ export const AuthProvider = ({ children }) => {
     const login = (email, role, token) => {
         const userData = { email, role, token };
         setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData)); // Save as JSON
+        sessionStorage.setItem("user", JSON.stringify(userData)); // Save as JSON
     };
 
     // Logout function
     const logout = () => {
-        localStorage.removeItem("user"); // Remove user completely
+        sessionStorage.removeItem("user"); // Remove user completely
         setIsLoggingOut(true)
         setUser(null); // Update state
         setTimeout(() => setIsLoggingOut(false), 500)
