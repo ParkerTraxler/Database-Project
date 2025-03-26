@@ -12,7 +12,7 @@ const Collections = () => {
     useEffect(()=>{
         const fetchAllCollections = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/collections")
+                const res = await axios.get("https://green-ground-0dc4ce31e.6.azurestaticapps.net/collections")
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){

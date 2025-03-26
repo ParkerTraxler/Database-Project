@@ -11,7 +11,7 @@ const ViewDonations = () => {
     useEffect(()=>{
         const fetchAllDonations = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/donations")
+                const res = await axios.get("https://green-ground-0dc4ce31e.6.azurestaticapps.net/donations")
                 console.log(res.data)
                 setDonations(res.data);
             }catch(err){

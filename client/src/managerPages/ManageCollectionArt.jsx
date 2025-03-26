@@ -28,7 +28,7 @@ import React from 'react'
          const fetchArtwork = async ()=>{
              console.log(collectionTitle)
              try{
-                 const res = await axios.get(`http://localhost:3002/artworks/collection/${encodeURIComponent(collectionTitle)}`);
+                 const res = await axios.get(`https://green-ground-0dc4ce31e.6.azurestaticapps.net/artworks/collection/${encodeURIComponent(collectionTitle)}`);
                  console.log(res.data)
                  setArtwork(res.data)
                  console.log(artwork.data)
@@ -42,7 +42,7 @@ import React from 'react'
      const handleDelete = async (artID)=>{
          console.log("ID: " + artID)
          try{
-             const res = await axios.delete("http://localhost:3002/artworks/", {
+             const res = await axios.delete("https://green-ground-0dc4ce31e.6.azurestaticapps.net/artworks/", {
                  headers: {
                      'authorization': `Bearer ${token}`
                  },

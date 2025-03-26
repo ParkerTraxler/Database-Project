@@ -31,7 +31,7 @@ const AddEmployee = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post("http://localhost:3002/employees", {
+            const res = await axios.post("https://green-ground-0dc4ce31e.6.azurestaticapps.net/employees", {
                 email: employee.email,
                 firstName: employee.firstName,
                 lastName: employee.lastName,

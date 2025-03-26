@@ -13,7 +13,7 @@ const Exhibits = () => {
     useEffect(()=>{
         const fetchAllExhibits = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/exhibits")
+                const res = await axios.get("https://green-ground-0dc4ce31e.6.azurestaticapps.net/exhibits")
                 console.log(res.data)
                 const regularExhibits = res.data.filter(exhibit => exhibit.IsSpecial !== 1);
                 const specialExhibits = res.data.filter(exhibit => exhibit.IsSpecial === 1);

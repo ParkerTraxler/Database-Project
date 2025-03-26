@@ -40,7 +40,7 @@ const LogIn = () => {
             e.preventDefault()  //prevents page refresh on button click
             
             try{
-                const res = await axios.post("http://localhost:3002/auth/login", userData)
+                const res = await axios.post("https://green-ground-0dc4ce31e.6.azurestaticapps.net/auth/login", userData)
                 const { message, token, error } = res.data
                 console.log(res.data)
                 console.log(message)
