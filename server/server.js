@@ -15,9 +15,9 @@ const manageProfileRoutes = require('./routes/manageUserAccRoutes')
 // Port
 const PORT = process.env.PORT || 8080;
 
-const server = http.createServer((req, res) => {
+const server = http.createServer( async (req, res) => {
 
-    corsMiddleware(req, res);
+    await corsMiddleware(req, res);
 
     if (req.url.startsWith('/auth'))
         authRoutes(req, res);

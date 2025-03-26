@@ -4,8 +4,10 @@ const corsMiddleware = (req, res) => {
 
     // Check that the request's origin matches the allowed origin
     const origin = req.headers.origin;
-    if (origin && origin === allowedOrigin)
-        res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+    if (origin && origin === allowedOrigin) {
+        console.log('Header sent');
+        res.setHeader('Access-Control-Allow-Origin', allowedOrigin);        
+    }
 
     // ALlow methods
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
