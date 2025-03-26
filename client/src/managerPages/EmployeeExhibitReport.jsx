@@ -19,7 +19,7 @@ const EmployeeExhibitReport = () => {
     useEffect(() => {
         const fetchAllEmployees = async () => {
             try {
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/report", {
+                const res = await axios.get("http://localhost:3002/employees/report", {
                     headers: {
                         'authorization': `Bearer ${token}`,
                     },

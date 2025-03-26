@@ -33,7 +33,7 @@ const CreateExhibit = () => {
         console.log("Exhibit object being sent:", exhibit);  // Debug the exhibit state before sending
         
         try{
-            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits/", {
+            const res = await axios.post("http://localhost:3002/exhibits/", {
                 exhibitname: exhibit.exhibitname, 
                 exhibitdesc: exhibit.exhibitdesc, 
                 exhibitpic: exhibit.exhibitpic,

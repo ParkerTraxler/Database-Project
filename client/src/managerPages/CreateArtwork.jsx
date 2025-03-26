@@ -43,7 +43,7 @@ import React from 'react'
          console.log(collectionTitle)
          console.log(artwork)
          try{
-             const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/", {
+             const res = await axios.post("http://localhost:3002/artworks/", {
                  artName: artwork.artName, 
                  artist: artwork.dateMade, 
                  dateMade: artwork.dateMade, 

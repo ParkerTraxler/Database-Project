@@ -51,9 +51,9 @@ loginUser = async (req, res) => {
             return res.end(JSON.stringify({ message: 'Login successful.', token: token }));
         });
     } catch (err) {
-        console.error('Error during login: ', err);
+        console.error('Error during login: ', error);
         res.writeHead(500, {'Content-Type': 'application/json'});
-        return res.end(JSON.stringify({ error: 'Server error occurred ' + err}));
+        return res.end(JSON.stringify({ error: 'Server error occurred'}));
     }
 };
 
