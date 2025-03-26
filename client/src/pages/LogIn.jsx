@@ -40,7 +40,11 @@ const LogIn = () => {
             e.preventDefault()  //prevents page refresh on button click
             
             try{
-                const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/auth/login", userData)
+                const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/auth/login", userData,
+                    {
+                        withCredentials: true, // Allows sending cookies and handling CORS credentials
+                    }
+                )
                 const { message, token, error } = res.data
                 console.log(res.data)
                 console.log(message)
