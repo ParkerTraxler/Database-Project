@@ -37,7 +37,7 @@ const EditEmployee = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put("https://green-ground-0dc4ce31e.6.azurestaticapps.net/employees/", {
+            const res = await axios.put("http://localhost:3002/employees/", {
                 hourlywage: employee.hourlywage,
                 weeklyhours: employee.weeklyhours,
                 firstname: employee.firstname,

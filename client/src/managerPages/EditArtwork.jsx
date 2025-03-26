@@ -42,7 +42,7 @@ import React from 'react'
          console.log("ID: " + artID)
          console.log(artwork)
          try{
-             const res = await axios.put("https://green-ground-0dc4ce31e.6.azurestaticapps.net/artworks/", {
+             const res = await axios.put("http://localhost:3002/artworks/", {
                  artID: artID,
                  artName: artwork.artName, 
                  artist: artwork.dateMade, 

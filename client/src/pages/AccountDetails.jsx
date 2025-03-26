@@ -25,7 +25,7 @@ const AccountDetails = () => {
     useEffect(() => {
         const fetchAccount = async () => {
             console.log(encodeURIComponent(email));
-            axios.get(`https://green-ground-0dc4ce31e.6.azurestaticapps.net/profile/${encodeURIComponent(email)}`)
+            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`)
                 .then((res) => {
                     console.log(res.data);
                     setInfo(res.data);

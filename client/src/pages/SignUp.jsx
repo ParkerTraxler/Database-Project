@@ -50,7 +50,7 @@ const SignUp = () => {
         else{
             e.preventDefault()  //prevents page refresh on button click
             try{
-                const res = await axios.post("https://green-ground-0dc4ce31e.6.azurestaticapps.net/auth/register", {
+                const res = await axios.post("http://localhost:3002/auth/register", {
                     firstname: signup.firstName,
                     lastname: signup.lastName,
                     email: signup.email,
