@@ -6,6 +6,12 @@ const manageItemsRoutes = (req, res) => {
     // regular items
     if (req.url === '/items' && req.method === 'GET') {
         getItems(req, res);
+    } else if (req.url === '/items/tickets' && req.method === 'GET') {
+        getTickets(req, res);
+    } else if (req.url.startsWith('/items/tickets/') && req.method === 'GET') {
+        const urlParts = req.url.split('/');
+        const ticketID = parseInt(urlParts[urlParts.length - 1]);
+        getTicket(req, res, ticketID);
     } else if(req.url.startsWith('/items/') && req.method === 'GET'){
         const urlParts = req.url.split('/');
         const itemID = parseInt(urlParts[urlParts.length - 1]);
@@ -28,12 +34,6 @@ const manageItemsRoutes = (req, res) => {
             updateItem(req, res);
         });
     // tickets - visible to everyone
-    }  else if (req.url === '/items/tickets' && req.url.method === 'GET') {
-        getTickets(req, res);
-    } else if (req.url.startsWith('/items/tickets/') && req.url.method === 'GET') {
-        const urlParts = req.url.split('/');
-        const ticketID = parseInt(urlParts[urlParts.length - 1]);
-        getTicket(req, res, ticketID);
     }
 }
 

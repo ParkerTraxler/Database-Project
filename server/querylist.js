@@ -81,7 +81,7 @@ const add_new_donation = `INSERT INTO donations (CustomerID, DonateDate, DonateA
 // Item and Ticket Controller : )
 const get_all_normal_items = "SELECT * FROM items WHERE isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
 const get_a_normal_item = "SELECT * FROM items WHERE isDeleted = false AND ItemID = ?";
-const get_all_tickets = "SELECT * FROM items WHERE ItemID IN (1, 2, 3, 4)";
+const get_all_tickets = "SELECT ItemID, ItemName, ItemPrice, AmountInStock FROM items WHERE ItemID IN (1, 2, 3, 4)";
 const get_specific_ticket = "SELECT * FROM items WHERE ItemID = ? AND ItemID IN (1, 2, 3, 4)";
 const insert_new_item = "INSERT INTO items (ItemName, AmountSold, ItemPrice, AmountInStock, GiftShopName) VALUES (?, 0, ?, ?, 'Gift Shop Museum')";
 const delete_item = "UPDATE items SET isDeleted = true WHERE ItemID = ? AND isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
@@ -112,8 +112,11 @@ const all_sales_report = `SELECT
 
 // User Profile Queries
 const get_user_profile = "SELECT Membership, FirstName, LastName, BirthDate, Gender FROM customers, logininfo WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID";
-const update_user_profile = "UPDATE customers JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.FirstName = ?, customers.LastName = ?, customers.BirthDate = ?, customers.Gender = ? WHERE logininfo.Email = ?";
+const update_user_profile = "UPDATE customers INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.FirstName = ?, customers.LastName = ?, customers.BirthDate = ?, customers.Gender = ? WHERE logininfo.Email = ?";
 const update_membership = "UPDATE customers JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.Membership = NOT customers.Membership WHERE logininfo.Email = ?";
+
+// All Review Queries
+const get_all_reviews = "SELECT customers.FullName, customers.LastName, reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews";
 
 // A report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
