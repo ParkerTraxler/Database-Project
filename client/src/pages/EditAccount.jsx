@@ -44,7 +44,7 @@ const EditAccount = () => {
             })
             console.log(res.end)
             
-            navigate("/manage-employees")
+            navigate("/account-details")
         }
         catch(err){
             console.log(err)
