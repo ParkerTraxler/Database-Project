@@ -25,6 +25,9 @@ const Collections = () => {
 
     return(
         <div>
+            <div className="collectionsBanner">
+                <h1>Collections</h1>
+            </div>
             <div>
                 <h1>Collections</h1>
                     <div className="collections">

@@ -1,0 +1,23 @@
+.giftshopBanner {
+    background-image: url('../assets/giftshopBanner.jpg');
+    background-size: cover;
+    width: 100%;
+    background-position: center;
+    height: 80vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.giftshopBanner h1{
+    font-weight: 300;
+}
+
+.giftshopBody {
+    height: 100vh;
+}

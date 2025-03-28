@@ -17,20 +17,24 @@ const Reviews = () => {
       
     return(
         <div>
-            Reviews
-            
-            <div className='starReview'>
-                {stars.map((_, index) => {
-                    let rating = 3.5;
-                    return (
-                        <div key={index} >
-                            <FaStarHalf size={24} color={(rating) > index ? 'gold' : 'grey'} />
-                            <FaStarHalf className="mirroredStar" size={24} color={(rating) > index + 0.5 ? 'gold' : 'grey'}/>
-                        </div>   
-                    );
-                })}
-            </div>           
-            <a href = "/write-review">Review Us!</a>
+            <div className="reviewsBanner">
+                <h1>Reviews</h1>
+            </div>
+            <div>
+                Reviews
+                <div className='starReview'>
+                    {stars.map((_, index) => {
+                        let rating = 3.5;
+                        return (
+                            <div key={index} >
+                                <FaStarHalf size={24} color={(rating) > index ? 'gold' : 'grey'} />
+                                <FaStarHalf className="mirroredStar" size={24} color={(rating) > index + 0.5 ? 'gold' : 'grey'}/>
+                            </div>   
+                        );
+                    })}
+                </div>           
+                <a href = "/write-review">Review Us!</a>
+            </div>
         </div>
     )
 }

@@ -7,3 +7,23 @@
     display: flex;
     gap: 0px;
 }
+
+.reviewsBanner {
+    background-image: url('../assets/reviewsBanner.jpg');
+    background-size: cover;
+    width: 100%;
+    background-position: center;
+    height: 80vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.reviewsBanner h1{
+    font-weight: 300;
+}
