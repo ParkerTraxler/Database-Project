@@ -34,7 +34,7 @@ const updateProfile = (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async () => {
-        const { firstname, lastname, birthdate, gender, email } = JSON.parse(body);
+        var { firstname, lastname, birthdate, gender, email } = JSON.parse(body);
         try {
             if(!email){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -64,7 +64,9 @@ const updateProfile = (req, res) => {
                 gender = curr_user[0].Gender;
             }
 
-            const [ result ] = await db.query(queries.update_user_profile, [firstname, lastname, birthdate, gender]);
+            console.log(firstname, " ", lastname, " ", birthdate, " ", gender);
+
+            const [ result ] = await db.query(queries.update_user_profile, [firstname, lastname, birthdate, gender, email]);
 
             if(!result || result.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -74,7 +76,7 @@ const updateProfile = (req, res) => {
             res.writeHead(200, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'User\'s profile successfully updated.' }));
         } catch (err) {
-            console.error('Error updating review.');
+            console.error('Error updating user profile: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error updating user\'s profile.' }));
         }

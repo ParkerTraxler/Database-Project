@@ -45,7 +45,7 @@ import React from 'react'
          try{
              const res = await axios.post("http://localhost:3002/artworks/", {
                  artName: artwork.artName, 
-                 artist: artwork.dateMade, 
+                 artist: artwork.artist, 
                  dateMade: artwork.dateMade, 
                  artType: artwork.artType, 
                  artVal: artwork.artVal, 
