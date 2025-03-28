@@ -3,7 +3,7 @@
 // First up, login/auth-controller - user oriented queries
 const user_exists_query = "SELECT UserPass, UserRole FROM logininfo WHERE Email = ?";
 const create_user_query = "INSERT INTO logininfo (Email, UserPass, UserRole) VALUES (?, ?, ?)";
-const create_customer_acc = "INSERT INTO customers (FirstName, LastName, UserID) VALUES (?, ?, ?)"
+const create_customer_acc = "INSERT INTO customers (FirstName, LastName, UserID) VALUES (?, ?, ?)";
 const create_new_employee = "UPDATE logininfo SET UserRole = 'Employee' WHERE Email = ?";
 const downgrade_employee = "UPDATE logininfo SET UserRole = 'Customer' WHERE Email = ?";
 
@@ -27,6 +27,24 @@ const update_employee_info = "UPDATE employees SET HourlyWage = ?, WeeklyHours =
 const check_employee_exist = "SELECT * FROM employees WHERE Email = ? AND isDeleted = TRUE";
 const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = ?, EPosition = ?, GiftShopName = ?, ManagerID = ?, isDeleted = FALSE WHERE Email = ?";
 
+// REPORT QUERY - report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
+const employee_exhibit_report = `SELECT 
+            e.EmployeeID as Employee_ID,
+            CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
+            e.Email as Employee_Email,
+            e.HourlyWage * e.WeeklyHours as Employee_Weekly_Wage,
+            ex.ExhibitName as Exhibit_Name,
+            CASE
+                WHEN e.isDeleted = FALSE THEN TRUE
+                WHEN e.isDeleted = TRUE THEN FALSE
+            END AS Employee_Active
+            FROM
+            employees as e,
+            exhibits as ex
+            WHERE
+            e.ExhibitID = ex.ExhibitID
+            ORDER BY ex.ExhibitID ASC, e.isDeleted ASC`;
+
 // Collections Management Controller
 const get_collections_query = "SELECT * FROM collections WHERE isDeleted = false";
 const get_specific_collection = "SELECT * FROM collections WHERE Title = ? AND isDeleted = false";
@@ -46,7 +64,7 @@ const get_all_exhibits =
 
     SELECT exhibits.ExhibitID, ExhibitName, ExhibitDesc, ExhibitPic, StartDate, EndDate, Fee, TRUE as IsSpecial
     FROM exhibits, specialexhibits 
-    WHERE exhibits.ExhibitID = specialexhibits.ExhibitID AND specialexhibits.EndDate IS NOT NULL AND specialexhibits.EndDate >= CURDATE()`;
+    WHERE exhibits.ExhibitID = specialexhibits.ExhibitID AND specialexhibits.EndDate >= CURDATE()`;
 
 const get_specific_exhibit = //coalesce checks to see if the value IS NOT null, and uses it if it is indeed not null
     `SELECT 
@@ -76,20 +94,20 @@ const update_special_exhibit = "UPDATE specialexhibits SET StartDate = ?, EndDat
 const get_all_donations = "SELECT DonationID, CONCAT(customers.FirstName, ' ', customers.LastName) AS DonatorName, DonateDate, DonateAmt, DonateDesc FROM donations, customers WHERE customers.CustomerID = donations.CustomerID";
 const get_specific_dons = "SELECT DonateDate, DonateAmt, DonateDesc FROM donations, logininfo, customers WHERE logininfo.email = ? AND logininfo.UserID = customers.userID AND customers.customerID = donations.customerID";
 const add_new_donation = `INSERT INTO donations (CustomerID, DonateDate, DonateAmt, DonateDesc) 
-                            VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.email = ? AND logininfo.userID = customers.userID), ?, ?, ?)`;
+                            VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)`;
 
 // Item and Ticket Controller : )
 const get_all_normal_items = "SELECT * FROM items WHERE isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
 const get_a_normal_item = "SELECT * FROM items WHERE isDeleted = false AND ItemID = ?";
-const get_all_tickets = "SELECT * FROM items WHERE ItemID IN (1, 2, 3, 4)";
+const get_all_tickets = "SELECT ItemID, ItemName, ItemPrice, AmountInStock FROM items WHERE ItemID IN (1, 2, 3, 4)";
 const get_specific_ticket = "SELECT * FROM items WHERE ItemID = ? AND ItemID IN (1, 2, 3, 4)";
-const insert_new_item = "INSERT INTO items (ItemName, AmountSold, ItemPrice, AmountInStock, GiftShopName) VALUES (?, 0, ?, ?, 'Gift Shop Museum')";
+const insert_new_item = "INSERT INTO items (ItemName, AmountSold, ItemPrice, AmountInStock, GiftShopName) VALUES (?, 0, ?, ?, 'Museum Gift Shop')";
 const delete_item = "UPDATE items SET isDeleted = true WHERE ItemID = ? AND isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
 const update_item = "UPDATE items SET ItemName = ?, ItemPrice = ?, GiftShopName = ? WHERE ItemID = ? AND isDeleted = false";
 const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE ItemID = ? AND isDeleted = false";
 
 // Transaction Controller - one query + the all_sales_report
-const new_transaction = "INESRT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo WHERE logininfo.email = ? AND logininfo.userID = customers.userID) ?, ?, ?"
+const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)";
 
 // REPORT QUERY -- gets all transactions, including tickets. 
 const all_sales_report = `SELECT
@@ -111,26 +129,18 @@ const all_sales_report = `SELECT
 
 
 // User Profile Queries
-const get_user_profile = "";
-const update_user_profile = "";
-const update_membership = "";
+const get_user_profile = "SELECT Membership, FirstName, LastName, BirthDate, Gender FROM customers, logininfo WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID";
+const update_user_profile = "UPDATE customers INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.FirstName = ?, customers.LastName = ?, customers.BirthDate = ?, customers.Gender = ? WHERE logininfo.Email = ?";
+const update_membership = "UPDATE customers JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.Membership = NOT customers.Membership WHERE logininfo.Email = ?";
 
-// A report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
-const employee_exhibit_report = `SELECT 
-            e.EmployeeID as Employee_ID,
-            CONCAT(e.FirstName + ' ' + e.LastName) as Employee_Name,
-            e.Email as Employee_Email,
-            ex.ExhibitName as Exhibit_Name,
-            CASE
-                WHEN e.isDeleted = FALSE THEN TRUE
-                WHEN e.isDeleted = TRUE THEN FALSE
-            END AS Employee_Active
-            FROM
-            employees as e,
-            exhibits as ex
-            WHERE
-            e.ExhibitID = ex.ExhibitID
-            ORDER BY ex.ExhibitID ASC, e.isDeleted ASC`;
+// All Review Queries
+const get_all_reviews = "SELECT reviews.CustomerID, CONCAT(customers.FirstName, ' ', customers.LastName) as Name, reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, customers WHERE customers.CustomerID = reviews.CustomerID";
+const get_user_review = "SELECT reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, logininfo, customers WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID AND customers.CustomerID = reviews.CustomerID"
+const new_user_review = `INSERT INTO reviews (CustomerID, StarCount, ReviewDesc, ReviewDate) 
+                            VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)`;
+const update_review = "UPDATE reviews INNER JOIN customers ON reviews.CustomerID = customers.CustomerID INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET reviews.StarCount = ?, reviews.ReviewDesc = ?, reviews.ReviewDate = ? WHERE logininfo.Email = ?";
+
+// A report that gets information on exhibits 
 
 // all the queries exported out
 module.exports = {
@@ -182,5 +192,9 @@ module.exports = {
     get_user_profile,
     update_user_profile,
     update_membership,
+    get_all_reviews,
+    get_user_review,
+    new_user_review,
+    update_review,
     employee_exhibit_report,
 };

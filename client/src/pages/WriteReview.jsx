@@ -1,18 +1,30 @@
 import React, { useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../utils/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./WriteReview.css";
 
 const WriteReview = () => {
     const [review, setReview] = useState({
-        rating: 0,
-        description: "",
-        reviewDate: null,
+        email:"",
+        starcount:"", 
+        reviewdesc:""
     });
+    const { user } = useAuth();
+    const token = user.token;
+    const decoded = jwtDecode(token);
+    const email = decoded.email;
+    console.log(email)
 
     const [hover, setHover] = useState(0);
 
+    const navigate = useNavigate()
+
     const handleClick = (index, isHalf) => {
-        setReview({ ...review, rating: isHalf ? index + 0.5 : index + 1 });
+        setReview({ ...review, starcount: isHalf ? index + 0.5 : index + 1 });
+        console.log(review)
     };
 
     const handleHover = (index, isHalf) => {
@@ -23,8 +35,28 @@ const WriteReview = () => {
         setHover(0);
     };
 
-    const handleSubmit = () => {
-
+    const handleSubmit = async e => {
+        e.preventDefault()  //prevents page refresh on button click
+        try{
+            console.log("POST Sent")
+            const res = await axios.post("http://localhost:3002/reviews", {
+                email: email,
+                starcount: review.starcount, 
+                reviewdesc: review.reviewdesc
+            },
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+            console.log("POST Completed")
+            console.log(res.end)
+            
+            navigate("/reviews")
+        }
+        catch(err){
+            console.log(err)
+        }
     };
 
     return (
@@ -32,16 +64,12 @@ const WriteReview = () => {
             <div className="Review-box">
                 <h1 className="Header">Write a Review</h1>
                 <div className="input-group">
-                    <label>First Name:</label>
-                    <input className="names" type="text" placeholder="First Name" maxLength="30" name="firstname" />
-                    <label>Last Name:</label>
-                    <input className="names" type="text" placeholder="Last Name" maxLength="30" name="lastname" />
 
                     {/* Star Rating Section */}
                     <div className="starReview" onMouseLeave={handleMouseLeave}>
                         {[...Array(5)].map((_, index) => {
-                            const fullStar = (hover || review.rating) > index + 0.5;
-                            const halfStar = (hover || review.rating) > index && (hover || review.rating) < index + 1;
+                            const fullStar = (hover || review.starcount) > index + 0.5;
+                            const halfStar = (hover || review.starcount) > index && (hover || review.starcount) < index + 1;
 
                             return (
                                 <span key={index} style={{ cursor: "pointer", position: "relative" }}>
@@ -90,10 +118,10 @@ const WriteReview = () => {
                         placeholder="What should other customers know?" 
                         maxLength="300"
                         name="review"
-                        onChange={(e) => setReview({ ...review, description: e.target.value })}
+                        onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>
                 </div>
-                <button onClick={handleClick}>Submit Review</button> {/*TEMPORARY*/ }
+                <button onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
 
                 <div className="no-account">
                     Don't have an account? <a href="/sign-up">Sign Up</a>

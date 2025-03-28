@@ -20,37 +20,29 @@ const getAllEmployees = async (req, res) => {
     }
 }
 
-const getEmployee = async (req, res) => {
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    });
-
-    req.on('end', async () => {
-        try {
-            const { empEmail } = JSON.parse(body);
-            // Ensure an email was provided
-            if (!empEmail) {
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'Please provide an email pointing to the employee to get.' }))
-            }
-
-            // SQL QUERY - get employee based off email (we assume we don't have their ID)
-            const[ rows ] = await db.query(queries.get_email_specific_emp, [empEmail]);
-            
-            if(!rows.length){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'Specified employee does not exist! It may have been deleted.'}));
-            }
-
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify(rows[0]));
-        } catch (err) {
-            console.error('Error while fetching employee: ', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Failed to retrieve employee. '}));
+const getEmployee = async (req, res, empEmail) => {
+    try {
+        // Ensure an email was provided
+        if (!empEmail) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Please provide an email pointing to the employee to get.' }))
         }
-    });
+
+        // SQL QUERY - get employee based off email (we assume we don't have their ID)
+        const[ rows ] = await db.query(queries.get_email_specific_emp, [empEmail]);
+            
+        if(!rows.length){
+            res.writeHead(400, {'Content-Type': 'application/json'});
+            return res.end(JSON.stringify({ error: 'Specified employee does not exist! It may have been deleted.'}));
+        }
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows[0]));
+    } catch (err) {
+        console.error('Error while fetching employee: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Failed to retrieve employee. '}));
+    }
 }
 
 const deleteEmployee = async (req, res) => {
@@ -199,7 +191,7 @@ const updateEmployee = (req, res) => {
 
             let giftshopname = null;
 
-            if(ePosition = "GiftShopTeam"){
+            if(ePosition == "GiftShopTeam"){
                 giftshopname = "Museum Gift Shop";
             }
 
@@ -259,4 +251,20 @@ const updateEmployee = (req, res) => {
     });
 }
 
-module.exports = { getAllEmployees, getEmployee, deleteEmployee, createEmployee, updateEmployee };
+// REPORT INFORMATION - Employees in each exhibit
+const getExhibitEmployees = async (req, res) => {
+    try {
+        // SQL Query - Get employees from the database
+        const [ rows ] = await db.query(queries.employee_exhibit_report);
+
+        // Return employees to frontend
+        res.writeHead(200, {'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows));
+    } catch (err) {
+        console.error('Error while fetching employees: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Failed to retrieve report regarding employees & exhibits.' }));
+    }
+}
+
+module.exports = { getAllEmployees, getEmployee, deleteEmployee, createEmployee, updateEmployee, getExhibitEmployees };

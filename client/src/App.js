@@ -23,7 +23,7 @@ import ManagerAccountDetails from './managerPages/ManagerAccountDetails.jsx';
 import EditAccountEmployee from './employeePages/EditAccountEmployee'
 import ViewAccountEmployee from './employeePages/AccountDetailsEmployee'
 import EmployeeManageExhibits from './employeePages/ManageExhibits'
-import ManageGiftShop from './employeePages/ManageGiftShop'
+//import ManageGiftShop from './employeePages/ManageGiftShop'
 import ManageCollections from './managerPages/ManageCollections.jsx';
 import ManagerAddCollection from './managerPages/ManagerAddCollection.jsx'
 import ManagerEditCollection from './managerPages/ManagerEditCollection.jsx';
@@ -38,6 +38,12 @@ import ManageCollectionArt from './managerPages/ManageCollectionArt.jsx';
 import CreateArtwork from './managerPages/CreateArtwork.jsx';
 import EditArtwork from './managerPages/EditArtwork.jsx';
 import CollectionArt from './pages/CollectionArt.jsx';
+import EmployeeExhibitReport from './managerPages/EmployeeExhibitReport.jsx';
+import ManageTickets from './managerPages/ManageTickets.jsx';
+import EditTicket from './managerPages/EditTicket.jsx';
+import ManageGiftShop from './managerPages/ManageGiftShop.jsx';
+import EditItem from './managerPages/EditItem.jsx';
+import CreateItem from './managerPages/CreateItem.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -90,7 +96,7 @@ function App() {
             <Route path="/edit-employee-account" element={<EditAccountEmployee/>}/>
             <Route path="/employee-account-details" element={<ViewAccountEmployee/>}/>
             <Route path="/employee-exhibits" element={<EmployeeManageExhibits/>}/>
-            <Route path="/employee-gift-shop" element={<ManageGiftShop/>}/>
+            
           </Route>
 
           <Route element={<ProtectedManagerRoutes/>}>
@@ -113,7 +119,12 @@ function App() {
             <Route path="/manage-collection-art/:Title" element={<ManageCollectionArt/>}/>
             <Route path="/add-artwork/:Title" element={<CreateArtwork/>}/>
             <Route path="/edit-artwork/:ArtID" element={<EditArtwork/>}/>
-             
+            <Route path="/employee-exhibit-report" element={<EmployeeExhibitReport/>}/>
+            <Route path="/manage-tickets" element={<ManageTickets/>}/>
+            <Route path="/edit-ticket/:ItemID" element={<EditTicket/>}/>
+            <Route path="/manage-gift-shop" element={<ManageGiftShop/>}/>
+            <Route path="/edit-item/:GiftShopName/:ItemID" element={<EditItem/>}/>
+            <Route path="/add-item" element={<CreateItem/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

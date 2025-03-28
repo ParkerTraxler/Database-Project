@@ -17,36 +17,28 @@ const getExhibits = async (req, res) => {
 }
 
 // Get an exhibit, can be normal or special - return all the information either way
-const getExhibit = async (req, res) => {
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    });
-
-    req.on('end', async() => {
-        const { exhibitid } = JSON.parse(body);
-        try {
-            if(!exhibitid){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'No Exhibit ID provided to search for.'}));
-            }
-            // SQL Query - Get the exhibit (if it is exists)
-            const [ row ] = await db.query(queries.get_specific_exhibit, exhibitid);
-
-            if(!row.length){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'Specified exhibit does not exist! Was it created successfully?'}));
-            }
-
-            // Return the exhibit
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify(row[0]));
-        } catch (err) {
-            console.error('Error fetching exhibit.');
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Error fetching exhibit.' }));
+const getExhibit = async (req, res, exhibitid) => {
+    try {
+        if(!exhibitid){
+            res.writeHead(400, {'Content-Type': 'application/json'});
+            return res.end(JSON.stringify({ error: 'No Exhibit ID provided to search for.'}));
         }
-    });
+        // SQL Query - Get the exhibit (if it is exists)
+        const [ row ] = await db.query(queries.get_specific_exhibit, exhibitid);
+
+        if(!row.length){
+            res.writeHead(400, {'Content-Type': 'application/json'});
+            return res.end(JSON.stringify({ error: 'Specified exhibit does not exist! Was it created successfully?'}));
+        }
+
+        // Return the exhibit
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(row[0]));
+    } catch (err) {
+        console.error('Error fetching exhibit.');
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Error fetching exhibit.' }));
+    }
 }
 
 // allow creation of an exhibit, special or otherwise. 

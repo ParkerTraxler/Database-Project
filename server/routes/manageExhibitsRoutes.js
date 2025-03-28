@@ -6,7 +6,9 @@ const manageExhibitsRoutes = (req, res) => {
     if (req.url === '/exhibits' && req.method === 'GET') {
         getExhibits(req, res);  
     } else if (req.url.startsWith('/exhibits/') && req.method === 'GET') {
-        getExhibit(req, res);
+        const urlParts = req.url.split('/');
+        const exhibitID = parseInt(urlParts[urlParts.length - 1]);
+        getExhibit(req, res, exhibitID);
     } else if (req.url.startsWith('/exhibits') && req.method === 'POST') {
         verifyToken('Manager')(req, res, () => {
             createExhibit(req, res);

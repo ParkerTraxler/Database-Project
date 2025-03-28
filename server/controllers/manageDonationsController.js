@@ -17,34 +17,24 @@ const getDonations = async (req, res) => {
     }
 }
 
-const getDonationsForUser = (req, res) => {
-    // Get data from request
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    });
-
-    // Process request and return response
-    req.on('end', async () => {
-        const { email } = JSON.parse(body);
-        try {
-            // Confirm that a customer was supplied
-            if (!email) {
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'Please supply which customer\'s donations to view' }))
-            }
-            // SQL QUERY - Return all the donations given by that user - MIGHT BE NONE.  
-            const [ rows ] = await db.query(queries.get_specific_dons, [email]);
-
-            // Return donations to frontend
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify(rows));
-        } catch (err) {
-            console.error('Error fetching donation: ', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error fetching donations for user.' }));
+const getDonationsForUser = async (req, res, email) => {
+    try {
+        // Confirm that a customer was supplied
+        if (!email) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Please supply which customer\'s donations to view' }))
         }
-    });
+        // SQL QUERY - Return all the donations given by that user - MIGHT BE NONE.  
+        const [ rows ] = await db.query(queries.get_specific_dons, [email]);
+
+        // Return donations to frontend
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows));
+    } catch (err) {
+        console.error('Error fetching donation: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Error fetching donations for user.' }));
+    }
 }
 
 const createDonation = (req, res) => {

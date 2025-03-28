@@ -17,31 +17,23 @@ const getAllCollections = async (req, res) => {
     }
 }
 
-const getExhibitCollections = async (req, res) => {
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    });
-    
-    req.on('end', async () => {
-        const { exhibitID } = JSON.parse(body);
-        try {
-            if(!exhibitID){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'No exhibit ID supplied to search for'}));
-            }
-            // SQL QUERY - Retrieve collection from database
-            const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
-
-            // may return empty if exhibit hsa no collections in it
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(rows));
-        } catch (err) {
-            console.error('Error fetching collection: ', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Failed to retrieve collections for specific exhibit.' }));
+const getExhibitCollections = async (req, res, exhibitID) => {
+    try {
+        if(!exhibitID){
+            res.writeHead(400, {'Content-Type': 'application/json'});
+            return res.end(JSON.stringify({ error: 'No exhibit ID supplied to search for'}));
         }
-    });
+        // SQL QUERY - Retrieve collection from database
+        const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
+
+        // may return empty if exhibit hsa no collections in it
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows));
+    } catch (err) {
+        console.error('Error fetching collection: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Failed to retrieve collections for specific exhibit.' }));
+    }
 }
 
 const createCollection = async (req, res) => {
