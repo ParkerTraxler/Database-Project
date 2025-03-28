@@ -37,7 +37,7 @@ const createItem = (req, res) => {
             res.writeHead(201, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Successfully created item.' }));
         } catch (err) {
-            console.error('Error creating item.');
+            console.error('Error creating item: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error creating item.' }));
         }
@@ -84,6 +84,7 @@ const deleteItem = (req, res) => {
 }
 
 const updateItem = (req, res) => {
+    console.log("API call is correct");
     // Get fields from request
     let body = '';
     req.on('data', (chunk) => {
@@ -92,7 +93,7 @@ const updateItem = (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async () => {
-        const { itemid, itemname, itemprice, giftshopname } = JSON.parse(body);
+        var { itemid, itemname, itemprice, giftshopname } = JSON.parse(body);
         try {
             if(!itemid){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -100,7 +101,8 @@ const updateItem = (req, res) => {
             }
 
             // get the item from the DB / confirm it exists
-            const [ curr_item ] = await db.query(get_a_normal_item, [itemid]);
+            const [ curr_item ] = await db.query(queries.get_a_normal_item, [itemid]);
+
 
             // SQL QUERY - update the item 
             if(itemname == null || itemname == ""){
@@ -125,7 +127,7 @@ const updateItem = (req, res) => {
             res.writeHead(204, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Item successfully updated.' }));
         } catch (err) {
-            console.error('Error updating item.');
+            console.error('Error updating item: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error updating item.' }));
         }
@@ -173,20 +175,18 @@ const updateItemQuantity = (req, res) => {
 
 // get all non-ticket items
 const getItems = async(req, res) =>{
-    req.on('end', async () => {
-        try {
-            // SQL Query - get all non-ticket items
-            const [ result ] = await db.query(queries.get_all_normal_items);
+    try {
+        // SQL Query - get all non-ticket items
+        const [ result ] = await db.query(queries.get_all_normal_items);
 
-            // Return success message
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify(JSON.stringify(result)));
-        } catch (err) {
-            console.error('Error retrieving all items: ', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Error retrieving all items' }));
-        }
-    });
+        // Return success message
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(result));
+    } catch (err) {
+        console.error('Error retrieving all items: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Error retrieving all items' }));
+    }
 }
 
 const getItem = async(req, res, itemID) =>{
@@ -203,7 +203,7 @@ const getItem = async(req, res, itemID) =>{
         }
 
         // SQL QUERY - Get item itself if checks are passed
-        const [ result ] = await db.query(get_a_normal_item, itemID);
+        const [ result ] = await db.query(queries.get_a_normal_item, itemID);
 
         if(result.affectedRows == 0){
             res.writeHead(400, { 'Content-Type':  'application/json' });
@@ -249,7 +249,7 @@ const getTicket =  async(req, res, itemID) => {
         }
 
         // SQL QUERY - Get ticket itself if checks are passed
-        const [ result ] = await db.query(get_specific_ticket, itemID);
+        const [ result ] = await db.query(queries.get_specific_ticket, itemID);
 
         if(result.affectedRows == 0){
             res.writeHead(400, { 'Content-Type':  'application/json' });
