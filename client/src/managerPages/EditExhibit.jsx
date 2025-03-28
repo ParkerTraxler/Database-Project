@@ -66,7 +66,7 @@ const EditExhibit = () => {
                 <input type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/> 
                 <button className="formButton" onClick={handleClick} >Update</button>
                     
-                </div>
+            </div>
             </div>
             
         </div>

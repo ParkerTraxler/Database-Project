@@ -37,7 +37,7 @@ const createItem = (req, res) => {
             res.writeHead(201, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Successfully created item.' }));
         } catch (err) {
-            console.error('Error creating item.');
+            console.error('Error creating item: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error creating item.' }));
         }

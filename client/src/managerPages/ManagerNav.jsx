@@ -29,6 +29,12 @@ const ManagerDashboard = () => {
                         <a href='/manage-collections'>Manage Collections</a>
                     </li>
                     <li>
+                        <a href='/manage-tickets'>Manage Tickets</a>
+                    </li>
+                    <li>
+                        <a href='/manage-gift-shop'>Manage Gift Shop</a>
+                    </li>
+                    <li>
                         <a href='/view-donations'>View Donations</a>
                     </li>
                     <li>

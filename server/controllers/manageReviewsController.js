@@ -4,14 +4,14 @@ const db = require('../db/db');
 
 const getReviews = async (req, res) => {
     try {
-        // SQL QUERY - get all donations + name
+        // SQL QUERY - get all reviews + name
         const [ rows ] = await db.query(queries.get_all_reviews);
 
-        // Return donations to frontend
+        // Return reviews to frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
     } catch (err) {
-        console.error('Error fetching donations: ', err);
+        console.error('Error fetching reviews: ', err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'Error fetching reviews.' }));
     }
@@ -48,8 +48,8 @@ const createReview = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Missing required information for reviews.' }));
             }
 
-            let reviewdate = Date();
-            reviewdate = reviewdate.getFullYear() + "-" + reviewdate.getMonth() + "-" + reviewdate.getDate();
+            let reviewdate = new Date();
+            reviewdate = reviewdate.getFullYear() + "-" + String(reviewdate.getMonth()+1).padStart(2, '0') + "-" + String(reviewdate.getDate()).padStart(2, '0');
 
             //  SQL QUERY - Create a new review
             const [ result ] = await db.query(queries.new_user_review, [email, starcount, reviewdesc, reviewdate]);
@@ -63,7 +63,7 @@ const createReview = (req, res) => {
             res.writeHead(201, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Successfully created review.' }));
         } catch (err) {
-            console.error('Error creating review.');
+            console.error('Error creating review: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error creating review.' }));
         }
@@ -96,18 +96,18 @@ const updateReview = (req, res) => {
             }
 
             if(starcount == null || starcount == ""){
-                starcount = curr_col[0].StarCount;
+                starcount = rows[0].StarCount;
             }
 
             if(reviewdesc == null || reviewdesc == ""){
-                reviewdesc = curr_col[0].ReviewDesc;
+                reviewdesc = rows[0].ReviewDesc;
             }
 
-            let reviewdate = Date();
-            reviewdate = reviewdate.getFullYear() + "-" + reviewdate.getMonth() + "-" + reviewdate.getDate();
+            let reviewdate = new Date();
+            reviewdate = reviewdate.getFullYear() + "-" + String(reviewdate.getMonth()+1).padStart(2, '0') + "-" + String(reviewdate.getDate()).padStart(2, '0');
 
             //  SQL QUERY - Create a new review
-            const [ result ] = await db.query(queries.update_review [starcount, reviewdesc, reviewdate, email]);
+            const [ result ] = await db.query(queries.update_review, [starcount, reviewdesc, reviewdate, email]);
 
             if(!result || result.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -118,7 +118,7 @@ const updateReview = (req, res) => {
             res.writeHead(204, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Review successfully updated.' }));
         } catch (err) {
-            console.error('Error updating review.');
+            console.error('Error updating review: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error updating review.' }));
         }

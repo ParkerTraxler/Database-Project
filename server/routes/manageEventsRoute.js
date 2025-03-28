@@ -1,5 +1,5 @@
 const http = require('http');
-const { getAllEvents, getEvent, createEvent, deleteEvent, updateEvent } = require('../controllers/manageEventsController');
+const { getAllEvents, getEvent, createEvent, cancelEvent, updateEvent } = require('../controllers/manageEventsController');
 const verifyToken = require('../middleware/authMiddleware');
 
 const manageEventsRoutes = (req, res) => {
@@ -17,7 +17,7 @@ const manageEventsRoutes = (req, res) => {
         });
     } else if (req.url.startsWith('/events/') && req.method === 'DELETE') {
         verifyToken('Manager')(req, res, () => {
-            deleteEvent(req, res);
+            cancelEvent(req, res);
         });
     }
 }
