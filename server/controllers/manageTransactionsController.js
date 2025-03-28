@@ -14,7 +14,55 @@ const getTransactionReport = (req, res) => {
         } catch (err) {
             console.error('Error fetching report: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error fetching transaction report.' }));
+            return res.end(JSON.stringify({ error: 'Error fetching transaction report.' }));
+        }
+    });
+}
+
+const ticketPurchase = (req, res) =>{
+    // Get fields from request
+    let body = '';
+    req.on('data', (chunk) => {
+        body += chunk.toString();
+    });
+
+    req.on('end', async () => {
+        const { ticketArray, email, datepurchased } = JSON.parse(body);
+        var itemIDs = [];
+        try{
+            for(let x = 0; x < 4; x++){
+                if(ticketArray[x] > 0){
+                    itemIDs.push(x+1);
+                }
+            }
+    
+            if(itemIDs.length == 0){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'This transaction includes no tickets to be purchased'}));
+            }
+    
+            if(!email){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Customer not authorized / no email given.'}));
+            }
+    
+            var finalprice = -1;
+    
+            if(!datepurchased){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'Must supply a date of purchase.'}));
+            }
+    
+            for(let ItemID of itemIDs){
+                await db.query(queries.new_transaction, [ItemID, email, parseInt(ticketArray[ItemID-1]), finalprice, datepurchased]);
+            }
+    
+            res.writeHead(201, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ message: 'Tickets purchased!' }));
+        } catch (err) {
+            console.error('Error processing ticket purchase: ', err);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Failed to purchase tickets.' }));
         }
     });
 }
@@ -27,7 +75,7 @@ const processTransaction = (req, res) => {
     });
 
     req.on('end', async () => {
-        var { itemid, email, quantity, finalprice, datepurchased } = JSON.parse(body);
+        var { itemid, email, quantity, datepurchased } = JSON.parse(body);
         try {
             if(!itemid){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -44,9 +92,7 @@ const processTransaction = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Quantity is invalid number.'}));
             }
 
-            if(finalprice == "" || !finalprice){
-                finalprice = null;
-            }
+            var finalprice = -1;
 
             if(!datepurchased){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -62,13 +108,13 @@ const processTransaction = (req, res) => {
 
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'New transaction added.' }));
+            return res.end(JSON.stringify({ message: 'New transaction added.' }));
         } catch (err) {
-            console.error('Error creating review.');
+            console.error('Error processing transaction: ',);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Failed to add transaction.' }));
+            return res.end(JSON.stringify({ error: 'Failed to add transaction.' }));
         }
     });
 }
 
-module.exports = { getTransactionReport, processTransaction };
+module.exports = { getTransactionReport, ticketPurchase, processTransaction };

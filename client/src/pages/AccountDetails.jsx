@@ -63,7 +63,7 @@ const AccountDetails = () => {
                 <div className="detailsBox">
                     <div className="detail"><strong>First Name:</strong> {info.FirstName}</div>
                     <div className="detail"><strong>Last Name:</strong> {info.LastName}</div>
-                    <div className="detail"><strong>Date of Birth:</strong> {info.BirthDate || "Not provided"}</div>
+                    <div className="detail"><strong>Date of Birth:</strong> {new Date(info.BirthDate).toLocaleDateString() || "Not provided"}</div>
                     <div className="detail"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
                     <div className="detail"><strong>Email:</strong> {email}</div>
                     <div className="detail"><strong>Password:</strong> ********</div>

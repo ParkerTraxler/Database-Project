@@ -100,10 +100,9 @@ const SignUp = () => {
                     <input type="password" onChange={handleChange} maxLength="16" placeholder="Re-enter your password"  name="password2"/>
                 </div>
                 <div className="no-account">
-                    <a href="/log-in" style={{textDecoration: "none", color: "inherit"}}> Already have an account? Log In</a>
-
+                    Already have an account? <a href="/log-in">Log In</a>
                 </div>
-                <button onClick={handleClick} className="submit-button">Sign Up</button>
+                <button onClick={handleClick}>Sign Up</button> 
             </div>
         </div>
     )

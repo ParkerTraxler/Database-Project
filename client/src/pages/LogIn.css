@@ -44,22 +44,3 @@ input{
 .error {
     color: red;
 }
-
-.submit-button {
-    background-color: #d4d8df;
-    color: #1a1a1a;
-    border: none;
-    padding: 0.75rem 2rem;
-    font-size: 1rem;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-  }
- 
-  .submit-button:hover {
-    background-color: #bfc3c9;
-  }
- 
-  .no-account:hover{
-    text-decoration: underline;
-  }

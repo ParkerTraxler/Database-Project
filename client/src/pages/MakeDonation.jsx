@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import { jwtDecode } from "jwt-decode";
+import './MakeDonation.css'
 
 const MakeDonation = () => {
     console.log("MakeDonation")
@@ -64,6 +65,9 @@ const MakeDonation = () => {
 
     return(
         <div>
+            <div className="donationBanner">
+                <h1>Want to Donate?</h1>
+            </div>
             <div className="form">
                 <h1>Make a Donation</h1>
                 <input type="number" step="0.01" placeholder="amount" onChange={handleChange} name="donateamt"/>

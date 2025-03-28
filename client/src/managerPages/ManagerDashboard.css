@@ -2,7 +2,6 @@
     display: flex;
 }
 
-
 .managerDashboard {
     height: 100vh;
     display: flex;
@@ -15,7 +14,6 @@
     border-right-style: inset;
 }
 
-
 .managerDashboard h1{
     color: white;
     font-size: x-large;
@@ -23,56 +21,17 @@
 }
 
 
-
-
 .dashLinks {
     list-style: none;
     gap: 25px;
-   
+    
     display: flex;
     flex-direction: column;
-   
+    
 }
-
 
 .dashLinks a {
     text-decoration: none;
     color: white;
-   
+    
 }
-
-.dashLinks a:hover {
-    color: #f0c040;
-    transition: color 0.2s ease-in-out;
-    text-shadow: 1px 1px 2px rgba(0,0,0);
-}
-
-
-
-.managerView-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    overflow: hidden;
-  }
- 
-  .mainContentWrapper {
-    position: relative;
-    flex: 1;
-    overflow: hidden;
-  }
- 
-  .bg-fade {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    transition: opacity 1s ease-in-out;
-    z-index: 0;
-  }
- 
- 
- 

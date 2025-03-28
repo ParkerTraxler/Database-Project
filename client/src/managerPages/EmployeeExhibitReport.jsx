@@ -4,7 +4,6 @@ import axios from 'axios'; // API calls
 import { useAuth } from '../utils/AuthContext';
 
 import './ManagerDashboard.css';
-import './EmployeeExhibitReport.css';
 
 const EmployeeExhibitReport = () => {
     console.log("EmployeeExhibitReport");
@@ -69,8 +68,8 @@ const EmployeeExhibitReport = () => {
             <div>
                 <ManagerNav />
             </div>
-            <div className = "report-section">
-                <h1 className="header">Employee Exhibit Report</h1>
+            <div>
+                <h1>Employee Exhibit Report</h1>
 
                 {/* Search Bar for Employee Name */}
                 <input
@@ -82,8 +81,8 @@ const EmployeeExhibitReport = () => {
                 />
 
                 {/* Exhibit Filter Dropdown */}
-                <label htmlFor="exhibitFilter" className= "filter-label">Filter by Exhibit:</label>
-                <select id="exhibitFilter" value={exhibitFilter} onChange={handleExhibitChange} className="filter-select">
+                <label htmlFor="exhibitFilter">Filter by Exhibit:</label>
+                <select id="exhibitFilter" value={exhibitFilter} onChange={handleExhibitChange}>
                     <option value="">All Exhibits</option>
                     {exhibitNames.map(exhibit => (
                         <option key={exhibit} value={exhibit}>
@@ -92,7 +91,7 @@ const EmployeeExhibitReport = () => {
                     ))}
                 </select>
 
-                <table className="info-table">
+                <table>
                     <thead>
                         <tr>
                             <th>Name</th>

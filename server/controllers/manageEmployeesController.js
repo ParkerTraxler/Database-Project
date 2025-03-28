@@ -191,7 +191,7 @@ const updateEmployee = (req, res) => {
 
             let giftshopname = null;
 
-            if(ePosition = "GiftShopTeam"){
+            if(ePosition == "GiftShopTeam"){
                 giftshopname = "Museum Gift Shop";
             }
 

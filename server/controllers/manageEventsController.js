@@ -82,7 +82,7 @@ const createEvent = async (req, res) => {
     });
 }
 
-const deleteEvent = async (req, res) => {
+const cancelEvent = async (req, res) => {
     // Get data from request
     let body = '';
     req.on('data', (chunk) => {
@@ -152,4 +152,4 @@ const updateEvent = (req, res) => {
     });
 }
 
-module.exports = { getAllEvents, getEvent, createEvent, deleteEvent, updateEvent };
+module.exports = { getAllEvents, getEvent, createEvent, cancelEvent, updateEvent };
