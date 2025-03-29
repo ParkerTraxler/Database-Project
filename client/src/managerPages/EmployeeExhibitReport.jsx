@@ -4,6 +4,7 @@ import axios from 'axios'; // API calls
 import { useAuth } from '../utils/AuthContext';
 
 import './ManagerDashboard.css';
+import './EmployeeExhibitReport.css';
 
 const EmployeeExhibitReport = () => {
     console.log("EmployeeExhibitReport");

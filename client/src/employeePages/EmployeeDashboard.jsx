@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import ManagerNav from './ManagerNav'
-import './ManagerDashboard.css';
-import './ManagerNav.jsx';
+import EmployeeNav from './EmployeeNav';
+import './EmployeeDashboard.css';
+import './EmployeeNav.css';
 
 
 
 
-const ManagerDashboard = () => {
+const EmployeeDashboard = () => {
   const images = [
-    '/images/background-img3.jpg',
-    '/images/background-img4.jpg',
-    '/images/background-img5.jpg'
+    '/images/background-img.jpg',
+    '/images/background-img1.jpg',
+    '/images/background-img2.jpg'
   ];
 
 
@@ -26,12 +26,13 @@ const ManagerDashboard = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setFade(false);
+ 
       setTimeout(() => {
         setCurrentImageIndex(nextImageIndex);
         setNextImageIndex((nextImageIndex + 1) % images.length);
         setFade(true);
-      }, 7000);
-    }, 7000);
+      }, 500);
+    }, 3000);
 
 
 
@@ -43,9 +44,9 @@ const ManagerDashboard = () => {
 
 
   return (
-    <div className="managerView-container">
-      <div className="managerNav">
-        <ManagerNav />
+    <div className="employeeView-container">
+      <div className="employeeNav">
+        <EmployeeNav />
       </div>
       <div className="mainContentWrapper">
         <div
@@ -62,7 +63,7 @@ const ManagerDashboard = () => {
             opacity: fade ? 0 : 1
           }}
         />
-        <div className="managerContent">
+        <div className="employeeContent">
         </div>
       </div>
     </div>
@@ -72,4 +73,4 @@ const ManagerDashboard = () => {
 
 
 
-export default ManagerDashboard;
+export default EmployeeDashboard;
