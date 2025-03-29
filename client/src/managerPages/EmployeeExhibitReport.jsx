@@ -69,8 +69,8 @@ const EmployeeExhibitReport = () => {
             <div>
                 <ManagerNav />
             </div>
-            <div>
-                <h1>Employee Exhibit Report</h1>
+            <div className = "report-section">
+                <h1 className="header">Employee Exhibit Report</h1>
 
                 {/* Search Bar for Employee Name */}
                 <input
@@ -83,7 +83,7 @@ const EmployeeExhibitReport = () => {
 
                 {/* Exhibit Filter Dropdown */}
                 <label htmlFor="exhibitFilter">Filter by Exhibit:</label>
-                <select id="exhibitFilter" value={exhibitFilter} onChange={handleExhibitChange}>
+                <select id="exhibitFilter" value={exhibitFilter} onChange={handleExhibitChange} className="filter-select">
                     <option value="">All Exhibits</option>
                     {exhibitNames.map(exhibit => (
                         <option key={exhibit} value={exhibit}>
@@ -92,7 +92,7 @@ const EmployeeExhibitReport = () => {
                     ))}
                 </select>
 
-                <table>
+                <table className="info-table">
                     <thead>
                         <tr>
                             <th>Name</th>
