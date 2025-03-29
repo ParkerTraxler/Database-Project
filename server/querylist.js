@@ -140,7 +140,19 @@ const new_user_review = `INSERT INTO reviews (CustomerID, StarCount, ReviewDesc,
                             VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)`;
 const update_review = "UPDATE reviews INNER JOIN customers ON reviews.CustomerID = customers.CustomerID INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET reviews.StarCount = ?, reviews.ReviewDesc = ?, reviews.ReviewDate = ? WHERE logininfo.Email = ?";
 
-// A report that gets information on exhibits 
+// A report that gets information on events
+const get_all_events = "SELECT * FROM eventlist WHERE isDeleted = false AND EventDate >= CURDATE()"; 
+const get_specific_event = "SELECT * FROM eventlist WHERE isDeleted = false AND EventID = ?";
+const get_event_employees = "SELECT employees.EmployeeID, CONCAT(employees.FirstName, ' ', employees.LastName) AS EmployeeName, employees.Email, eventworkers.EventID FROM eventworkers, employees WHERE EventID = ? AND eventworkers.EmployeeID = employees.EmployeeID AND employees.isDeleted = FALSE";
+const cancel_event = "UPDATE eventlist SET isDeleted = TRUE WHERE EventID = ?";
+const create_event = "INSERT INTO eventlist (EventName, EventDesc, EventDate, MemberOnly) VALUES (?, ?, ?, ?)";
+const add_event_employee = "INSERT INTO eventworkers (EventID, EmployeeID) VALUES (?, (SELECT EmployeeID FROM employees WHERE employees.Email = ? AND isDeleted = FALSE))";
+const update_event = "UPDATE eventlist SET EventName = ?, EventDesc = ?, EventDate = ?, MemberOnly = ? WHERE EventID = ?";
+// this is the only actual delete command in the whole DB - the history table will track when an employee gets unassigned, so no information is actually lost, but the table will actually remove things 
+const remove_event_employee = "DELETE FROM eventworkers WHERE EventID = ? AND EmployeeID = (SELECT EmployeeID FROM employees WHERE employees.Email = ? AND isDeleted = FALSE)";
+
+// all history table commands - incredibly important never touch these without asking Ash please!!
+
 
 // all the queries exported out
 module.exports = {
@@ -196,5 +208,13 @@ module.exports = {
     get_user_review,
     new_user_review,
     update_review,
+    get_all_events,
+    get_specific_event,
+    get_event_employees,
+    cancel_event,
+    create_event,
+    add_event_employee,
+    update_event,
+    remove_event_employee,
     employee_exhibit_report,
 };
