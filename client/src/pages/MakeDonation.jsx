@@ -68,11 +68,13 @@ const MakeDonation = () => {
             <div className="donationBanner">
                 <h1>Want to Donate?</h1>
             </div>
-            <div className="form">
-                <h1>Make a Donation</h1>
-                <input type="number" step="0.01" placeholder="amount" onChange={handleChange} name="donateamt"/>
-                <input type="text" placeholder="desc" onChange={handleChange} name="donatedesc"/>
-                <button className="formButton" onClick={handleClick} >Donate</button>
+            <div className="donationPage">
+                <div className="donationForm">
+                    <h1>Make a Donation</h1>
+                    <input type="number" step="0.01" placeholder="amount" onChange={handleChange} name="donateamt"/>
+                    <input type="text" placeholder="desc" onChange={handleChange} name="donatedesc"/>
+                    <button className="donationButton" onClick={handleClick} >Donate</button>
+                </div>
             </div>
         </div>
     )

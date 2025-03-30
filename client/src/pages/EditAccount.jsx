@@ -56,23 +56,23 @@ const EditAccount = () => {
     
 
     return(
-        <div className='AccountPage'>
-        <div className="AccountDetails">
+        <div className='AccountPageC'>
+        <div className="AccountDetailsC">
             <h1>Edit Account</h1>
-            <div className="detailsBox">
-                <div className="detail">
+            <div className="detailsBoxC">
+                <div className="detailC">
                     <strong>First Name:</strong>
                     <input type="text" maxLength="28" onChange={handleChange} name="firstname"></input>
                 </div>
-                <div className="detail">
+                <div className="detailC">
                     <strong>Last Name:</strong>
                     <input type="text" maxLength="28" onChange={handleChange} name="lastname"></input>
                 </div>
-                <div className="detail">
+                <div className="detailC">
                     <strong>Date of Birth:</strong>
                     <input type="date" onChange={handleChange} name="birthdate"></input>
                 </div>
-                <div className="detail">
+                <div className="detailC">
                     <strong>Gender:  </strong>
                     <select onChange={handleChange} name="gender">
                         <option value="">---Choose an option---</option>
@@ -83,7 +83,7 @@ const EditAccount = () => {
                 </div>
             </div>
             <div>
-                <button onClick={handleClick} className="saveButton">Save Changes</button>
+                <button onClick={handleClick} className="saveButtonC">Save Changes</button>
             </div>
         </div>
         </div>
