@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import './ManagerDashboard.css'
+import './CreateItem.css'
 
 const CreateItem = () => {
     console.log("CreateItem")
@@ -55,12 +56,12 @@ const CreateItem = () => {
 
     return(
         
-        
+        <div className="manage-gift-shop-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
-            <div>
+            <div className="add-item-section">
                 <div className="form">
                     <h1>Add Item</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="itemname"/>
@@ -69,7 +70,7 @@ const CreateItem = () => {
                     <button className="formButton" onClick={handleClick} >Add</button>
                 </div>
             </div>
-            
+        </div>
         </div>
     )
 }
