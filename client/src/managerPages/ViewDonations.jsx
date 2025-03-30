@@ -3,6 +3,7 @@ import ManagerNav from './ManagerNav'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './ManagerDashboard.css'
+import './ViewDonations.css'
 
 const ViewDonations = () => {
     console.log("ViewDonations")
@@ -23,15 +24,15 @@ const ViewDonations = () => {
 
     return(
         
-        
+        <div className = "container-view-donations">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
             <div>
-            <h1>Donations</h1>
-                <table>
-                <thead>
+            <h1 className = "view-donations-header">Donations</h1>
+                <table className = "view-donations-table">
+                <thead className ="view-donations-table-head">
                     <tr>
                         <th>Name</th>
                         <th>ID</th>
@@ -40,7 +41,7 @@ const ViewDonations = () => {
                         <th>Description</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className = "view-donations-tbody">
                     {donations.map(donation=>(
                         <tr key={donation.DonationID}>
                             <td>{donation.DonatorName}</td>
@@ -55,7 +56,7 @@ const ViewDonations = () => {
                 
                 </div>
             </div>
-            
+        </div>    
         
     )
 }
