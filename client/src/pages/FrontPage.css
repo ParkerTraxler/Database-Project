@@ -1,12 +1,12 @@
 /* First Page */
 
-.frontPageStyle {
+.frontPageContainer {
     display: flex;
     flex-direction: column;
     height: auto;
 }
 
-.imageStyle {
+.firstPageContainer {
     background-image: url('../assets/homepage1.jpg');
     background-size: cover;
     background-position: center;
@@ -18,7 +18,7 @@
     align-items: center;
 }
 
-.textStyle {
+.firstPageMessage {
     color: white;
     display: flex;
     padding-left: 2.5rem;
@@ -29,7 +29,7 @@
 }
 
 /* About Page */
-.aboutStyle {
+.aboutPageContainer {
     background-image: url('../assets/aboutus.jpg');
     background-size: cover;
     width: 100%;
@@ -45,7 +45,7 @@
     box-sizing: border-box;
 }
 
-.heading {
+.aboutPageHeading {
     font-size: 3rem; 
     color: black; 
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
@@ -53,7 +53,7 @@
     margin-bottom: 20px;
 }
 
-.white-box {
+.aboutPageBox {
     width: 60%; 
     max-width: 800px;
     max-height: 80vh;
@@ -72,22 +72,22 @@
     box-sizing: border-box;
 }
 
-.white-box h2 {
+.aboutPageBox h2 {
     font-size: 2rem; 
     margin-bottom: 15px; 
 }
 
-.white-box p {
+.aboutPageBox p {
     margin: 10px 0; 
 }
 
 /* Hours Page */
-.home-container {
+.hoursPageContainer {
     display: flex;           
     height: 100vh;           
 }
 
-.image-section {
+.hoursPageImage {
     flex: 1;                
     display: flex;
     justify-content: center; 
@@ -100,7 +100,7 @@
     max-height: 100%; 
 }
 
-.info-section {
+.hoursPageInfo {
     flex: 1;      
     padding: 20px;        
     color: white;             
@@ -112,12 +112,12 @@
     overflow-y: auto;  
 }
 
-.info-section h2 {
+.hoursPageInfo h2 {
     margin-bottom: 20px;    
     font-size: 2rem;
 }
 
-.info-section p {
+.hoursPageInfo p {
     font-size: 1.2rem;
     line-height: 1.5;    
     margin-bottom: 10px;   
@@ -125,12 +125,12 @@
 
 
 /* Rules Page */
-.rules-container {
+.rulesPageContainer {
     display: flex;           
     height: 100vh;           
 }
 
-.imageRules-section {
+.rulesPageImage {
     flex: 1;                
     display: flex;
     justify-content: center; 
@@ -143,7 +143,7 @@
     max-height: 100%; 
 }
 
-.rules-section {
+.rulesPageInfo {
     flex: 1;                 
     padding: 20px;           
     background-color: rgb(106, 139, 149);
@@ -156,43 +156,43 @@
 }
   
 
-.rules-section h1 {
+.rulesPageInfo h1 {
     margin-bottom: 20px;     
     font-size: 2rem;
 }
   
-.rules-section h2 {
+.rulesPageInfo h2 {
     margin-bottom: 10px;
     font-size: 1.5rem;
 }
   
-.rules-section ul {
+.rulesPageInfo ul {
     list-style-type: none;
     padding-left: 0;
 }
   
-.rules-section ul li {
+.rulesPageInfo ul li {
     font-size: 1rem;
     margin-bottom: 5px;
     line-height: 1.6;
 }
   
-.rules-section section {
+.rulesPageInfo section {
     margin-bottom: 20px;
 }
 
 /*map page*/
-.map-container {
+.mapPageContainer {
     padding: 20px;
     text-align: center;
 }
   
-.map-container h1 {
+.mapPageContainer h1 {
     font-size: 2rem;
     margin-bottom: 50px;
 }
   
-.floor-maps {
+.mapPageFloors {
     display: grid; 
     grid-template-columns: repeat(2, 1fr); 
     gap: 20px; 
@@ -201,11 +201,11 @@
     margin: 0 auto;
 }
   
-.map-item {
+.mapFloorContainer {
     text-align: center;
 }
   
-.floor-image {
+.mapFloorImage {
     width: 100%;
     height: 320px;
     object-fit: contain;
@@ -213,30 +213,30 @@
     background-color: white;
 }
   
-.description {
+.mapFloorDesc {
     margin-top: 10px;
     padding: 15px;
-    background-color: #f9f9f9; 
+    background-color: rgb(249, 249, 249); 
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
   
-.description h3 {
+.mapFloorDesc h3 {
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 10px;
 }
   
-.description p {
+.mapFloorDesc p {
     font-size: 1rem;
-    color: #555;
+    color: rgb(85, 85, 85);
     line-height: 1.6;
 }
 
 
 
 /*parking*/
-.parking-page-container {
+.parkingPageContainer {
     position: relative;
     width: 100%;
     height: 100vh;
@@ -251,7 +251,7 @@
     box-sizing: border-box;
 }
 
-.overlay-box {
+.parkingPageBox {
     background-color: rgba(255, 255, 255, 0.8); 
     padding: 20px;
     width: 80%;  
@@ -267,36 +267,36 @@
     overflow-y: auto;  
 }
 
-.overlay-box h1 {
+.parkingPageBox h1 {
     font-size: 2.2rem;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.overlay-box h2 {
+.parkingPageBox h2 {
     font-size: 1.5rem;
     text-align: center;
     margin-bottom: 20px;
 }
 
-.overlay-box ul {
+.parkingPageBox ul {
     list-style-type: none;
     padding: 0;
 }
 
-.overlay-box ul li {
+.parkingPageBox ul li {
     font-size: 1.1rem;
     margin-bottom: 10px;
 }
 
 
 /* Contact Page */
-.contact-container {
+.contactPageContainer {
     display: flex;           
     height: 100vh;           
 }
 
-.imageContact-section {
+.contactPageImage {
     flex: 1;                
     display: flex;
     justify-content: center; 
@@ -309,7 +309,7 @@
     max-height: 100%; 
 }
 
-.infoContact-section {
+.contactPageInfo {
     flex: 1;      
     padding: 20px;        
     color: white;             
@@ -321,12 +321,12 @@
     overflow-y: auto;
 }
 
-.infoContact-section h2 {
+.contactPageInfo h2 {
     margin-bottom: 20px;    
     font-size: 2rem;
 }
 
-.infoContact-section p {
+.contactPageInfo p {
     font-size: 1.2rem;
     line-height: 1.5;    
     margin-bottom: 10px;   

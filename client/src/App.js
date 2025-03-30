@@ -15,6 +15,7 @@ import ReportProblem from './pages/ReportProblem'
 import EditAccount from './pages/EditAccount.jsx'
 import MakeDonation from './pages/MakeDonation.jsx';
 import ManagerDashboard from './managerPages/ManagerDashboard.jsx';
+import EmployeeDashboard from './employeePages/EmployeeDashboard.jsx'; 
 import EditManagerAccount from './managerPages/EditManagerAccount.jsx';
 import ManageEmployees from './managerPages/ManageEmployees.jsx';
 import ManageEvents from './managerPages/ManageEvents.jsx';
@@ -44,6 +45,8 @@ import EditTicket from './managerPages/EditTicket.jsx';
 import ManageGiftShop from './managerPages/ManageGiftShop.jsx';
 import EditItem from './managerPages/EditItem.jsx';
 import CreateItem from './managerPages/CreateItem.jsx';
+import TransactionsReport from './managerPages/TransactionsReport.jsx';
+import LogTransactions from './managerPages/LogTransactions.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -93,6 +96,7 @@ function App() {
           </Route>
 
           <Route element={<ProtectedEmployeeRoutes/>}>
+			<Route path="/employee-dashboard" element={<EmployeeDashboard/>}/> 
             <Route path="/edit-employee-account" element={<EditAccountEmployee/>}/>
             <Route path="/employee-account-details" element={<ViewAccountEmployee/>}/>
             <Route path="/employee-exhibits" element={<EmployeeManageExhibits/>}/>
@@ -125,6 +129,8 @@ function App() {
             <Route path="/manage-gift-shop" element={<ManageGiftShop/>}/>
             <Route path="/edit-item/:GiftShopName/:ItemID" element={<EditItem/>}/>
             <Route path="/add-item" element={<CreateItem/>}/>
+            <Route path="/transactions-report" element={<TransactionsReport/>}/>
+            <Route path="/log-transactions" element={<LogTransactions/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

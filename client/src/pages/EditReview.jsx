@@ -62,7 +62,7 @@ const EditReview = () => {
 
 
     return (
-        <div className="container">
+        <div className="reviewPage">
             <div className="Review-box">
                 <h1 className="Header">Edit your Review</h1>
                 <div className="input-group">
@@ -123,7 +123,7 @@ const EditReview = () => {
                         onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>
                 </div>
-                <button onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
+                <button className="submitReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
             </div>
         </div>
     );

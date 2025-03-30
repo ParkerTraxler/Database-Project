@@ -6,7 +6,7 @@ const manageArtworksRoutes = (req, res) => {
     if (req.url === '/artworks' && req.method === 'GET') {
         getAllArtworks(req, res);
     } else if (req.url.startsWith('/artworks') && req.method === 'POST') {
-        verifyToken('Manager')(req, res, () => {
+        verifyToken('Employee', 'Curator')(req, res, () => {
             createArtwork(req, res);
         });
     } else if (req.url.startsWith('/artworks/collection/') && req.method === 'GET') {
@@ -14,11 +14,11 @@ const manageArtworksRoutes = (req, res) => {
         const title = decodeURIComponent(urlParts[urlParts.length - 1]);  // Extract the collectionTitle from the last part of the URL
         getCollectionArtwork(req, res, title);
     } else if (req.url.startsWith('/artworks/') && req.method === 'PUT') {
-        verifyToken('Manager')(req, res, () => {
+        verifyToken('Employee', 'Curator')(req, res, () => {
             updateArtwork(req, res);
         });
     } else if (req.url.startsWith('/artworks/') && req.method === 'DELETE') {
-        verifyToken('Manager')(req, res, () => {
+        verifyToken('Employee', 'Curator')(req, res, () => {
             deleteArtwork(req, res);
         });
     }

@@ -60,7 +60,7 @@ const WriteReview = () => {
     };
 
     return (
-        <div className="container">
+        <div className="reviewPage">
             <div className="Review-box">
                 <h1 className="Header">Write a Review</h1>
                 <div className="input-group">
@@ -121,11 +121,8 @@ const WriteReview = () => {
                         onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>
                 </div>
-                <button onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
+                <button className="submitReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
 
-                <div className="no-account">
-                    Don't have an account? <a href="/sign-up">Sign Up</a>
-                </div>
                 <a href = "/edit-review">Edit a Review</a>
             </div>
         </div>

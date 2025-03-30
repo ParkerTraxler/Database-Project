@@ -37,11 +37,20 @@ loginUser = async (req, res) => {
                 return res.end(JSON.stringify({ error: 'Invalid username and/or password.'}));
             }
 
+            let position = null;
+            // if the person is an employee, get whether they're curator, giftshopteam, or other
+            if (rows[0].UserRole === 'Employee') {
+                const [ emp_match ] = await db.query(queries.get_email_specific_emp, email)
+                position = emp_match[0].EPosition || null; // get the subset position, else set null 
+            }
+
             // Create JWT token
             const user = {
                 email: email,
-                role: rows[0].UserRole
+                role: rows[0].UserRole, // Customer, Employee, Manager
+                position: position // GiftShopTeam, Curator, Other
             };
+
 
             // Sign JWT token, expires in 3 hours
             const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '3h'});
@@ -51,7 +60,7 @@ loginUser = async (req, res) => {
             return res.end(JSON.stringify({ message: 'Login successful.', token: token }));
         });
     } catch (err) {
-        console.error('Error during login: ', error);
+        console.error('Error during login: ', err);
         res.writeHead(500, {'Content-Type': 'application/json'});
         return res.end(JSON.stringify({ error: 'Server error occurred'}));
     }

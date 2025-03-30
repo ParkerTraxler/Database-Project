@@ -21,11 +21,14 @@ const get_employee_query = "SELECT * FROM employees WHERE isDeleted = false";
 const get_email_specific_emp = "SELECT * FROM employees WHERE Email = ? AND isDeleted = false";
 const mark_emp_for_deletion = "UPDATE employees SET isDeleted = true WHERE Email = ? AND isDeleted = false";
 const get_manager_query = "SELECT ManagerID FROM managers, logininfo WHERE logininfo.Email = ? AND logininfo.UserID = managers.UserID";
-const insert_employee_info = "INSERT INTO employees (FirstName, LastName, EPosition, GiftShopName, ManagerID, Email) VALUES (?, ?, ?, ?, ?, ?)";
+const insert_employee_info = "INSERT INTO employees (FirstName, LastName, BirthDate, EPosition, GiftShopName, ManagerID, Gender, Email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 const update_employee_info = "UPDATE employees SET HourlyWage = ?, WeeklyHours = ?, FirstName = ?, LastName = ?, BirthDate = ?, EPosition = ?, ExhibitID = ?, GiftShopName = ?, ManagerID = ?, Gender = ? WHERE Email = ? AND isDeleted = false";
 // if an employee is being reinstated, use these two commands
 const check_employee_exist = "SELECT * FROM employees WHERE Email = ? AND isDeleted = TRUE";
-const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = ?, EPosition = ?, GiftShopName = ?, ManagerID = ?, isDeleted = FALSE WHERE Email = ?";
+const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = ?, BirthDate = ?, EPosition = ?, GiftShopName = ?, ManagerID = ?, Gender = ?, isDeleted = FALSE WHERE Email = ?";
+// remove their customer profile on creation - I'm using delete here since the information is the same, it just moves tables entirely.
+const remove_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET isDeleted = TRUE WHERE logininfo.email = ?";
+const reinstate_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET FirstName = ?, LastName = ?, BirthDate = ?, Gender = ?, isDeleted = FALSE WHERE logininfo.email = ?";
 
 // REPORT QUERY - report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
@@ -106,8 +109,8 @@ const delete_item = "UPDATE items SET isDeleted = true WHERE ItemID = ? AND isDe
 const update_item = "UPDATE items SET ItemName = ?, ItemPrice = ?, GiftShopName = ? WHERE ItemID = ? AND isDeleted = false";
 const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE ItemID = ? AND isDeleted = false";
 
-// Transaction Controller - one query + the all_sales_report
-const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)";
+// Transaction Controller - one query to add a new transaction
+const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo JOIN customers ON logininfo.UserID = customers.UserID WHERE logininfo.Email = ?), ?, ?, ?)";
 
 // REPORT QUERY -- gets all transactions, including tickets. 
 const all_sales_report = `SELECT
@@ -115,7 +118,7 @@ const all_sales_report = `SELECT
 			CONCAT(c.FirstName, ' ', c.LastName) as CustomerName, 
 			i.ItemName as ItemName,
 			s.Quantity as ItemQuantity,
-			s.Price as TotalPrice,
+			s.FinalPrice as FinalPrice,
 			s.DatePurchased as DateofSale
 			FROM 
 			customers AS c,
@@ -148,11 +151,11 @@ const cancel_event = "UPDATE eventlist SET isDeleted = TRUE WHERE EventID = ?";
 const create_event = "INSERT INTO eventlist (EventName, EventDesc, EventDate, MemberOnly) VALUES (?, ?, ?, ?)";
 const add_event_employee = "INSERT INTO eventworkers (EventID, EmployeeID) VALUES (?, (SELECT EmployeeID FROM employees WHERE employees.Email = ? AND isDeleted = FALSE))";
 const update_event = "UPDATE eventlist SET EventName = ?, EventDesc = ?, EventDate = ?, MemberOnly = ? WHERE EventID = ?";
-// this is the only actual delete command in the whole DB - the history table will track when an employee gets unassigned, so no information is actually lost, but the table will actually remove things 
+// this is one of the only actual delete command in the whole DB - the history table will track when an employee gets unassigned, so no information is actually lost, but the table will actually remove things 
 const remove_event_employee = "DELETE FROM eventworkers WHERE EventID = ? AND EmployeeID = (SELECT EmployeeID FROM employees WHERE employees.Email = ? AND isDeleted = FALSE)";
 
-// all history table commands - incredibly important never touch these without asking Ash please!!
-
+// history table command - incredibly important never touch these without asking Ash please!!
+const new_history_log = "INSERT INTO allhistory (UserID, ActionType, EffectedTable, EffectedEntry, DescOfAction) VALUES ((SELECT UserID FROM logininfo WHERE Email = ?), ?, ?, ?, ?)";
 
 // all the queries exported out
 module.exports = {
@@ -176,6 +179,8 @@ module.exports = {
     update_employee_info,
     check_employee_exist,
     reinstate_employee_info,
+    remove_customer_profile,
+    reinstate_customer_profile,
     get_collections_query,
     get_specific_collection,
     get_exhibit_collections,
@@ -216,5 +221,6 @@ module.exports = {
     add_event_employee,
     update_event,
     remove_event_employee,
+    new_history_log,
     employee_exhibit_report,
 };

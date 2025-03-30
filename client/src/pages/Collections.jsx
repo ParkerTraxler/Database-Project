@@ -30,9 +30,9 @@ const Collections = () => {
             </div>
             <div>
                 <h1>Collections</h1>
-                    <div className="collections">
+                    <div className="collectionsC">
                     {collections.map(collection=>(
-                        <div className="collection" key={collection.Title}>
+                        <div className="collectionC" key={collection.Title}>
                             {collection.CollectPic && 
                                 <Link to={`/collection-art/${collection.Title}`}>
                                     <img src={collection.CollectPic} alt="" />

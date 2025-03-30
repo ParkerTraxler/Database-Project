@@ -1,3 +1,44 @@
+.reviewPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: url('../assets/login.jpg');
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    position: relative;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.Review-box {
+    background-color: rgb(241, 241, 241);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 50px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    max-height: 80vh;
+    height: auto;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+input{
+    width: 250px;
+    padding: 10px;
+    border: 1px solid grey;
+    border-radius: 12px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
 .names, .Review {
     width: 200%; 
     padding: 5px;
@@ -7,9 +48,24 @@
     gap: 1px;
     
 }
+
 label {
     text-align: left;
     display: block;
     margin-bottom: 0px; 
     font-size: 14px;
+}
+
+.submitReviewButton {
+    width: 170px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    background-color: rgb(22, 22, 22);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
 }
