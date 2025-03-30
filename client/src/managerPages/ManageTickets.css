@@ -42,32 +42,3 @@
     transition: background-color 0.3s ease;
   }
   
-  .ticket:hover {
-    background-color: #eef1f5;
-  }
-  
-  .ticket div {
-    flex: 1;
-    color: #444;
-  }
-  
-  .ticket .update {
-    background-color: #007bff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .ticket .update:hover {
-    background-color: #0056b3;
-  }
-  
-  .ticket .update a {
-    text-decoration: none;
-    color: white;
-  }
-  

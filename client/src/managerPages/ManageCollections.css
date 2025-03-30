@@ -3,6 +3,43 @@ h1 {
     margin-bottom: 20px;
 }
 
+.manage-collections-container {
+    background-image: url('../assets/abstract-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.manage-collections-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.create-collection-button {
+    display: block;
+    margin: 20px auto 0;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
 .collectionsM {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -19,32 +56,105 @@ h1 {
 }
 
 .collectionM img {
-    width: 400px;
-    height: 290px;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    max-height: 290px;
     border-radius: 5px;
-    background-color: black;/*replace this with image*/
+    background-color: #000; /* Placeholder if image doesn't load */
+    object-fit: cover;
 }
 
-.delete{
-    border: none;
-    padding: 3px 6px;
+.delete, .update {
+    border: 1px solid rgb(245, 191, 191);
+    padding: 6px 12px;
     background-color: white;
     cursor: pointer;
-    border: 1px solid rgb(245, 191, 191);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease;
+}
+
+.delete {
     color: red;
 }
 
-.update{
-    border: none;
-    padding: 3px 6px;
-    background-color: white;
-    cursor: pointer;
-    border: 1px solid rgb(245, 191, 191);
+.update {
     color: blueviolet;
 }
 
 @media (max-width: 1000px) {
     .collectionsM {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: 1fr;
+    }
+
+    .collectionM img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+
+.add-collections-container {
+    background-image: url('../assets/abstract-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.add-collection-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.add-collection-section input {
+    padding: 12px 16px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.add-collection-section input:focus {
+    border-color: #4f46e5;
+}
+
+.formButton {
+    padding: 12px;
+    background-color: #4f46e5;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.formButton:hover {
+    background-color: #4338ca;
+}
+
+@media (max-width: 768px) {
+    .managerView {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .add-collection-form {
+        width: 100%;
     }
 }
