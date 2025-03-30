@@ -1,0 +1,23 @@
+.ticketsBanner {
+    background-image: url('../assets/ticketsBanner.jpg');
+    background-size: cover;
+    width: 100%;
+    background-position: center;
+    height: 80vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.ticketsBanner h1{
+    font-weight: 300;
+}
+
+.ticketsBody {
+    height: 100vh;
+}

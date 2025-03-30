@@ -12,7 +12,7 @@ const manageSalesRoutes = (req, res) => {
         verifyToken('Customer') (req, res, () => {
             ticketPurchase(req, res);
         });
-    } else if (req.url.startsWith('/transactions/') && req.method === 'GET') {
+    } else if (req.url.startsWith('/transactions') && req.method === 'GET') {
         verifyToken('Manager') (req, res, () => {
             getTransactionReport(req, res);
         });

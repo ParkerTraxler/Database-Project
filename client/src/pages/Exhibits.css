@@ -1,3 +1,23 @@
+.exhibitsBanner {
+    background-image: url('../assets/exhibitsBanner.jpg');
+    background-size: cover;
+    width: 100%;
+    background-position: center;
+    height: 80vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.exhibitsBanner h1{
+    font-weight: 300;
+}
+
 h1 {
     text-align: center;
     margin-bottom: 20px;

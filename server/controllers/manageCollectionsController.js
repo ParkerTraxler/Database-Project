@@ -28,11 +28,11 @@ const getExhibitCollections = async (req, res, exhibitID) => {
 
         // may return empty if exhibit hsa no collections in it
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(rows));
+        return res.end(JSON.stringify(rows));
     } catch (err) {
         console.error('Error fetching collection: ', err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Failed to retrieve collections for specific exhibit.' }));
+        return res.end(JSON.stringify({ error: 'Failed to retrieve collections for specific exhibit.' }));
     }
 }
 

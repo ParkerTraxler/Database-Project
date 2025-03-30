@@ -5,7 +5,6 @@ const verifyToken = require('../middleware/authMiddleware');
 const manageItemsRoutes = (req, res) => {
     // regular items
     if (req.url === '/items' && req.method === 'GET') {
-        console.log("Correct URL");
         getItems(req, res);
     } else if (req.url === '/items/tickets' && req.method === 'GET') {
         getTickets(req, res);

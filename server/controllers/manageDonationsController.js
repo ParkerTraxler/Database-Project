@@ -27,7 +27,7 @@ const getDonationsForUser = async (req, res, email) => {
         // SQL QUERY - Return all the donations given by that user - MIGHT BE NONE.  
         const [ rows ] = await db.query(queries.get_specific_dons, [email]);
 
-            // Return donations to frontend
+        // Return donations to frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
     } catch (err) {

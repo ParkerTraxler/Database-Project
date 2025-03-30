@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import './GiftShop.css'
 import { useState, useEffect } from 'react'
 
 const GiftShop = () => {
@@ -28,22 +29,30 @@ const GiftShop = () => {
 
     return(
         <div>
-            <h1>Gift Shop</h1>
-            {loading ? (
-                <p>Loading items...</p>  // Show a loading message while waiting for data
-            ) : (
-                items.length > 0 ? (
-                items.map(item=>(
-                    <div className="item" key={item.ItemID}>
-                        <div>{item.ItemName}</div>
-                        <div>{"$" + item.ItemPrice}</div>
-                        <div>Stock: {item.AmountInStock}</div>
-                    </div>
-                ))
-            ) : (
-                <p>No items found.</p>  // Handle case when tickets array is empty
-            ))}
-        </div>
+            <div className="giftshopBanner">
+                <h1>Gift Shop</h1>
+            </div>
+            <div>
+                <h1>Gift Shop</h1>
+                <div className="giftshopBody">
+                    {loading ? (
+                        <p>Loading items...</p>  // Show a loading message while waiting for data
+                    ) : (
+                        items.length > 0 ? (
+                        items.map(item=>(
+                            <div className="item" key={item.ItemID}>
+                                <div>{item.ItemName}</div>
+                                <div>{"$" + item.ItemPrice}</div>
+                                <div>Stock: {item.AmountInStock}</div>
+                                
+                            </div>
+                        ))
+                    ) : (
+                        <p className="no-items-message">No items currently available.</p>  // Handle case when item array is empty
+                    ))}
+                </div>
+            </div>
+        </div> 
     )
 }
 

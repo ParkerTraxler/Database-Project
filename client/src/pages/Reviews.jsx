@@ -2,6 +2,7 @@ import React from 'react'
 import { FaStar, FaStarHalf, FaStarHalfAlt } from "react-icons/fa";
 import { useState, useEffect } from 'react'
 import axios from 'axios';
+import { useAuth } from '../utils/AuthContext';
 import './Reviews.css'
 
 const Reviews = () => {
@@ -10,6 +11,8 @@ const Reviews = () => {
     const [reviews, setReviews] = useState([])
     const [loading, setLoading] = useState(true); // Track loading status
     
+    const { user } = useAuth()
+    const role = user?.role
 
     useEffect(()=>{
         const fetchAllReviews = async ()=>{
@@ -32,7 +35,10 @@ const Reviews = () => {
       
     return(
         <div>
-            <h1>Reviews</h1>
+            <div className="reviewsBanner">
+                <h1>Reviews</h1>
+            </div>
+            <div>
                 {loading ? (
                     <p>Loading reviews...</p>  // Show a loading message while waiting for data
                 ) : (
@@ -57,13 +63,19 @@ const Reviews = () => {
                         </div>
                     ))
                 ) : (
-                    <p>No reviews found.</p>  // Handle case when reviews array is empty
+                    // Handle case when reviews array is empty
+                    <div>
+                        <p className="no-reviews-found">No reviews found!</p>
+                        {role == 'Customer' && (
+                        <a href="/write-review" className="be-the-first">Be the first!</a>
+                        )}
+                    </div>
                 ))}
 
-
-            
-                       
-            <a href = "/write-review">Review Us!</a>
+                {role == 'Customer' && (
+                    <a href={reviews.length > 0 ? "/write-review" : ""} className={reviews.length > 0 ? "review-us" : ""}>{reviews.length > 0 ? "Review Us!" : ""}</a>
+                )}
+            </div>
         </div>
     )
 }

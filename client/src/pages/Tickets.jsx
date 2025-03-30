@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../utils/AuthContext';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import './Tickets.css';
 
 const Tickets = () => {
     const [tickets, setTickets] = useState([{ name: "Sample Ticket" }]);
@@ -84,42 +85,42 @@ const Tickets = () => {
 
     return (
         <div>
+            <div className="ticketsBanner">
+                <h1>Tickets</h1>
+            </div>
             <div>
                 <h1>Tickets</h1>
-                {loading ? (
-                    <p>Loading tickets...</p>  // Show a loading message while waiting for data
-                ) : (
-                    tickets.length > 0 ? (
+                <div className="ticketsBody">
+                    {loading ? (
+                        <p>Loading tickets...</p>  // Show a loading message while waiting for data
+                    ) : (
+                        tickets.length > 0 ? (
                     
-                    tickets.map(ticket=>(
+                        tickets.map(ticket=>(
                     
-                        <div className="ticket" key={ticket.ItemID}>
-                            <div>{ticket.ItemName}</div>
-                            <div>{"$" + ticket.ItemPrice}</div>
-                            {role == 'Customer' && (
-                                <div>
-                                    Quantity:
-                                    <input type="number" min="0" placeholder="amount to buy" onChange={handleChange} name={"quantity" + ticket.ItemID}/>
-
-                                </div>
-                            )}
-                            
+                            <div className="ticket" key={ticket.ItemID}>
+                                <div>{ticket.ItemName}</div>
+                                <div>{"$" + ticket.ItemPrice}</div>
+                                {role == 'Customer' && (
+                                    <div>
+                                        Quantity:
+                                        <input type="number" min="0" placeholder="amount to buy" onChange={handleChange} name={"quantity" + ticket.ItemID}/>
+                                    </div>
+                                )}
+                            </div>
+                        ))
+                    ) : (
+                        <p>No tickets found.</p>  // Handle case when tickets array is empty
+                    ))}
+                </div>
+                <div>
+                    {role == 'Customer' && (
+                        <div>
+                            <button className="formButton" onClick={handleClick}>Purchase Tickets</button>
                         </div>
-                        
-                    
-                    ))
-                ) : (
-                    <p>No tickets found.</p>  // Handle case when tickets array is empty
-                ))}
+                        )}
+                </div>
             </div>
-            <div>
-                {role == 'Customer' && (
-                    <div>
-                        <button className="formButton" onClick={handleClick}>Purchase Tickets</button>
-                    </div>
-                )}
-            </div>
-            
         </div>
     );
 };

@@ -30,8 +30,11 @@ const Exhibits = () => {
 
     return(
         <div>
-            <div>
+            <div className="exhibitsBanner">
                 <h1>Exhibits</h1>
+            </div>
+            <div>
+                <h1>Regular Exhibits</h1>
                 <div className="exhibits">
                 {exhibits.map(exhibit=>(
                     <div className="exhibit" key={exhibit.ExhibitID}>

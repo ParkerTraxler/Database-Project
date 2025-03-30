@@ -1,22 +1,28 @@
-.collections{
-    display: flex;
-    gap: 10px;
-
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.collection{
-    flex:1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
+.collectionsM {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
 }
 
-img{
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    background-color: rgb(8, 8, 110);
+.collectionM {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.collectionM img {
+    width: 400px;
+    height: 290px;
+    border-radius: 5px;
+    background-color: black;/*replace this with image*/
 }
 
 .delete{
@@ -35,4 +41,10 @@ img{
     cursor: pointer;
     border: 1px solid rgb(245, 191, 191);
     color: blueviolet;
+}
+
+@media (max-width: 1000px) {
+    .collectionsM {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
