@@ -4,7 +4,7 @@
     text-align: center;
     margin-bottom: 15px;
 }
-body {
+.container-exhibit-report {
     background-image: url('../assets/abstract-background-image.jpg'); 
     background-size: cover;
     background-position: center;

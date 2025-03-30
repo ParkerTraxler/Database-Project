@@ -14,7 +14,7 @@ const EmployeeExhibitReport = () => {
     const [exhibitFilter, setExhibitFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState(''); // New state for search term
     const { user } = useAuth();
-    const token = user.token;
+    const token = user.token; 
     console.log("token: " + token);
 
     useEffect(() => {
@@ -65,6 +65,7 @@ const EmployeeExhibitReport = () => {
     const exhibitNames = [...new Set(employees.map(employee => employee.Exhibit_Name))];
 
     return (
+        <div className="container-exhibit-report">
         <div className="managerView">
             <div>
                 <ManagerNav />
@@ -117,6 +118,7 @@ const EmployeeExhibitReport = () => {
                     </tbody>
                 </table>
             </div>
+        </div>
         </div>
     );
 };
