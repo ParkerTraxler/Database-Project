@@ -25,34 +25,34 @@ const ViewDonations = () => {
     return(
         
         <div className = "container-view-donations">
-        <div className="managerView">
-            <div>
-                <ManagerNav/>
-            </div>
-            <div>
-            <h1 className = "view-donations-header">Donations</h1>
-                <table className = "view-donations-table">
-                <thead className ="view-donations-table-head">
-                    <tr>
-                        <th>Name</th>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody className = "view-donations-tbody">
-                    {donations.map(donation=>(
-                        <tr key={donation.DonationID}>
-                            <td>{donation.DonatorName}</td>
-                            <td>{donation.DonationID}</td>
-                            <td>{new Date(donation.DonateDate).toLocaleDateString()}</td>
-                            <td>{donation.DonateAmt}</td>
-                            <td>{donation.DonateDesc}</td>
+            <div className="managerView">
+                <div>
+                    <ManagerNav/>
+                </div>
+            <div className = "view-donations-section">
+                <h1 className = "view-donations-header">Donations</h1>
+                    <table className = "view-donations-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Description</th>
                         </tr>
-                    ))}
-                </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                        {donations.map(donation=>(
+                            <tr key={donation.DonationID}>
+                                <td>{donation.DonatorName}</td>
+                                <td>{donation.DonationID}</td>
+                                <td>{new Date(donation.DonateDate).toLocaleDateString()}</td>
+                                <td>{donation.DonateAmt}</td>
+                                <td>{donation.DonateDesc}</td>
+                            </tr>
+                            ))}
+                    </tbody>
+                    </table>
                 
                 </div>
             </div>
