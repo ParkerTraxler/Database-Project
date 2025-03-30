@@ -8,20 +8,23 @@
 }
 
 .add-collections-section {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
     justify-content: flex-start;
     gap: 15px;
     width: 100%;
-    max-width: 500px;
     margin: 30px auto;
     padding: 30px;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
 .add-collection-section input {
@@ -69,4 +72,21 @@ input[type="number"]:focus {
   border-color: #007bff;
   box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
   outline: none;
+}
+@media screen and (max-width: 600px) {
+    .add-collections-section {
+        padding: 20px;
+        margin: 20px auto;
+    }
+
+    .formButton-add-collection {
+        font-size: 0.95rem;
+        padding: 10px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+    }
 }
