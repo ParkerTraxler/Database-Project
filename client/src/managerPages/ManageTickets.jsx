@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 import './ManagerDashboard.css'
+import './ManageTickets.css'
 
 const ManageTickets = () => {
     console.log("ManageTickets")
@@ -30,13 +31,13 @@ const ManageTickets = () => {
     
     return(
         
-        
+        <div className="manage-tickets-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
-            <div>
-            <h1>Manage Tickets</h1>
+            <div className="manage-tickets-section">
+            <h1 className="manage-tickets-header">Manage Tickets</h1>
                 {loading ? (
                     <p>Loading tickets...</p>  // Show a loading message while waiting for data
                 ) : (
@@ -53,7 +54,7 @@ const ManageTickets = () => {
                 <p>No tickets found.</p>  // Handle case when tickets array is empty
             ))}
             </div>
-            
+        </div>
         </div>
     )
 }
