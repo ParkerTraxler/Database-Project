@@ -44,12 +44,13 @@ const GiftShop = () => {
                                 <div>{item.ItemName}</div>
                                 <div>{"$" + item.ItemPrice}</div>
                                 <div>Stock: {item.AmountInStock}</div>
+                                
                             </div>
                         ))
                     ) : (
                         <p className="no-items-message">No items currently available.</p>  // Handle case when item array is empty
                     ))}
-                </div> 
+                </div>
             </div>
         </div> 
     )
