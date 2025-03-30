@@ -21,13 +21,14 @@ const get_employee_query = "SELECT * FROM employees WHERE isDeleted = false";
 const get_email_specific_emp = "SELECT * FROM employees WHERE Email = ? AND isDeleted = false";
 const mark_emp_for_deletion = "UPDATE employees SET isDeleted = true WHERE Email = ? AND isDeleted = false";
 const get_manager_query = "SELECT ManagerID FROM managers, logininfo WHERE logininfo.Email = ? AND logininfo.UserID = managers.UserID";
-const insert_employee_info = "INSERT INTO employees (FirstName, LastName, EPosition, GiftShopName, ManagerID, Email) VALUES (?, ?, ?, ?, ?, ?)";
+const insert_employee_info = "INSERT INTO employees (FirstName, LastName, BirthDate, EPosition, GiftShopName, ManagerID, Gender, Email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 const update_employee_info = "UPDATE employees SET HourlyWage = ?, WeeklyHours = ?, FirstName = ?, LastName = ?, BirthDate = ?, EPosition = ?, ExhibitID = ?, GiftShopName = ?, ManagerID = ?, Gender = ? WHERE Email = ? AND isDeleted = false";
 // if an employee is being reinstated, use these two commands
 const check_employee_exist = "SELECT * FROM employees WHERE Email = ? AND isDeleted = TRUE";
-const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = ?, EPosition = ?, GiftShopName = ?, ManagerID = ?, isDeleted = FALSE WHERE Email = ?";
+const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = ?, BirthDate = ?, EPosition = ?, GiftShopName = ?, ManagerID = ?, Gender = ?, isDeleted = FALSE WHERE Email = ?";
 // remove their customer profile on creation - I'm using delete here since the information is the same, it just moves tables entirely.
-const remove_customer_profile = "DELETE FROM customers JOIN logininfo ON customers.UserID = logininfo.UserID WHERE logininfo.email = ?";
+const remove_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET isDeleted = TRUE WHERE logininfo.email = ?";
+const reinstate_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET FirstName = ?, LastName = ?, BirthDate = ?, Gender = ?, isDeleted = FALSE WHERE logininfo.email = ?";
 
 // REPORT QUERY - report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
@@ -154,7 +155,7 @@ const update_event = "UPDATE eventlist SET EventName = ?, EventDesc = ?, EventDa
 const remove_event_employee = "DELETE FROM eventworkers WHERE EventID = ? AND EmployeeID = (SELECT EmployeeID FROM employees WHERE employees.Email = ? AND isDeleted = FALSE)";
 
 // history table command - incredibly important never touch these without asking Ash please!!
-const new_history_log = "INESRT INTO allhistory (UserID, ActionType, EffectedTable, EffectedEntry, DescOfAction) VALUES ((SELECT UserID FROM logininfo WHERE Email = ?), ?, ?, ?, ?)";
+const new_history_log = "INSERT INTO allhistory (UserID, ActionType, EffectedTable, EffectedEntry, DescOfAction) VALUES ((SELECT UserID FROM logininfo WHERE Email = ?), ?, ?, ?, ?)";
 
 // all the queries exported out
 module.exports = {
@@ -178,6 +179,8 @@ module.exports = {
     update_employee_info,
     check_employee_exist,
     reinstate_employee_info,
+    remove_customer_profile,
+    reinstate_customer_profile,
     get_collections_query,
     get_specific_collection,
     get_exhibit_collections,

@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import ManagerNav from './ManagerNav'
@@ -60,28 +59,15 @@ const LogTransactions = () => {
 
     const removeFromCart = (itemID) => {
         setCartItems(prevCart => prevCart.filter(item => item.ItemID !== itemID));
-    };
-
-    const [transaction, setTransaction] = useState({
-        itemids:"", 
-        email:"", 
-        quantities:"", 
-        datepurchased:"",
-        
-    })
-
-   
+    };   
 
     const now = new Date();
 
-    const year = now.getFullYear();            // e.g., 2025
-    const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based, add 1 and pad with 0
-    const day = String(now.getDate()).padStart(2, '0');         // Pad with 0 to ensure two digits
-
+    const year = now.getFullYear();            
+    const month = String(now.getMonth() + 1).padStart(2, '0'); 
+    const day = String(now.getDate()).padStart(2, '0');         
     const formattedDate = `${year}-${month}-${day}`;
-    console.log(formattedDate);  // e.g., "2025-03-24"
-
-    const navigate = useNavigate()
+    console.log(formattedDate);  
 
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click

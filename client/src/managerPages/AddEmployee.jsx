@@ -33,8 +33,8 @@ const AddEmployee = () => {
         try{
             const res = await axios.post("http://localhost:3002/employees", {
                 email: employee.email,
-                firstName: employee.firstName,
-                lastName: employee.lastName,
+                //firstName: employee.firstName,
+                //lastName: employee.lastName,
                 position: employee.position,
                 managerEmail: employee.managerEmail,
                 
