@@ -7,6 +7,9 @@ const getTransactionReport = async(req, res) => {
     try {
         // SQL Query - return a report to the front-end including all sales transactions
         const [ transaction_report ] = await db.query(queries.all_sales_report);
+
+        // TO DO - whenever report generated, log the email of the manager who got the report 
+
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(transaction_report));
     } catch (err) {
@@ -51,7 +54,8 @@ const ticketPurchase = async(req, res) =>{
             }
     
             for(let ItemID of itemIDs){
-                await db.query(queries.new_transaction, [ItemID, email, parseInt(ticketArray[ItemID-1]), finalprice, datepurchased]);
+                let [ results ] = await db.query(queries.new_transaction, [ItemID, email, parseInt(ticketArray[ItemID-1]), finalprice, datepurchased]);
+                await db.query(queries.new_history_log, [email, "Created", "Sales", results.InsertId, "A customer has purchased tickets. See transaction report for more details."]);
             }
     
             res.writeHead(201, { 'Content-Type': 'application/json' });
@@ -118,6 +122,9 @@ const processTransaction = async(req, res) => {
                 if(!result || result.affectedRows == 0){
                     console.log("Failed to process transaction for ID: " + itemid);
                     faileditemadditions.push(itemid);
+                }
+                else{
+                    await db.query(queries.new_history_log, [email, "Created", "Sales", result.insertId, "New transaction for an item has been processed. See transaction report for more details."]);
                 }
             }
 

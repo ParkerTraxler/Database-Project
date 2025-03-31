@@ -99,8 +99,9 @@ registerUser = async (req, res) => {
             const hash = await bcrypt.hash(password1, 10);
             const [ results ] = await db.query(queries.create_user_query, [email, hash, "Customer"]);
             assigned_USID = results.insertId;
-            await db.query(queries.create_customer_acc, [firstname, lastname, assigned_USID]);
+            const [ new_acc] = await db.query(queries.create_customer_acc, [firstname, lastname, assigned_USID]);
 
+            await db.query(queries.new_history_log, [email, "Created", "Customers", new_acc.insertId, "A new customer has signed up and an account was created."])
 
             // Create JWT token to authenticate new user account (assume role is customer)
             const user = {

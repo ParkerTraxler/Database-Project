@@ -13,7 +13,7 @@ const createItem = (req, res) => {
     });
 
     req.on('end', async () => {
-        const { itemname, itemprice, amountinstock } = JSON.parse(body);
+        const { itemname, itemprice, amountinstock, email } = JSON.parse(body);
         try {
             if(!itemname){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -32,6 +32,8 @@ const createItem = (req, res) => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not input new item. Invalid input?' }));
             }
+
+            await db.query(queries.new_history_log, [email, "Created", "Items", result.insertId, "A new item with name " + itemname + " has been added to the Museum Gift Shop"]);
 
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
@@ -53,7 +55,7 @@ const deleteItem = (req, res) => {
 
     // Process the request once it is received, send response
     req.on('end', async () => {
-        const { itemid } = JSON.parse(body);
+        const { itemid, email } = JSON.parse(body);
         try {
             if(!itemid){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -71,6 +73,8 @@ const deleteItem = (req, res) => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not delete the item. Is it already deleted?' }));
             }
+
+            await db.query(queries.new_history_log, [email, "Deleted", "Items", itemid, "An item has been deleted from the museum."]);
 
             // Return successful delete message
             res.writeHead(204, { 'Content-Type': 'application/json' });
@@ -93,7 +97,7 @@ const updateItem = (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async () => {
-        var { itemid, itemname, itemprice, giftshopname } = JSON.parse(body);
+        var { itemid, itemname, itemprice, giftshopname, email } = JSON.parse(body);
         try {
             if(!itemid){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -123,6 +127,8 @@ const updateItem = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Database could not update item. Invalid input?' }));
             }
 
+            await db.query(queries.new_history_log, [email, "Updated", "Items", itemid, "An item by the name of " + itemname + " has been updated."])
+
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Item successfully updated.' }));
@@ -143,7 +149,7 @@ const updateItemQuantity = (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async () => {
-        const { itemid, amounttoadd } = JSON.parse(body);
+        const { itemid, amounttoadd, email } = JSON.parse(body);
         try {
             if(!itemid){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -161,6 +167,8 @@ const updateItemQuantity = (req, res) => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Failed to restock item. Has it been deleted?' }));
             }
+
+            await db.query(queries.new_history_log, [email, "Updated", "Items", itemid, "An item has been restocked. Amount added = " + amounttoadd + "."]);
 
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });

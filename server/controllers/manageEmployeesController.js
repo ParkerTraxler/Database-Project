@@ -53,7 +53,7 @@ const deleteEmployee = async (req, res) => {
 
     req.on('end', async () => {
         try {
-            const { empEmail } = JSON.parse(body);
+            const { empEmail, managerEmail } = JSON.parse(body);
 
             // Ensure an email was provided
             if (!empEmail) {
@@ -89,6 +89,8 @@ const deleteEmployee = async (req, res) => {
                 return res.end(JSON.stringify({ error: 'Unable to reinstate employee\'s customer account.' })) 
             }
 
+            await db.query(queries.new_history_log, [email, "Deleted", "Employees", emp_account[0].EmployeeID, "Employee " + emp_account[0].FirstName + " " + emp_account[0].LastName + " was demoted. Their user account linked to email " + empEmail + " is now marked as a customer one."]);
+
             res.writeHead(200, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Employee deleted successfully' }));
         } catch (err) {
@@ -110,7 +112,7 @@ const createEmployee = (req, res) => {
             // the way we're gonna do this is, employee makes their acc via normal login, we update enum.
             // we're also going to assume that the manager knows name, role, managerID, and all other non-null values
             // make sure getting managerID makes logical sense - might need to change this later
-            const { email, position, managerEmail } = JSON.parse(body);
+            const { email, position, managerEmail, managerMakingChangeEmail } = JSON.parse(body);
 
             // Ensure all of these were provided
             if (!email) {
@@ -152,23 +154,29 @@ const createEmployee = (req, res) => {
                 return res.end(JSON.stringify({ error: 'The employee\'s email does not have a user account! Have them create one.'}));
             }
 
+            let employee_id = 0;
+
             // SQL QUERY - Reinstate the currently existing row instead of creating a new one
             const [ wasHeDeleted ] = await db.query(queries.check_employee_exist, [email]);
             if(wasHeDeleted.length > 0){
+                employee_id = wasHeDeleted[0].EmployeeID;
                 const [ result ] = await db.query(queries.reinstate_employee_info, [firstName, lastName, old_profile[0].BirthDate, position, giftshopname, managerID, old_profile[0].Gender, email]);
                 if(!result || result.affectedRows == 0){
                     res.writeHead(400, { 'Content-Type': 'application/json' });
                     return res.end(JSON.stringify({ error: 'Unable to reinstate employee.'}));
                 }
+                await db.query(queries.new_history_log, [managerMakingChangeEmail, "Created", "Employees", employee_id, "An employee by the name of " + firstName + " " + lastName + " and with email " + email + " was reinstated into the system under Manager with email " + managerEmail + "."]);
             }
 
             // SQL QUERY - Create an entry in the employee table for the user. If it fails, reset the state
             else{
                 const [ result ] = await db.query(queries.insert_employee_info, [firstName, lastName, old_profile[0].BirthDate, position, giftshopname, managerID, old_profile[0].Gender, email]);
+                employee_id = result.insertId;
                 if(!result || result.affectedRows == 0){
                     res.writeHead(400, { 'Content-Type': 'application/json' });
                     return res.end(JSON.stringify({ error: 'Unable to create employee.'}));
                 }
+                await db.query(queries.new_history_log, [managerMakingChangeEmail, "Created", "Employees", employee_id, "A new employee by the name of " + firstName + " " + lastName + " and with email " + email + " has been added to the system under Manager with email " + managerEmail + "."]);
             }
 
             // Remove his customer profile entirely
@@ -197,7 +205,7 @@ const updateEmployee = (req, res) => {
 
     req.on('end', async () => {
         try {
-            var { hourlywage, weeklyhours, firstname, lastname, birthdate, ePosition, exhibitID, managerID, gender, email } = JSON.parse(body);
+            var { hourlywage, weeklyhours, firstname, lastname, birthdate, ePosition, exhibitID, managerID, gender, email, managerEmail} = JSON.parse(body);
 
             // If no email is provided, halt
             if (!email) {
@@ -263,6 +271,8 @@ const updateEmployee = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
             }
 
+            await db.query(queries.new_history_log, [managerEmail, "Updated", "Employees", rows[0].EmployeeID, "An employee by the name of " + firstname + " " + lastname + " with email " + email + " had information about them updated."]);
+
             // Return success message
             res.writeHead(200, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Employee updated successfully.' }));
@@ -280,6 +290,8 @@ const getExhibitEmployees = async (req, res) => {
     try {
         // SQL Query - Get employees from the database
         const [ rows ] = await db.query(queries.employee_exhibit_report);
+
+        // to do: log when a manager generates report - do so in the report controller
 
         // Return employees to frontend
         res.writeHead(200, {'Content-Type': 'application/json' });

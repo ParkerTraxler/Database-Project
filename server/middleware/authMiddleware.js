@@ -34,7 +34,7 @@ function verifyToken(requiredRole, requiredPosition) {
                 return res.end(JSON.stringify({ error: 'Forbidden: Insufficient privileges' }));
             }
 
-            if(requiredPosition != null && res.user.position !== requiredPosition){
+            if(requiredPosition != null && req.user.position !== requiredPosition){
                 res.writeHead(403, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Forbidden: Insufficient privileges' }));  
             }

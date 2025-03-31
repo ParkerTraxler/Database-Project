@@ -59,6 +59,8 @@ const createReview = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Database could not accept entry. Invalid input?' }));
             }
 
+            await db.query(queries.new_history_log, [email, "Created", "Reviews", result.insertId, "A customer has left a new review"])
+
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Successfully created review.' }));
@@ -113,6 +115,8 @@ const updateReview = (req, res) => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not update the review. Invalid input?' }));
             }
+
+            await db.query(queries.new_history_log, [email, "Updated", "Reviews", rows[0].CustomerID, "A customer has updated their review."])
 
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });
