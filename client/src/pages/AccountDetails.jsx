@@ -25,7 +25,12 @@ const AccountDetails = () => {
     useEffect(() => {
         const fetchAccount = async () => {
             console.log(encodeURIComponent(email));
-            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`)
+            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`, 
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
                 .then((res) => {
                     console.log(res.data);
                     setInfo(res.data);
@@ -54,22 +59,22 @@ const AccountDetails = () => {
     }
 
     return (
-        <div className="AccountPage">
-            <div className="AccountDetails">
+        <div className="AccountPageC">
+            <div className="AccountDetailsC">
                 <h1>Account Details</h1>
                 {!info.FirstName && (
                     <div>Loading Info...</div>
                 )}
-                <div className="detailsBox">
-                    <div className="detail"><strong>First Name:</strong> {info.FirstName}</div>
-                    <div className="detail"><strong>Last Name:</strong> {info.LastName}</div>
-                    <div className="detail"><strong>Date of Birth:</strong> {new Date(info.BirthDate).toLocaleDateString() || "Not provided"}</div>
-                    <div className="detail"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
-                    <div className="detail"><strong>Email:</strong> {email}</div>
-                    <div className="detail"><strong>Password:</strong> ********</div>
+                <div className="detailsBoxC">
+                    <div className="detailC"><strong>First Name:</strong> {info.FirstName}</div>
+                    <div className="detailC"><strong>Last Name:</strong> {info.LastName}</div>
+                    <div className="detailC"><strong>Date of Birth:</strong> {new Date(info.BirthDate).toLocaleDateString() || "Not provided"}</div>
+                    <div className="detailC"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
+                    <div className="detailC"><strong>Email:</strong> {email}</div>
+                    <div className="detailC"><strong>Password:</strong> ********</div>
                 </div>
                 <div>
-                    <button className="saveButton" onClick={handleClick}>Edit Account</button>
+                    <button className="saveButtonC" onClick={handleClick}>Edit Account</button>
                 </div>
             </div>
         </div>

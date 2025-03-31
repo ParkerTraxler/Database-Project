@@ -4,6 +4,7 @@ import axios from 'axios'; // API calls
 import { useAuth } from '../utils/AuthContext';
 
 import './ManagerDashboard.css';
+import './EmployeeExhibitReport.css';
 
 const EmployeeExhibitReport = () => {
     console.log("EmployeeExhibitReport");
@@ -13,7 +14,7 @@ const EmployeeExhibitReport = () => {
     const [exhibitFilter, setExhibitFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState(''); // New state for search term
     const { user } = useAuth();
-    const token = user.token;
+    const token = user.token; 
     console.log("token: " + token);
 
     useEffect(() => {
@@ -64,12 +65,13 @@ const EmployeeExhibitReport = () => {
     const exhibitNames = [...new Set(employees.map(employee => employee.Exhibit_Name))];
 
     return (
+        <div className="container-exhibit-report">
         <div className="managerView">
             <div>
                 <ManagerNav />
             </div>
-            <div>
-                <h1>Employee Exhibit Report</h1>
+            <div className = "report-section">
+                <h1 className="header">Employee Exhibit Report</h1>
 
                 {/* Search Bar for Employee Name */}
                 <input
@@ -82,7 +84,7 @@ const EmployeeExhibitReport = () => {
 
                 {/* Exhibit Filter Dropdown */}
                 <label htmlFor="exhibitFilter">Filter by Exhibit:</label>
-                <select id="exhibitFilter" value={exhibitFilter} onChange={handleExhibitChange}>
+                <select id="exhibitFilter" value={exhibitFilter} onChange={handleExhibitChange} className="filter-select">
                     <option value="">All Exhibits</option>
                     {exhibitNames.map(exhibit => (
                         <option key={exhibit} value={exhibit}>
@@ -91,7 +93,7 @@ const EmployeeExhibitReport = () => {
                     ))}
                 </select>
 
-                <table>
+                <table className="info-table">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -116,6 +118,7 @@ const EmployeeExhibitReport = () => {
                     </tbody>
                 </table>
             </div>
+        </div>
         </div>
     );
 };

@@ -129,11 +129,11 @@ const processTransaction = async(req, res) => {
 
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ message: 'New transaction added.' }));
+            return res.end(JSON.stringify({ message: 'New transactions added.' }));
         } catch (err) {
             console.error('Error processing transaction: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Failed to add transaction.' }));
+            return res.end(JSON.stringify({ error: 'Failed to attempt adding transactions.' }));
         }
     });
 }

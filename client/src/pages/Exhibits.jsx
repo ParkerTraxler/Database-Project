@@ -35,9 +35,9 @@ const Exhibits = () => {
             </div>
             <div>
                 <h1>Regular Exhibits</h1>
-                <div className="exhibits">
+                <div className="exhibitsC">
                 {exhibits.map(exhibit=>(
-                    <div className="exhibit" key={exhibit.ExhibitID}>
+                    <div className="exhibitC" key={exhibit.ExhibitID}>
                         {exhibit.ExhibitPic && <img src={exhibit.ExhibitPic} alt="" />}
                         <h2>{exhibit.ExhibitName}</h2>
                         <p>{exhibit.ExhibitDesc}</p>
@@ -47,9 +47,9 @@ const Exhibits = () => {
                 </div>
 
                 <h1>Special Exhibits</h1>
-                <div className="specialExhibits">
+                <div className="specialExhibitsC">
                 {specialExhibits.map(specialExhibit=>(
-                    <div className="exhibit" key={specialExhibit.ExhibitID}>
+                    <div className="exhibitC" key={specialExhibit.ExhibitID}>
                         {specialExhibit.ExhibitPic && <img src={specialExhibit.ExhibitPic} alt="" />}
                         <h2>{specialExhibit.ExhibitName}</h2>
                         <p>{specialExhibit.ExhibitDesc}</p>

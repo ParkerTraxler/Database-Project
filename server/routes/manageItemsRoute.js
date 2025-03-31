@@ -15,22 +15,22 @@ const manageItemsRoutes = (req, res) => {
     } else if(req.url.startsWith('/items/') && req.method === 'GET'){
         const urlParts = req.url.split('/');
         const itemID = parseInt(urlParts[urlParts.length - 1]);
-        getItem(req, res, itemID);
+        getItem(req, res, itemID); 
     } else if (req.url.startsWith('/items/') && req.method === 'POST') {
-        verifyToken('Manager') (req, res, () => {
+        verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
             createItem(req, res);
         });
     } else if (req.url.startsWith('/items/') && req.method === 'DELETE') {
-        verifyToken('Manager') (req, res, () => {
+        verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
             deleteItem(req, res);
         });
     // both tickets & items can have the bottom 2 done to it
     } else if (req.url.startsWith('/items/restock') && req.method === 'PUT'){
-        verifyToken('Manager') (req, res, () => {
+        verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
             updateItemQuantity(req, res);
         });
     } else if (req.url.startsWith('/items/') && req.method === 'PUT') {
-        verifyToken('Manager') (req, res, () => {
+        verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
             updateItem(req, res);
         });
     }

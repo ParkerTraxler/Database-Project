@@ -11,15 +11,15 @@ const manageCollectionsRoutes = (req, res) => {
         const exhibitID = parseInt(urlParts[urlParts.length - 1]);
         getExhibitCollections(req, res, exhibitID);
     } else if (req.url === '/collections' && req.method === 'POST') {
-        verifyToken('Manager')(req, res, () => {
+        verifyToken('Employee', 'Curator')(req, res, () => {
             createCollection(req, res);
         });
     } else if (req.url.startsWith('/collections/') && req.method === 'PUT') {
-        verifyToken('Manager')(req, res, () => {
+        verifyToken('Employee', 'Curator')(req, res, () => {
             updateCollection(req, res);
         });
     } else if (req.url.startsWith('/collections/') && req.method === 'DELETE') {
-        verifyToken('Manager')(req, res, () => {
+        verifyToken('Employee', 'Curator')(req, res, () => {
             deleteCollection(req, res);
         });
     }
