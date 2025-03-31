@@ -89,7 +89,7 @@ const deleteEmployee = async (req, res) => {
                 return res.end(JSON.stringify({ error: 'Unable to reinstate employee\'s customer account.' })) 
             }
 
-            await db.query(queries.new_history_log, [email, "Deleted", "Employees", emp_account[0].EmployeeID, "Employee " + emp_account[0].FirstName + " " + emp_account[0].LastName + " was demoted. Their user account linked to email " + empEmail + " is now marked as a customer one."]);
+            await db.query(queries.new_history_log, [empEmail, "Deleted", "Employees", emp_account[0].EmployeeID, "Employee " + emp_account[0].FirstName + " " + emp_account[0].LastName + " was demoted. Their user account linked to email " + empEmail + " is now marked as a customer one."]);
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Employee deleted successfully' }));

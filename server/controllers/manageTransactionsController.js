@@ -54,8 +54,8 @@ const ticketPurchase = async(req, res) =>{
             }
     
             for(let ItemID of itemIDs){
-                let [ results ] = await db.query(queries.new_transaction, [ItemID, email, parseInt(ticketArray[ItemID-1]), finalprice, datepurchased]);
-                await db.query(queries.new_history_log, [email, "Created", "Sales", results.InsertId, "A customer has purchased tickets. See transaction report for more details."]);
+                var [ results ] = await db.query(queries.new_transaction, [ItemID, email, parseInt(ticketArray[ItemID-1]), finalprice, datepurchased]);
+                await db.query(queries.new_history_log, [email, "Created", "Sales", results.insertId, "A customer has purchased tickets. See transaction report for more details."]);
             }
     
             res.writeHead(201, { 'Content-Type': 'application/json' });

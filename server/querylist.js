@@ -95,14 +95,14 @@ const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE I
 const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo JOIN customers ON logininfo.UserID = customers.UserID WHERE logininfo.Email = ?), ?, ?, ?)";
 
 // User Profile Queries
-const get_user_profile = "SELECT Membership, FirstName, LastName, BirthDate, Gender FROM customers, logininfo WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID";
+const get_user_profile = "SELECT CustomerID, Membership, FirstName, LastName, BirthDate, Gender FROM customers, logininfo WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID";
 const update_user_profile = "UPDATE customers INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.FirstName = ?, customers.LastName = ?, customers.BirthDate = ?, customers.Gender = ? WHERE logininfo.Email = ?";
 const update_membership = "UPDATE customers JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.Membership = NOT customers.Membership WHERE logininfo.Email = ?";
 const get_all_members = "SELECT * FROM customers JOIN logininfo ON customers.UserID = logininfo.UserID WHERE customers.isMember = TRUE";
 
 // All Review Queries
 const get_all_reviews = "SELECT reviews.CustomerID, CONCAT(customers.FirstName, ' ', customers.LastName) as Name, reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, customers WHERE customers.CustomerID = reviews.CustomerID";
-const get_user_review = "SELECT reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, logininfo, customers WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID AND customers.CustomerID = reviews.CustomerID"
+const get_user_review = "SELECT reviews.CustomerID, reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, logininfo, customers WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID AND customers.CustomerID = reviews.CustomerID"
 const new_user_review = `INSERT INTO reviews (CustomerID, StarCount, ReviewDesc, ReviewDate) 
                             VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)`;
 const update_review = "UPDATE reviews INNER JOIN customers ON reviews.CustomerID = customers.CustomerID INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET reviews.StarCount = ?, reviews.ReviewDesc = ?, reviews.ReviewDate = ? WHERE logininfo.Email = ?";
@@ -138,7 +138,24 @@ const all_sales_report = `SELECT
 			s.CustomerID = c.CustomerID
 			AND
 			s.ItemID = i.ItemID
+            AND 
+            i.ItemID NOT IN (1, 2, 3, 4)
+            AND 
+            s.DatePurchased >= ?
             ORDER BY s.DatePurchased DESC`;
+
+const all_sales_aggregate = `SELECT 
+            COUNT(s.PurchaseID) as TransactionCount,
+            SUM(s.Quantity) as TotalQuantity, 
+            SUM(s.FinalPrice) as TotalPrice
+            FROM 
+            Sales as s
+            WHERE
+            s.DatePurchased >= ?
+            AND
+            ItemID NOT IN (1, 2, 3, 4)`;
+
+// REPORT QUERY #2 - 
 
 // REPORT QUERY #2 -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
@@ -224,5 +241,6 @@ module.exports = {
     remove_event_employee,
     new_history_log,
     all_sales_report,
+    all_sales_aggregate,
     employee_exhibit_report,
 };
