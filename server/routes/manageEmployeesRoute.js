@@ -3,7 +3,7 @@ const verifyToken = require('../middleware/authMiddleware');
 const { getAllEmployees, getEmployee, deleteEmployee, createEmployee, updateEmployee, getExhibitEmployees } = require('../controllers/manageEmployeesController');
 // Require controllers later...
 
-const manageEmployeeRoutes = async (req, res) => { 
+const manageEmployeeRoutes = async (req, res) => {
 
     console.log(req.url);
 

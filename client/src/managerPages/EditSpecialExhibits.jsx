@@ -5,12 +5,15 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
+import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
 
 const EditSpecialExhibit = () => {
     console.log("EditSpecialExhibit")
     const { user } = useAuth()
     const token = user.token
+    const decoded = jwtDecode(token)
+    const email = decoded.email
     const [specialExhibit, setSpecialExhibit] = useState({
         exhibitname:"", 
         exhibitdesc:"", 
@@ -42,6 +45,7 @@ const EditSpecialExhibit = () => {
                 startdate: specialExhibit.startdate,
                 enddate: specialExhibit.enddate,
                 fee: specialExhibit.fee,
+                managerEmail: email
             },
             {
                 headers: {

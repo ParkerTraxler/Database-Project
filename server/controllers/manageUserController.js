@@ -64,14 +64,14 @@ const updateProfile = (req, res) => {
                 gender = curr_user[0].Gender;
             }
 
-            console.log(firstname, " ", lastname, " ", birthdate, " ", gender);
-
             const [ result ] = await db.query(queries.update_user_profile, [firstname, lastname, birthdate, gender, email]);
 
             if(!result || result.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
             }
+
+            await db.query(queries.new_history_log, [email, "Updated", "Customers", curr_user[0].CustomerID, "User by the name of " + firstname + " " + lastname + " has updated their account."])
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'User\'s profile successfully updated.' }));
@@ -101,6 +101,8 @@ const toggleMembership = (req, res) => {
             }
 
             const [ results ] = await db.query(queries.toggleMembership, [email]);
+
+            await db.query(queries.new_history_log, [email, "Updated", "Customers", curr_user[0].CustomerID, "User by the name of " + firstname + " " + lastname + " has subscribed/unsubscribed from the museum's monthly membership."])
 
             if(!results || results.affectedRows == 0){
                 res.writeHead(400, {'Content-Type': 'application/json'});

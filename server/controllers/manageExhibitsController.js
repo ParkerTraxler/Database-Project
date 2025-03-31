@@ -50,7 +50,7 @@ const createExhibit = async (req, res) => {
     });
 
     req.on('end', async() => {
-        const { exhibitname, exhibitdesc, exhibitpic, startdate, enddate, fee, isSpecial } = JSON.parse(body);
+        const { exhibitname, exhibitdesc, exhibitpic, startdate, enddate, fee, isSpecial, managerEmail } = JSON.parse(body);
         try {
              // SQL Query - Inserting a new exhibit. If is special, insert it into that table too.
              if(!exhibitname){
@@ -76,6 +76,11 @@ const createExhibit = async (req, res) => {
                     res.writeHead(400, { 'Content-Type': 'application/json' });
                     return res.end(JSON.stringify({ error: 'Database could not input special exhibit. Invalid input?' }));
                 }
+                await db.query(queries.new_history_log, [managerEmail, "Created", "SpecialExhibits", results.insertId, "A new special exhibit has been created."]);
+            }
+            
+            else{
+                await db.query(queries.new_history_log, [managerEmail, "Created", "Exhibits", results.insertId, "A new normal exhibit has been created."]);
             }
 
             // Return success message
@@ -98,7 +103,7 @@ const updateExhibit = async (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async() => {
-        var { exhibitid, exhibitname, exhibitdesc, exhibitpic, startdate, enddate, fee } = JSON.parse(body);
+        var { exhibitid, exhibitname, exhibitdesc, exhibitpic, startdate, enddate, fee, managerEmail } = JSON.parse(body);
         try {
             // Check that fields were provided
             if(!exhibitid){
@@ -139,6 +144,11 @@ const updateExhibit = async (req, res) => {
                     res.writeHead(400, { 'Content-Type': 'application/json' });
                     return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
                 }
+                await db.query(queries.new_history_log, [managerEmail, "Updated", "SpecialExhibits", exhibitid, "Special exhibit with the name " + exhibitname + " has been updated."]);
+            }
+
+            else{
+                await db.query(queries.new_history_log, [managerEmail, "Updated", "Exhibits", exhibitid, "Normal exhibit with the name " + exhibitname + " has been updated."]);
             }
 
             const results = await db.query(queries.update_exhibit, [exhibitname, exhibitdesc, exhibitpic, exhibitid,])

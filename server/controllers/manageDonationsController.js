@@ -69,6 +69,8 @@ const createDonation = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Something has gone wrong inserting the donation into the table.'}));
             }
 
+            await db.query(queries.new_history_log, [email, "Created", "Donations", results.insertId, "A customer has donated $" + donateamt + " to the museum!"])
+
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: 'Successfully created donation.' }));

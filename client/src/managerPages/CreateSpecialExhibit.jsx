@@ -4,13 +4,16 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
 
 const CreateSpecialExhibit = () => {
     console.log("CreateExhibit")
     const { user } = useAuth()
-        const token = user.token
-        console.log(token)
+    const token = user.token
+    console.log(token)
+    const decoded = jwtDecode(token)
+    const email = decoded.email
         
     const [specialExhibit, setSpecialExhibit] = useState({
         exhibitname:"", 
@@ -40,6 +43,7 @@ const CreateSpecialExhibit = () => {
                 enddate: specialExhibit.enddate,
                 fee: specialExhibit.fee,
                 isSpecial: 1,
+                managerEmail: email
             },
             {
                 headers: {

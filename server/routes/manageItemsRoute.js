@@ -15,7 +15,7 @@ const manageItemsRoutes = (req, res) => {
     } else if(req.url.startsWith('/items/') && req.method === 'GET'){
         const urlParts = req.url.split('/');
         const itemID = parseInt(urlParts[urlParts.length - 1]);
-        getItem(req, res, itemID); 
+        getItem(req, res, itemID);
     } else if (req.url.startsWith('/items/') && req.method === 'POST') {
         verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
             createItem(req, res);
