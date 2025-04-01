@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/AuthContext';
 import { jwtDecode } from "jwt-decode";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Account.css'
 
@@ -14,6 +14,9 @@ const EditAccount = () => {
     const decoded = jwtDecode(token);
     const email = decoded.email;
 
+    const [info, setInfo] = useState([])
+    const [isLoading, setIsLoading] = useState(true); // Track loading status
+
     const [details, setDetails] = useState({
         firstname:"", 
         lastname:"", 
@@ -22,10 +25,33 @@ const EditAccount = () => {
         email:""
     })
 
+    useEffect(() => {
+        const fetchAccount = async () => {
+            console.log(encodeURIComponent(email));
+            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`, 
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+                .then((res) => {
+                    console.log(res.data);
+                    setInfo(res.data);
+                    setIsLoading(false); // Set loading to false when done
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setIsLoading(false); // Even on error, stop loading
+                });
+        };
+            fetchAccount();
+    }, [email]);
+
     const handleChange = (e) =>{ // given target to given value  
         setDetails(prev=>({...prev, [e.target.name]: e.target.value}))
         console.log(details)
     }
+
     
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
@@ -43,6 +69,20 @@ const EditAccount = () => {
                 },
             })
             console.log(res.end)
+
+            if(details.cancelMembership === "on"){
+                console.log("PUT Sent")
+                const res2 = axios.put('http://localhost:3002/profile/membership', {
+                    email: email
+                },
+                {
+                    headers: {
+                        'authorization': `Bearer ${token}`
+                    },
+                })
+                console.log(res2)
+                console.log("PUT Completed")
+            }
             
             navigate("/account-details")
         }
@@ -54,6 +94,9 @@ const EditAccount = () => {
 
     const navigate = useNavigate()
     
+    if (isLoading) {
+        return <div>Loading account details...</div>; // Display while loading
+    }
 
     return(
         <div className='AccountPageC'>
@@ -81,6 +124,18 @@ const EditAccount = () => {
                         <option value="Other">Other</option>
                     </select>
                 </div>
+                {info.isMember == "1" && info.isRenewing == "1" && (
+                    <div className="detailC">
+                        <strong>Cancel Membership:</strong>
+                        <input type="checkbox" onChange={handleChange} name="cancelMembership" />
+                    </div>
+                )}
+                {info.isMember == "1" && info.isRenewing == "0" && (
+                    <div className="detailC">
+                        <strong>Renew Membership:</strong>
+                        <input type="checkbox" onChange={handleChange} name="cancelMembership" />
+                    </div>
+                )}
             </div>
             <div>
                 <button onClick={handleClick} className="saveButtonC">Save Changes</button>

@@ -3,6 +3,7 @@ import { useAuth } from '../utils/AuthContext'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import { jwtDecode } from 'jwt-decode'
 import ManagerDashboard from './ManagerNav'
 import './ManagerDashboard.css'
 
@@ -12,6 +13,8 @@ const ManageEmployees = () => {
     const { user } = useAuth()
     const token = user.token
     console.log("token: " + token)
+    const decoded = jwtDecode(token)
+    const managerEmail = decoded.email
 
     useEffect(()=>{
         const fetchAllEmployees = async ()=>{
@@ -37,7 +40,10 @@ const ManageEmployees = () => {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },
-                data: {empEmail: email}
+                data: {
+                    empEmail: email,
+                    managerEmail: managerEmail
+                }
             })
             console.log(res.data)
             window.location.reload() //refreshes the page

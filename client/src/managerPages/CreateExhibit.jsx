@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
 
 const CreateExhibit = () => {
@@ -11,6 +12,8 @@ const CreateExhibit = () => {
     const { user } = useAuth()
     const token = user.token
     console.log(token)
+    const decoded = jwtDecode(token)
+    const email = decoded.email
         
     const [exhibit, setExhibit] = useState({
         exhibitname:"", 
@@ -38,6 +41,7 @@ const CreateExhibit = () => {
                 exhibitdesc: exhibit.exhibitdesc, 
                 exhibitpic: exhibit.exhibitpic,
                 isSpecial: 0,
+                managerEmail: email
             },
             {
                 headers: {

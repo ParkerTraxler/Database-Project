@@ -5,6 +5,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
+import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
 
 const EditTicket = () => {
@@ -12,6 +13,8 @@ const EditTicket = () => {
 
     const { user } = useAuth()
     const token = user.token
+    const decoded = jwtDecode(token)
+    const email = decoded.email
     const [ticket, setTicket] = useState({
         price:"",
         amounttoadd:""
@@ -35,7 +38,8 @@ const EditTicket = () => {
             console.log("PUT Sent")
             const res = await axios.put("http://localhost:3002/items/", {
                 itemid: ticketID,
-                itemprice: ticket.price
+                itemprice: ticket.price,
+                email: email
             },
             {
                 headers: {
@@ -47,7 +51,8 @@ const EditTicket = () => {
             console.log("PUT Sent")
             const res2 = await axios.put("http://localhost:3002/items/restock", {
                 itemid: ticketID,
-                amounttoadd: ticket.amounttoadd
+                amounttoadd: ticket.amounttoadd,
+                email: email
             },
             {
                 headers: {

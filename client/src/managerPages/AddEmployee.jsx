@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import ManagerDashboard from './ManagerNav'
 import './ManagerDashboard.css'
 
@@ -11,7 +12,9 @@ const AddEmployee = () => {
     const { user } = useAuth()
     const token = user.token
     console.log(token)
-    
+    const decoded = jwtDecode(token)
+    const managerMakingChangeEmail = decoded.email
+    console.log("User: " + managerMakingChangeEmail)
     const [employee, setEmployee] = useState({
         email:"",
         firstName:"",
@@ -37,6 +40,7 @@ const AddEmployee = () => {
                 //lastName: employee.lastName,
                 position: employee.position,
                 managerEmail: employee.managerEmail,
+                managerMakingChangeEmail: managerMakingChangeEmail
                 
             },
             {
