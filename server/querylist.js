@@ -95,10 +95,24 @@ const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE I
 const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo JOIN customers ON logininfo.UserID = customers.UserID WHERE logininfo.Email = ?), ?, ?, ?)";
 
 // User Profile Queries
-const get_user_profile = "SELECT CustomerID, Membership, FirstName, LastName, BirthDate, Gender FROM customers, logininfo WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID";
+const get_user_profile = `SELECT 
+		customers.CustomerID, 
+		FirstName, LastName, BirthDate, Gender, 
+		DateOfExpiration, isRenewing, YearsOfMembership,
+		CASE
+            WHEN DateOfExpiration IS NULL THEN FALSE
+            ELSE TRUE
+        	END AS isMember
+		FROM logininfo, customers 
+		LEFT JOIN membership ON customers.CustomerID = membership.CustomerID 
+		WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID`;
 const update_user_profile = "UPDATE customers INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.FirstName = ?, customers.LastName = ?, customers.BirthDate = ?, customers.Gender = ? WHERE logininfo.Email = ?";
-const update_membership = "UPDATE customers JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.Membership = NOT customers.Membership WHERE logininfo.Email = ?";
-const get_all_members = "SELECT * FROM customers JOIN logininfo ON customers.UserID = logininfo.UserID WHERE customers.isMember = TRUE";
+// User Profiles - membership stuff
+const get_user_member_info = "SELECT m.CustomerID, m.DateOfExpiration, m.IsRenewing, M.YearsOfMembership FROM membership AS m JOIN customers ON m.CustomerID = customers.CustomerID JOIN logininfo ON customers.UserID = logininfo.UserID WHERE logininfo.email = ?"
+const insert_new_member = "INSERT INTO membership (CustomerID, DateOfExpiration) VALUES (?, ?)"
+const renew_without_expire = "UPDATE membership SET isRenewing = TRUE WHERE CustomerID = ?";
+const renew_with_expire = "UPDATE membership SET isRenewing = TRUE, DateOfExpiration = ?, YearsOfMembership = YearsOfMembership+1 WHERE CustomerID = ?";
+const cancel_membership = "UPDATE membership SET isRenewing = FALSE WHERE CustomerID = ?"
 
 // All Review Queries
 const get_all_reviews = "SELECT reviews.CustomerID, CONCAT(customers.FirstName, ' ', customers.LastName) as Name, reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, customers WHERE customers.CustomerID = reviews.CustomerID";
@@ -225,8 +239,11 @@ module.exports = {
     new_transaction,
     get_user_profile,
     update_user_profile,
-    update_membership,
-    get_all_members,
+    get_user_member_info,
+    insert_new_member,
+    renew_without_expire,
+    renew_with_expire,
+    cancel_membership,
     get_all_reviews,
     get_user_review,
     new_user_review,
