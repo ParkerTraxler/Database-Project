@@ -5,6 +5,7 @@ import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import ManagerDashboard from './ManagerNav'
 import './ManagerDashboard.css'
+import './AddEmployee.css'
 
 const AddEmployee = () => {
     console.log("AddEmployee")
@@ -63,7 +64,7 @@ const AddEmployee = () => {
             </div>
             <div>
                 <div className="add-employee-form">
-                    <h1>Add Employee</h1>
+                    <h1 className="add-employee-header">Add Employee</h1>
                     <input type="text" placeholder="email" onChange={handleChange} name="email"/>
                     <input type="text" placeholder="first name" onChange={handleChange} name="firstName"/>
                     <input type="text" placeholder="last name" onChange={handleChange} name="lastName"/>

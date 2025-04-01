@@ -4,6 +4,12 @@
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 20px;
+    box-sizing: border-box;
 }
 
 .add-employee-form {
@@ -23,14 +29,14 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
-.add-employee-form h1 {
+.add-employee-header {
     font-size: 2rem;
     font-weight: 600;
     text-align: center;
     color: #2c3e50;
+    margin-bottom: 10px;
 }
 
-/* Input fields */
 .add-employee-form input[type="text"],
 .add-employee-form select {
     padding: 12px 16px;
@@ -61,19 +67,19 @@
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 100%;
 }
 
 .add-employee-formButton:hover {
     background-color: #0056b3;
 }
 
-/* Responsive tweaks */
 @media screen and (max-width: 600px) {
     .add-employee-form {
         padding: 20px;
     }
 
-    .add-employee-form h1 {
+    .add-employee-header {
         font-size: 1.5rem;
     }
 
