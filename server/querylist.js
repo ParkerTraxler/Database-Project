@@ -95,10 +95,24 @@ const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE I
 const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo JOIN customers ON logininfo.UserID = customers.UserID WHERE logininfo.Email = ?), ?, ?, ?)";
 
 // User Profile Queries
-const get_user_profile = "SELECT CustomerID, Membership, FirstName, LastName, BirthDate, Gender FROM customers, logininfo WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID";
+const get_user_profile = `SELECT 
+		customers.CustomerID, 
+		FirstName, LastName, BirthDate, Gender, 
+		DateOfExpiration, isRenewing, YearsOfMembership,
+		CASE
+            WHEN DateOfExpiration IS NULL THEN FALSE
+            ELSE TRUE
+        	END AS isMember
+		FROM logininfo, customers 
+		LEFT JOIN membership ON customers.CustomerID = membership.CustomerID 
+		WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID`;
 const update_user_profile = "UPDATE customers INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.FirstName = ?, customers.LastName = ?, customers.BirthDate = ?, customers.Gender = ? WHERE logininfo.Email = ?";
-const update_membership = "UPDATE customers JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.Membership = NOT customers.Membership WHERE logininfo.Email = ?";
-const get_all_members = "SELECT * FROM customers JOIN logininfo ON customers.UserID = logininfo.UserID WHERE customers.isMember = TRUE";
+// User Profiles - membership stuff
+const get_user_member_info = "SELECT m.CustomerID, m.DateOfExpiration, m.IsRenewing, M.YearsOfMembership FROM membership AS m JOIN customers ON m.CustomerID = customers.CustomerID JOIN logininfo ON customers.UserID = logininfo.UserID WHERE logininfo.email = ?"
+const insert_new_member = "INSERT INTO membership (CustomerID, DateOfExpiration) VALUES (?, ?)"
+const renew_without_expire = "UPDATE membership SET isRenewing = TRUE WHERE CustomerID = ?";
+const renew_with_expire = "UPDATE membership SET isRenewing = TRUE, DateOfExpiration = ?, YearsOfMembership = YearsOfMembership+1 WHERE CustomerID = ?";
+const cancel_membership = "UPDATE membership SET isRenewing = FALSE WHERE CustomerID = ?"
 
 // All Review Queries
 const get_all_reviews = "SELECT reviews.CustomerID, CONCAT(customers.FirstName, ' ', customers.LastName) as Name, reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, customers WHERE customers.CustomerID = reviews.CustomerID";
@@ -155,9 +169,75 @@ const all_sales_aggregate = `SELECT
             AND
             ItemID NOT IN (1, 2, 3, 4)`;
 
-// REPORT QUERY #2 - 
+// REPORT QUERY #2 - A report that gets information on all the customers in the museum. Date of their last visit, total amount spent (donations + items + tickets + membership), etc.
+const customer_report_info = `SELECT
+        CONCAT(c.FirstName, ' ', c.LastName) as Customer_Name,
+        li.email as Customer_Email,
+        CASE
+            WHEN DateOfExpiration IS NULL then FALSE
+            ELSE TRUE
+        END AS Currently_Member,
+        MIN(ah.TimestampAction) AS Account_Creation_Date,
+        COALESCE((SELECT SUM(s.FinalPrice)
+	        FROM sales AS s
+            WHERE
+            s.CustomerID = c.CustomerID), 0)
+        + 
+        COALESCE((SELECT SUM(d.DonateAmt) 
+	        FROM donations as d
+            WHERE
+            d.CustomerID = c.CustomerID), 0)
+        +
+        COALESCE((SELECT YearsOfMembership*100
+	        FROM membership as m
+            WHERE
+            m.CustomerID = c.CustomerID), 0) AS Total_Amount_Spent,
+        (SELECT MAX(s.DatePurchased)
+	        FROM sales as S
+            WHERE
+            s.CustomerID = c.CustomerID
+            AND
+            s.ItemID IN (1, 2, 3, 4)) AS Last_Visit_Date,
+        CASE
+	        WHEN (SELECT MAX(s.DatePurchased)
+	        FROM sales as S
+            WHERE
+            s.CustomerID = c.CustomerID
+            AND
+            s.ItemID IN (1, 2, 3, 4)) <= CURDATE() - INTERVAL 1 MONTH 
+            AND
+            (SELECT COUNT(*) 
+            FROM sales AS s
+            WHERE 
+            s.ItemID IN (1, 2, 3, 4)) >= 2 THEN TRUE
+            ELSE FALSE
+        END AS Good_Promotion
+        FROM
+        customers AS c
+        LEFT JOIN
+        logininfo AS li
+        ON 
+        c.UserID = li.UserID
+        LEFT JOIN
+        membership as m
+        ON
+        c.CustomerID = m.CustomerID
+        LEFT JOIN
+        allhistory AS ah 
+        ON 
+            c.CustomerID = CAST(ah.EffectedEntry AS SIGNED)
+            AND ah.EffectedTable = 'Customers'
+            AND ah.ActionType = 'Created'
+        WHERE
+        li.UserRole = "Customer"
+        AND
+        ah.TimestampAction > ?
+        GROUP BY c.CustomerID`; // Groups it into a bunch of groups of size 1 that let the function work -- added dynamically at the end of the query
+    // First question mark: account creation date > time
+    // Then it groups by customers having two criterium defined earlier 
+    // If I get asked to explain this query, I will take 10 minutes but I will do it :')
 
-// REPORT QUERY #2 -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
+// REPORT QUERY #3 -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
             e.EmployeeID as Employee_ID,
             CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
@@ -225,8 +305,11 @@ module.exports = {
     new_transaction,
     get_user_profile,
     update_user_profile,
-    update_membership,
-    get_all_members,
+    get_user_member_info,
+    insert_new_member,
+    renew_without_expire,
+    renew_with_expire,
+    cancel_membership,
     get_all_reviews,
     get_user_review,
     new_user_review,
@@ -243,4 +326,5 @@ module.exports = {
     all_sales_report,
     all_sales_aggregate,
     employee_exhibit_report,
+    customer_report_info,
 };

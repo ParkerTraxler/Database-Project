@@ -100,21 +100,70 @@ const toggleMembership = (req, res) => {
                 return res.end(JSON.stringify({ error: 'No customer email received.'}));
             }
 
-            const [ results ] = await db.query(queries.toggleMembership, [email]);
-
-            await db.query(queries.new_history_log, [email, "Updated", "Customers", curr_user[0].CustomerID, "User by the name of " + firstname + " " + lastname + " has subscribed/unsubscribed from the museum's monthly membership."])
-
-            if(!results || results.affectedRows == 0){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'Unable to toggle user\'s membership'}));
+            // Check to see if the user was already a member
+            const [ user_member ] = await db.query(queries.get_user_member_info, [email]);
+            if(user_member.length > 0){
+                today = new Date();
+                today.setHours(0, 0, 0, 0);
+                // Check if they're cancelling first and foremost
+                if(user_member[0].IsRenewing){
+                    // they are cancelling
+                    [ results ] = await db.query(queries.cancel_membership, user_member[0].CustomerID);
+                    if(!results || results.affectedRows == 0){
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        return res.end(JSON.stringify({ error: 'Failed to cancel user\'s membership.'}));
+                    }
+                    await db.query(queries.new_history_log, [email, "Updated", "Membership", user_member[0].CustomerID, "User cancelled their renewing membership."])
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ message: 'User cancelled their membership successfully.' }));
+                }
+                // user was indeed a member before and is renewing now
+                else if(user_member[0].DateOfExpiration == null || user_member[0].DateOfExpiration.toDateString() < today.toDateString()){
+                    // if the user's membership expired or never renewed, "charge" them $100, set their new date to a year from today, add one to years of membership, etc.
+                    expiration = new Date();
+                    expiration.setFullYear(expiration.getFullYear() + 1);
+                    expiration = expiration.getFullYear() + "-" + String(expiration.getMonth()+1).padStart(2, '0') + "-" + String(expiration.getDate()).padStart(2, '0');
+                    [ results ] = await db.query(queries.renew_with_expire, [expiration, user_member[0].CustomerID]);
+                    if(!results || results.affectedRows == 0){
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        return res.end(JSON.stringify({ error: 'Failed to re-enable user\'s expired membership.'}));
+                    }
+                    await db.query(queries.new_history_log, [email, "Updated", "Membership", user_member[0].CustomerID, "User has re-enabled their membership (with charge)."])
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ message: 'User re-enabled their membership successfully.' }));
+                }
+                else{
+                    // this user is re-enabling their subscription but has not had their previous one "expire" yet. Change nothing, do not charge them, do not add to years of membership
+                    [ results ] = await db.query(queries.renew_without_expire, user_member[0].CustomerID);
+                    if(!results || results.affectedRows == 0){
+                        res.writeHead(400, { 'Content-Type': 'application/json' });
+                        return res.end(JSON.stringify({ error: 'Failed to renew user\'s membership.'}));
+                    }
+                    await db.query(queries.new_history_log, [email, "Updated", "Membership", user_member[0].CustomerID, "User has decided to re-enable auto-renewal on their membership (no charge)."])
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ message: 'User resubscribed without charge successfully.' }));
+                }
             }
-
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ message: 'Membership successfully updated.' }));
+            else{
+                // user's first time as a member, get their profile
+                const [ new_member ] = await db.query(queries.get_user_profile, [email]);
+                if(!new_member || new_member.length == 0){
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    return res.end(JSON.stringify({ error: 'Failed to find user in the system - subscription cancelled.'}));
+                }
+                expiration = new Date();
+                expiration.setFullYear(expiration.getFullYear() + 1)
+                expiration = expiration.getFullYear() + "-" + String(expiration.getMonth()+1).padStart(2, '0') + "-" + String(expiration.getDate()).padStart(2, '0');
+                // add them to the members list, then make a log of it
+                await db.query(queries.insert_new_member, [new_member[0].CustomerID, expiration]);
+                await db.query(queries.new_history_log, [email, "Created", "Membership", new_member[0].CustomerID, "User by the name of " + new_member[0].FirstName + " " + new_member[0].LastName + " has subscribed for the very first time!"])
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ message: 'First time member successfully added!' }));
+            }
         } catch (err) {
-            console.error('Error updating review.');
+            console.error('Error with membership: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Error updating membership.' }));
+            return res.end(JSON.stringify({ error: 'Error with processing membership activity.' }));
         }
     });
 }
