@@ -52,7 +52,7 @@ const ManageExhibits = () => {
                     </div>
                 ))}
                 </div>
-                <button classNmae="add-special-exhibit-button">
+                <button classNmae="create-exhibit-button">
                     <Link to="/add-exhibit">Create Exhibit</Link>
                 </button>
 
