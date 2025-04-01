@@ -171,6 +171,7 @@ const all_sales_aggregate = `SELECT
 
 // REPORT QUERY #2 - A report that gets information on all the customers in the museum. Date of their last visit, total amount spent (donations + items + tickets + membership), etc.
 const customer_report_info = `SELECT
+        c.CustomerID as Customer_ID,
         CONCAT(c.FirstName, ' ', c.LastName) as Customer_Name,
         li.email as Customer_Email,
         CASE

@@ -42,6 +42,9 @@ const giftshop_sales_report = async (req, res, email, period_of_time) => {
         // SQL QUERY - get the report 
         const [ rows ] = await db.query(queries.all_sales_report, [final_date]);
 
+        // log that a manager generated a report
+        await db.query(queries.new_history_log, [email, "Report Generated", "Sales", 0, "Manager has generated the Giftshop Sales Report."]);
+
         // Return reviews to frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
@@ -58,9 +61,6 @@ const giftshop_aggregate = async(req, res, period_of_time) =>{
 
         // SQL QUERY - get the report 
         const [ rows ] = await db.query(queries.all_sales_aggregate, [final_date]);
-
-        // log that a manager generated a report
-        await db.query(queries.new_history_log, [email, "Report Generated", "Sales", 0, "Manager has generated the Giftshop Sales Report."]);
 
         // Return report to frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -101,14 +101,14 @@ const customer_info_report = async(req, res, email, account_creation_period, pro
         switch(members_only){
             case "true":
                 if(promotional_offer_candidate != "all"){
-                    end_of_query += " AND Currently_Member = TRUE"
+                    end_of_query += " AND Currently_Member = TRUE";
                     break;
                 }
                 end_of_query += " HAVING Currently_Member = TRUE";
                 break;
             case "false":
                 if(promotional_offer_candidate != "all"){
-                    end_of_query += " AND Currently_Member = FALSE"
+                    end_of_query += " AND Currently_Member = FALSE";
                     break;
                 }
                 end_of_query += " HAVING Currently_Member = FALSE";

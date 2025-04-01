@@ -47,6 +47,7 @@ import CreateItem from './employeePages/CreateItem.jsx';
 import TransactionsReport from './managerPages/TransactionsReport.jsx';
 import LogTransactions from './employeePages/LogTransactions.jsx';
 import GiftShopSalesReport from './managerPages/GiftShopSalesReport.jsx';
+import CustomersReport from './managerPages/CustomersReport.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -131,6 +132,7 @@ function App() {
             <Route path="/edit-ticket/:ItemID" element={<EditTicket/>}/>
             <Route path="/transactions-report" element={<TransactionsReport/>}/>
             <Route path="/gift-shop-sales-report" element={<GiftShopSalesReport/>}/>
+            <Route path="/customers-report" element={<CustomersReport/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
