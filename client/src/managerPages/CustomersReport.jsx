@@ -68,11 +68,11 @@ const CustomersReport = () => {
                     <option value="true">Members Only</option>
                     <option value="false">Non-Members Only</option>
                 </select>
-                <label>Filter by valid promotional targets:</label>
+                <label>Filter by ideal promotional targets:</label>
                 <select value={promoFilter} onChange={(e) => setPromoFilter(e.target.value)}>
                     <option value="all">All Customers</option>
-                    <option value="true">Valid Target</option>
-                    <option value="false">Invalid Target</option>
+                    <option value="true">Ideal Targets</option>
+                    <option value="false">Not Ideal Targets</option>
                 </select>
                 <div>
                     <button onClick={fetchCustomers}>Generate Report</button>
@@ -87,7 +87,7 @@ const CustomersReport = () => {
                                 <th>Date of Last Visit</th>
                                 <th>Membership Status</th>
                                 <th>Date of Account Creation</th>
-                                <th>Valid Promotional Target</th>
+                                <th>Ideal Promotional Target</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,7 +99,7 @@ const CustomersReport = () => {
                                     <td>{new Date(customer.Last_Visit_Date).toLocaleDateString()}</td>
                                     <td>{customer.Currently_Member ? "Member" : "Not a Member"}</td>
                                     <td>{new Date(customer.Account_Creation_Date).toLocaleDateString()}</td>
-                                    <td>{customer.Good_Promotion ? "Valid Target" : "Invalid Target"}</td>
+                                    <td>{customer.Good_Promotion ? "Ideal Target" : "Not Ideal Target"}</td>
                                 </tr>
                             ))}
                         </tbody>
