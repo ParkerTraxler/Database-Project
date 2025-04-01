@@ -169,9 +169,76 @@ const all_sales_aggregate = `SELECT
             AND
             ItemID NOT IN (1, 2, 3, 4)`;
 
-// REPORT QUERY #2 - 
+// REPORT QUERY #2 - A report that gets information on all the customers in the museum. Date of their last visit, total amount spent (donations + items + tickets + membership), etc.
+const customer_report_info = `SELECT
+        c.CustomerID as Customer_ID,
+        CONCAT(c.FirstName, ' ', c.LastName) as Customer_Name,
+        li.email as Customer_Email,
+        CASE
+            WHEN DateOfExpiration IS NULL then FALSE
+            ELSE TRUE
+        END AS Currently_Member,
+        MIN(ah.TimestampAction) AS Account_Creation_Date,
+        COALESCE((SELECT SUM(s.FinalPrice)
+	        FROM sales AS s
+            WHERE
+            s.CustomerID = c.CustomerID), 0)
+        + 
+        COALESCE((SELECT SUM(d.DonateAmt) 
+	        FROM donations as d
+            WHERE
+            d.CustomerID = c.CustomerID), 0)
+        +
+        COALESCE((SELECT YearsOfMembership*100
+	        FROM membership as m
+            WHERE
+            m.CustomerID = c.CustomerID), 0) AS Total_Amount_Spent,
+        (SELECT MAX(s.DatePurchased)
+	        FROM sales as S
+            WHERE
+            s.CustomerID = c.CustomerID
+            AND
+            s.ItemID IN (1, 2, 3, 4)) AS Last_Visit_Date,
+        CASE
+	        WHEN (SELECT MAX(s.DatePurchased)
+	        FROM sales as S
+            WHERE
+            s.CustomerID = c.CustomerID
+            AND
+            s.ItemID IN (1, 2, 3, 4)) <= CURDATE() - INTERVAL 1 MONTH 
+            AND
+            (SELECT COUNT(*) 
+            FROM sales AS s
+            WHERE 
+            s.ItemID IN (1, 2, 3, 4)) >= 2 THEN TRUE
+            ELSE FALSE
+        END AS Good_Promotion
+        FROM
+        customers AS c
+        LEFT JOIN
+        logininfo AS li
+        ON 
+        c.UserID = li.UserID
+        LEFT JOIN
+        membership as m
+        ON
+        c.CustomerID = m.CustomerID
+        LEFT JOIN
+        allhistory AS ah 
+        ON 
+            c.CustomerID = CAST(ah.EffectedEntry AS SIGNED)
+            AND ah.EffectedTable = 'Customers'
+            AND ah.ActionType = 'Created'
+        WHERE
+        li.UserRole = "Customer"
+        AND
+        ah.TimestampAction > ?
+        GROUP BY c.CustomerID`; // Groups it into a bunch of groups of size 1 that let the function work -- added dynamically at the end of the query
+    // First question mark: account creation date > time
+    // Then it groups by customers having two criterium defined earlier 
+    // If I get asked to explain this query, I will take 10 minutes but I will do it :')
 
-// REPORT QUERY #2 -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
+// REPORT QUERY #3 -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
             e.EmployeeID as Employee_ID,
             CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
@@ -260,4 +327,5 @@ module.exports = {
     all_sales_report,
     all_sales_aggregate,
     employee_exhibit_report,
+    customer_report_info,
 };

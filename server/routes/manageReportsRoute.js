@@ -39,8 +39,11 @@ const manageReportsRoutes = (req, res) => {
     } else if (req.url.startsWith('/reports/customer-report') && req.method === 'GET') {
         verifyToken('Manager', null)(req, res, () => {
             const urlParts = req.url.split('/');
-            const email = decodeURIComponent(urlParts[urlParts.length - 1]);
-            customer_info_report(req, res, email);
+            const email = decodeURIComponent(urlParts[urlParts.length - 4]); // manager email
+            const account_creation_period = urlParts[urlParts.length - 3]; // same as the other reports
+            const promotional_offer_candidate = urlParts[urlParts.length - 2]; // true false all
+            const members_only = urlParts[urlParts.length-1]; // true false all
+            customer_info_report(req, res, email, account_creation_period, promotional_offer_candidate, members_only);
         });
     }
 };
