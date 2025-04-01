@@ -81,8 +81,8 @@ button.update a, button.delete a {
     color: inherit;
     text-decoration: none;
 }
-
-.gift-shop-add-item-button {
+.create-exhibit-button,
+.add-special-exhibit-button {
     display: block;
     margin: 20px auto 0;
     background-color: #007bff;
@@ -92,16 +92,21 @@ button.update a, button.delete a {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
-.gift-shop-add-item-button:hover {
+.create-exhibit-button:hover,
+.add-special-exhibit-button:hover {
     background-color: #0056b3;
 }
 
-.gift-shop-add-item-button a {
+.create-exhibit-button a,
+.add-special-exhibit-button a {
     text-decoration: none;
     color: inherit;
 }
+
 
 @media (max-width: 768px) {
     .manage-gift-shop-section {
