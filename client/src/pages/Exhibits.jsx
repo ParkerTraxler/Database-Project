@@ -66,6 +66,14 @@ const Exhibits = () => {
                     </div>
                 ))}
                 </div>
+                <div className="exhibitC">
+                    <Link to={"/miscellaneous-collections"}>
+                        <img src="default.png" alt="" />
+                    </Link>
+                                            
+                    <h2>Miscellaneous Collections</h2>
+                    <p>Collections not contained in any exhibit</p>
+                </div>
             </div>
         </div>  
         

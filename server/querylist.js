@@ -10,7 +10,7 @@ const downgrade_employee = "UPDATE logininfo SET UserRole = 'Customer' WHERE Ema
 // Artwork Management Controller - artwork oriented queries
 const get_artwork_query = "SELECT * FROM artworks WHERE isDeleted = false";
 const get_specific_art = "SELECT * FROM artworks WHERE ArtID = ? AND isDeleted = false";
-const get_collection_art = "SELECT * FROM artworks WHERE Collection = ? AND isDeleted = false AND OnDisplay = true";
+const get_collection_art = "SELECT * FROM artworks WHERE (Collection = ? OR Collection IS NULL) AND isDeleted = false AND OnDisplay = true";
 const get_name_specific_art = "SELECT * FROM artworks WHERE ArtName = ? AND isDeleted = false";
 const insert_art_piece = "INSERT INTO artworks (ArtName, Artist, DateMade, ArtType, ArtVal, Collection, ArtDesc, ArtPic, OnDisplay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 const mark_art_for_deletion = "UPDATE artworks SET isDeleted = true WHERE ArtID = ? AND isDeleted = false";
@@ -33,7 +33,7 @@ const reinstate_customer_profile = "UPDATE customers JOIN logininfo ON customers
 // Collections Management Controller
 const get_collections_query = "SELECT * FROM collections WHERE isDeleted = false";
 const get_specific_collection = "SELECT * FROM collections WHERE Title = ? AND isDeleted = false";
-const get_exhibit_collections = "SELECT * FROM collections WHERE ExhibitID = ? AND isDeleted = false";
+const get_exhibit_collections = "SELECT * FROM collections WHERE (ExhibitID = ? OR ExhibitID IS NULL) AND isDeleted = false";
 const insert_new_collection = "INSERT INTO collections (Title, CollectDesc, CollectPic, ExhibitID) VALUES (?, ?, ?, ?)";
 const mark_collection_delete = "UPDATE collections SET isDeleted = true WHERE Title = ? AND isDeleted = false";
 const update_collection_query = "UPDATE collections SET CollectDesc = ?, CollectPic = ?, ExhibitID = ? WHERE Title = ? AND isDeleted = false";

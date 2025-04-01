@@ -49,6 +49,8 @@ import LogTransactions from './employeePages/LogTransactions.jsx';
 import GiftShopSalesReport from './managerPages/GiftShopSalesReport.jsx';
 import CustomersReport from './managerPages/CustomersReport.jsx';
 import ExhibitCollections from './pages/ExhibitCollections.jsx';
+import MiscellaneousArt from './pages/MiscellaneousArt.jsx';
+import MiscellaneousCollections from './pages/MiscellaneousCollections.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -87,6 +89,8 @@ function App() {
           <Route path="/report-problem" element={<ReportProblem/>}/>
           <Route path="/collection-art/:Title" element={<CollectionArt/>}/>
           <Route path="/exhibit-collections/:ExhibitID" element={<ExhibitCollections/>}/>
+          <Route path="/miscellaneous-artwork" element={<MiscellaneousArt/>}/>
+          <Route path="/miscellaneous-collections" element={<MiscellaneousCollections/>}/>
           
           
 
