@@ -90,7 +90,7 @@ const updateReview = (req, res) => {
             }
 
             // SQL QUERY - Update an employee's information, by first checking if they exist
-            const [rows] = await db.query(queries.get_user_review, [email]);
+            const [ rows ] = await db.query(queries.get_user_review, [email]);
 
             if(rows.length == 0){
                 res.writeHead(400, {'Content-Type': 'application/json'});
