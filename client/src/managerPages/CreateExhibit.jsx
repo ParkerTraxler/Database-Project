@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import './ManagerDashboard.css'
+import './CreateExhibit.css'
 
 const CreateExhibit = () => {
     console.log("CreateExhibit")
@@ -54,12 +55,13 @@ const CreateExhibit = () => {
     }
 
     return(
+        <div clsssName="create-exhibit-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
             <div>
-                <div className="form">
+                <div className="create-exhibit-form">
                     <h1>Create Exhibit</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
                     <input type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
@@ -67,7 +69,7 @@ const CreateExhibit = () => {
                     <button className="formButton" onClick={handleClick} >Add</button>
                 </div>
             </div>
-            
+        </div>   
         </div>
     )
 }
