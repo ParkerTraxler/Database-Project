@@ -1,0 +1,84 @@
+.add-employee-container {
+    background-image: url('../assets/abstract-background-image.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.add-employee-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.add-employee-form h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    color: #2c3e50;
+}
+
+/* Input fields */
+.add-employee-form input[type="text"],
+.add-employee-form select {
+    padding: 12px 16px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.add-employee-form input[type="text"]:focus,
+.add-employee-form select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    outline: none;
+    background-color: #fff;
+}
+
+.add-employee-formButton {
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-employee-formButton:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive tweaks */
+@media screen and (max-width: 600px) {
+    .add-employee-form {
+        padding: 20px;
+    }
+
+    .add-employee-form h1 {
+        font-size: 1.5rem;
+    }
+
+    .add-employee-formButton {
+        font-size: 0.95rem;
+        padding: 10px 16px;
+    }
+}
