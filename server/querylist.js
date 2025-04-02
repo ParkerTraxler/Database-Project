@@ -238,7 +238,30 @@ const customer_report_info = `SELECT
     // Then it groups by customers having two criterium defined earlier 
     // If I get asked to explain this query, I will take 10 minutes but I will do it :')
 
-// REPORT QUERY #3 -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
+// REPORT QUERY #3 -- report that gets the history of the mueseum - dynamic filtering
+const change_history_report = `SELECT
+            ah.HistoryID as TableKey,
+            CONCAT(COALESCE(m.FirstName, e.FirstName, c.FirstName), ' ', COALESCE(m.LastName, e.LastName, c.LastName)) AS Action_Done_By,
+            li.Email AS Email,
+            ah.ActionType AS Type_Of_Action,
+            ah.EffectedTable AS Table_Impacted,
+            ah.EffectedEntry AS PK_Effected,
+            ah.DescOfAction AS Description,
+            ah.TimestampAction AS Date_Time_Happened
+        FROM
+            allhistory AS ah,
+            logininfo AS li
+        LEFT JOIN
+            Managers AS m ON li.UserID = m.UserID
+        LEFT JOIN
+            Employees AS e ON li.Email = e.Email
+        LEFT JOIN
+            Customers AS c ON li.UserID = c.UserID
+        WHERE
+            ah.UserID = li.UserID`;
+
+
+// REPORT QUERY #4 -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
             e.EmployeeID as Employee_ID,
             CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
@@ -326,6 +349,7 @@ module.exports = {
     new_history_log,
     all_sales_report,
     all_sales_aggregate,
-    employee_exhibit_report,
     customer_report_info,
+    change_history_report,
+    employee_exhibit_report
 };

@@ -76,8 +76,40 @@ const aggregate_finance_report = async (req, res, email) =>{
 
 }
 
-const change_history_report = async (req, res, email) =>{
+const change_history_report = async (req, res, email, from_date, to_date, action_type, effected_table) =>{
+    try{
+        var end_of_query = "";
+        // Start by converting the from and to dates
+        if(from_date != "all"){
+            from_date = new Date(from_date);
+            to_date = new Date(to_date);
+            from_date.setHours(0, 0, 0, 0);
+            to_date.setHours(23, 59, 59, 999);
+            const final_from_date = from_date.toISOString().slice(0, 19).replace('T', ' ');
+            const final_to_date = to_date.toISOString().slice(0, 19).replace('T', ' ');
+            end_of_query += ` AND ah.TimestampAction >= "${final_from_date}" AND ah.TimestampAction <= "${final_to_date}"`;
+        }
+        if(action_type != "any"){
+            end_of_query += ` AND ah.ActionType = "${action_type}"`
+        }
+        if(effected_table != "all"){
+            end_of_query += ` AND ah.EffectedTable = "${effected_table}"`
+        }
 
+        const [ rows ] = await db.query(queries.change_history_report+end_of_query);
+
+        // log that a manager generated a report
+        //await db.query(queries.new_history_log, [email, "Report Generated", "Sales", 0, "Manager has generated the Giftshop Sales Report."]);
+
+        // Return reviews to frontend
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows));
+
+    } catch (err) {
+        console.error('Error fetching change history report: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Error fetching the museum changes history report.' }));
+    }
 }
 
 const customer_info_report = async(req, res, email, account_creation_period, promotional_offer_candidate, members_only) =>{
@@ -128,7 +160,7 @@ const customer_info_report = async(req, res, email, account_creation_period, pro
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
     } catch (err) {
-        console.error('Error fetching reviews: ', err);
+        console.error('Error fetching customer report: ', err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'Error fetching the customer report.' }));
     }

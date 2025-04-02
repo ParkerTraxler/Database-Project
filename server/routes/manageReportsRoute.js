@@ -31,8 +31,12 @@ const manageReportsRoutes = (req, res) => {
     } else if (req.url.startsWith('/reports/change-history') && req.method === 'GET') {
         verifyToken('Manager', null)(req, res, () => {
             const urlParts = req.url.split('/');
-            const email = decodeURIComponent(urlParts[urlParts.length - 1]);
-            change_history_report(req, res, email);
+            const email = decodeURIComponent(urlParts[urlParts.length - 5]); // manager email
+            const from_date = urlParts[urlParts.length - 4]; // first date selected
+            const to_date = urlParts[urlParts.length - 3]; // second date selected (should be later than the first)
+            const action_type = urlParts[urlParts.length-2]; // matches the enum in allhistory OR -> "any"
+            const effected_table = urlParts[urlParts.length-1]; // matches the enum in allhistory OR -> "all"
+            change_history_report(req, res, email, from_date, to_date, action_type, effected_table);
         });
     
     // forth report stuff

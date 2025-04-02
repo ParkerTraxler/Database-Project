@@ -39,6 +39,9 @@ const ManagerDashboard = () => {
                         <a href='/customers-report'>Customer Report</a>
                     </li>
                     <li>
+                        <a href='/edit-history-report'>Edit History Report</a>
+                    </li>
+                    <li>
                         <a href='/employee-exhibit-report'>Employee Exhibit Report</a>
                     </li>
                     <li>
