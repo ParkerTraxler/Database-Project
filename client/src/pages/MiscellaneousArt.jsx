@@ -1,27 +1,18 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
+
  
-const CollectionArt = () => {
-    console.log("CollectionArt")
+const MiscellaneousArt = () => {
+    console.log("MiscellaneousArt")
  
     const [artwork, setArtwork] = useState([])
-     
-    const location = useLocation()
-     
-    const urlTitle = location.pathname.split("/")[2]
-    const collectionTitle = urlTitle.replaceAll("%20", " ");
-     
-    console.log(encodeURIComponent(collectionTitle))
+
  
      useEffect(()=>{
          const fetchArtwork = async ()=>{
-             console.log(collectionTitle)
              try{
-                 const res = await axios.get(`http://localhost:3002/artworks/collection/${encodeURIComponent(collectionTitle)}`);
+                 const res = await axios.get(`http://localhost:3002/artworks/collection/${null}`);
                  console.log(res.data)
                  setArtwork(res.data)
                  console.log(artwork.data)
@@ -40,7 +31,7 @@ const CollectionArt = () => {
          <div>
              
              <div>
-                 <h1>{collectionTitle}</h1>
+                 <h1>Miscellaneous Art</h1>
                  <div className="artwork">
                  {artwork.map(art=>(
                      <div className="art" key={art.ArtID}>
@@ -64,4 +55,4 @@ const CollectionArt = () => {
      )
  }
  
- export default CollectionArt
+ export default MiscellaneousArt

@@ -11,6 +11,7 @@ const GiftShopSalesReport = () => {
     const [timeRange, setTimeRange] = useState("alltime");
     const [reportGenerated, setReportGenerated] = useState(false);
     const [reportValues, setReportValues] = useState(null);
+    const [customerFilter, setCustomerFilter] = useState("");
     const { user } = useAuth();
     const token = user.token;
     const decoded = jwtDecode(token);
@@ -44,6 +45,10 @@ const GiftShopSalesReport = () => {
         }
     };
 
+    const filteredSales = sales.filter(sale => 
+        sale.CustomerName.toLowerCase().includes(customerFilter.toLowerCase())
+    );
+
     return (
         <div className="managerView">
             <div>
@@ -60,6 +65,10 @@ const GiftShopSalesReport = () => {
                     <option value="last-quarter">Last Quarter</option>
                     <option value="last-year">Last Year</option>
                 </select>
+                <div>
+                        <label>Filter by Customer Name: </label>
+                        <input type="text" value={customerFilter} onChange={(e) => setCustomerFilter(e.target.value)}placeholder="Enter customer name"/>
+                </div>
                 <div>
                     <button onClick={fetchSales}>Generate Report</button>
                 </div>
@@ -84,7 +93,7 @@ const GiftShopSalesReport = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {sales.map(sale => (
+                            {filteredSales.map(sale => (
                                 <tr key={sale.TransactionID}>
                                     <td>{sale.CustomerName}</td>
                                     <td>{sale.ItemName}</td>

@@ -48,6 +48,10 @@ import TransactionsReport from './managerPages/TransactionsReport.jsx';
 import LogTransactions from './employeePages/LogTransactions.jsx';
 import GiftShopSalesReport from './managerPages/GiftShopSalesReport.jsx';
 import CustomersReport from './managerPages/CustomersReport.jsx';
+import EditHistoryReport from './managerPages/EditHistoryReport.jsx';
+import ExhibitCollections from './pages/ExhibitCollections.jsx';
+import MiscellaneousArt from './pages/MiscellaneousArt.jsx';
+import MiscellaneousCollections from './pages/MiscellaneousCollections.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -85,6 +89,9 @@ function App() {
           
           <Route path="/report-problem" element={<ReportProblem/>}/>
           <Route path="/collection-art/:Title" element={<CollectionArt/>}/>
+          <Route path="/exhibit-collections/:ExhibitID" element={<ExhibitCollections/>}/>
+          <Route path="/miscellaneous-artwork" element={<MiscellaneousArt/>}/>
+          <Route path="/miscellaneous-collections" element={<MiscellaneousCollections/>}/>
           
           
 
@@ -133,6 +140,7 @@ function App() {
             <Route path="/transactions-report" element={<TransactionsReport/>}/>
             <Route path="/gift-shop-sales-report" element={<GiftShopSalesReport/>}/>
             <Route path="/customers-report" element={<CustomersReport/>}/>
+            <Route path="/edit-history-report" element={<EditHistoryReport/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
