@@ -1,3 +1,28 @@
+.manage-exhibits-container {
+    background-image: url('../assets/abstract-background-image.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.manage-exhibits-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
 h1 {
     text-align: center;
     margin-bottom: 20px;
@@ -11,7 +36,7 @@ h1 {
 }
 
 .exhibitM {
-    background-color: rgb(245, 245, 245);
+    background-color: #f5f5f5;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -22,8 +47,34 @@ h1 {
     width: 400px;
     height: 290px;
     border-radius: 5px;
-    background-color: black;/*replace this with image*/
 }
+
+.create-exhibit-button,
+.add-special-exhibit-button {
+    display: block;
+    margin: 20px auto 0;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.create-exhibit-button:hover,
+.add-special-exhibit-button:hover {
+    background-color: #0056b3;
+}
+
+.create-exhibit-button a,
+.add-special-exhibit-button a {
+    text-decoration: none;
+    color: inherit;
+}
+
 
 @media (max-width: 1000px) {
     .exhibitsM, .specialExhibitsM {

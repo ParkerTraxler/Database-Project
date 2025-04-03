@@ -1,0 +1,125 @@
+.manage-gift-shop-container {
+    background-image: url('../assets/abstract-background-image.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.manage-gift-shop-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.manage-gift-shop-header {
+    color: #333;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.item:hover {
+    background-color: #eef5ff;
+}
+
+.item div {
+    flex: 1;
+    text-align: center;
+    color: #555;
+}
+
+button.update, button.delete {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+button.update {
+    background-color: #4caf50;
+    margin-right: 8px;
+}
+
+button.delete {
+    background-color: #f44336;
+}
+
+button.update:hover, button.delete:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+button.update a, button.delete a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.gift-shop-add-item-button {
+    display: block;
+    margin: 20px auto 0;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.gift-shop-add-item-button:hover {
+    background-color: #0056b3;
+}
+
+.gift-shop-add-item-button a {
+    text-decoration: none;
+    color: inherit;
+}
+
+@media (max-width: 768px) {
+    .manage-gift-shop-section {
+        padding: 20px;
+    }
+
+    .item {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .item div {
+        width: 100%;
+        text-align: center;
+    }
+
+    button.update, button.delete {
+        width: 100%;
+        margin-top: 5px;
+    }
+}

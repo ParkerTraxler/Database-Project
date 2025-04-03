@@ -3,9 +3,9 @@ import { useAuth } from '../utils/AuthContext'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import { jwtDecode } from 'jwt-decode'
 import ManagerDashboard from './ManagerNav'
 import './ManagerDashboard.css'
+import './ManageEmployee.css'
 
 const ManageEmployees = () => {
     console.log("ManageEmployees")
@@ -13,8 +13,6 @@ const ManageEmployees = () => {
     const { user } = useAuth()
     const token = user.token
     console.log("token: " + token)
-    const decoded = jwtDecode(token)
-    const managerEmail = decoded.email
 
     useEffect(()=>{
         const fetchAllEmployees = async ()=>{
@@ -40,10 +38,7 @@ const ManageEmployees = () => {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },
-                data: {
-                    empEmail: email,
-                    managerEmail: managerEmail
-                }
+                data: {empEmail: email}
             })
             console.log(res.data)
             window.location.reload() //refreshes the page
@@ -55,13 +50,13 @@ const ManageEmployees = () => {
 
 
     return(
+        <div className="manage-employees-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
-            <div>
-                Manage Employees
-                <h1>Employees</h1>
+            <div className="manage-employees-section">
+                <h1 className="manage-employees-header">Employees</h1>
                 <table>
                 <thead>
                     <tr>
@@ -105,12 +100,11 @@ const ManageEmployees = () => {
                     ))}
                 </tbody>
                 </table>
-                
-                </div>
-                <button>
+                <button className="add-employee-button">
                     <Link to="/add-employee">Add Employee</Link>
                 </button>
-
+                </div>
+            </div>
             </div>
             
         

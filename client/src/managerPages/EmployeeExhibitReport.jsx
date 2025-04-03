@@ -3,19 +3,23 @@ import ManagerNav from './ManagerNav';
 import axios from 'axios'; // API calls
 import { useAuth } from '../utils/AuthContext';
 
+
 import './ManagerDashboard.css';
 import './EmployeeExhibitReport.css';
 
+
 const EmployeeExhibitReport = () => {
     console.log("EmployeeExhibitReport");
+
 
     const [employees, setEmployees] = useState([]);
     const [filteredEmployees, setFilteredEmployees] = useState([]);
     const [exhibitFilter, setExhibitFilter] = useState('');
     const [searchTerm, setSearchTerm] = useState(''); // New state for search term
     const { user } = useAuth();
-    const token = user.token; 
+    const token = user.token;
     console.log("token: " + token);
+
 
     useEffect(() => {
         const fetchAllEmployees = async () => {
@@ -35,11 +39,13 @@ const EmployeeExhibitReport = () => {
         fetchAllEmployees();
     }, [token]);
 
+
     const handleExhibitChange = (e) => {
         const selectedExhibit = e.target.value;
         setExhibitFilter(selectedExhibit);
         filterEmployees(selectedExhibit, searchTerm);
     };
+
 
     const handleSearchChange = (e) => {
         const newSearchTerm = e.target.value;
@@ -47,8 +53,10 @@ const EmployeeExhibitReport = () => {
         filterEmployees(exhibitFilter, newSearchTerm);
     };
 
+
     const filterEmployees = (exhibit, name) => {
         let filteredList = employees;
+
 
         if (exhibit) {
             filteredList = filteredList.filter(employee => employee.Exhibit_Name === exhibit);
@@ -61,8 +69,10 @@ const EmployeeExhibitReport = () => {
         setFilteredEmployees(filteredList);
     };
 
+
     // Extract unique exhibit names for the filter dropdown
     const exhibitNames = [...new Set(employees.map(employee => employee.Exhibit_Name))];
+
 
     return (
         <div className="container-exhibit-report">
@@ -73,6 +83,7 @@ const EmployeeExhibitReport = () => {
             <div className = "report-section">
                 <h1 className="header">Employee Exhibit Report</h1>
 
+
                 {/* Search Bar for Employee Name */}
                 <input
                     type="text"
@@ -81,6 +92,7 @@ const EmployeeExhibitReport = () => {
                     onChange={handleSearchChange}
                     className="search-bar"
                 />
+
 
                 {/* Exhibit Filter Dropdown */}
                 <label htmlFor="exhibitFilter">Filter by Exhibit:</label>
@@ -92,6 +104,7 @@ const EmployeeExhibitReport = () => {
                         </option>
                     ))}
                 </select>
+
 
                 <table className="info-table">
                     <thead>
@@ -122,5 +135,6 @@ const EmployeeExhibitReport = () => {
         </div>
     );
 };
+
 
 export default EmployeeExhibitReport;
