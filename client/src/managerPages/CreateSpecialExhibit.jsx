@@ -62,14 +62,14 @@ const CreateSpecialExhibit = () => {
             <div>
                 <ManagerDashboard/>
             </div>
-            <div>
+            <div className ="create-exhibit-form-wrapper">
             <div className="create-exhibit-form">
                     <h1>Create Special Exhibit</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
                     <input type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
                     <input type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/>
-                    <input type="date" onChange={handleChange} name="startdate"/>
-                    <input type="date" onChange={handleChange} name="enddate"/>
+                    <input type="date" placeholder="Start Date" onChange={handleChange} name="startdate"/>
+                    <input type="date" placeholder="End Date" onChange={handleChange} name="enddate" />
                     <input type="number" placeholder="fee" onChange={handleChange} name="fee"/>
                     <button className="formButton" onClick={handleClick} >Add</button>
                 </div>
