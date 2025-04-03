@@ -51,7 +51,7 @@ const ManageTickets = () => {
                     </div>
                 ))
             ) : (
-                <p>No tickets found.</p>  // Handle case when tickets array is empty
+                <p>No tickets found.</p>  
             ))}
             </div>
         </div>

@@ -60,7 +60,7 @@ const ManageGiftShop = () => {
             <div className="manage-gift-shop-section">
                 <h1 className="manage-gift-shop-header">Manage Gift Shop</h1>
                 {loading ? (
-                    <p>Loading items...</p>  // Show a loading message while waiting for data
+                    <p>Loading items...</p>  
                 ) : (
                     items.length > 0 ? (
                     items.map(item=>(
@@ -73,7 +73,7 @@ const ManageGiftShop = () => {
                         </div>
                     ))
                 ) : (
-                    <p>No items found.</p>  // Handle case when tickets array is empty
+                    <p>No items found.</p> 
                 ))}
                 <button className ="gift-shop-add-item-button">
                     <Link to="/add-item">Add Item</Link>
