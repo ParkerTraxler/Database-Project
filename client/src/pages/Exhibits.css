@@ -23,22 +23,22 @@ h1 {
     margin-bottom: 20px;
 }
 
-.exhibits, .specialExhibits {
+.exhibitsC, .specialExhibitsC {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 20px;
 }
 
-.exhibit {
-    background-color: #f5f5f5;
+.exhibitC {
+    background-color: rgb(245, 245, 245);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-.exhibit img {
+.exhibitC img {
     width: 400px;
     height: 290px;
     border-radius: 5px;
@@ -46,13 +46,13 @@ h1 {
 }
 
 @media (max-width: 1050px) {
-    .exhibits, .specialExhibits {
+    .exhibitsC, .specialExhibitsC {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 680px) {
-    .exhibits, .specialExhibits {
+    .exhibitsC, .specialExhibitsC {
         grid-template-columns: 1fr;
     }
 }

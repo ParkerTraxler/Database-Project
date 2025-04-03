@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import ManagerNav from './ManagerNav'
 import './ManagerDashboard.css'
-import './ManageGiftShop.css'
 
 const ManageGiftShop = () => {
     console.log("ManagerGiftShop")
@@ -52,13 +51,13 @@ const ManageGiftShop = () => {
 
     return(
         
-        <div className="manage-gift-shop-container">
+        
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
-            <div className="manage-gift-shop-section">
-                <h1 className="manage-gift-shop-header">Manage Gift Shop</h1>
+            <div>
+                <h1>Manage Gift Shop</h1>
                 {loading ? (
                     <p>Loading items...</p>  // Show a loading message while waiting for data
                 ) : (
@@ -75,11 +74,11 @@ const ManageGiftShop = () => {
                 ) : (
                     <p>No items found.</p>  // Handle case when tickets array is empty
                 ))}
-                <button className ="gift-shop-add-item-button">
+                <button>
                     <Link to="/add-item">Add Item</Link>
                 </button>
             </div>
-        </div>
+            
         </div>
     )
 }

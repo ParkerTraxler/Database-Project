@@ -48,12 +48,12 @@ const ManageCollections = () => {
 
 
     return(
-        <div className="manage-collections-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
-            <div className="manage-collections-section">
+            <div>
+                Manage Collections
                 <h1>Collections</h1>
                 <div className="collectionsM">
                 {collections.map(collection=>(
@@ -71,10 +71,10 @@ const ManageCollections = () => {
                 ))}
                 </div>
                 <button>
-                    <Link to="/add-collection" className="create-collection-button">Create Collection</Link>
+                    <Link to="/add-collection">Create Collection</Link>
                 </button>
             </div>
-        </div>    
+            
         </div>
     )
 }

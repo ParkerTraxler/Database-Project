@@ -3,7 +3,6 @@ import ManagerNav from './ManagerNav'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './ManagerDashboard.css'
-import './ViewDonations.css'
 
 const ViewDonations = () => {
     console.log("ViewDonations")
@@ -24,39 +23,39 @@ const ViewDonations = () => {
 
     return(
         
-        <div className = "container-view-donations">
-            <div className="managerView">
-                <div>
-                    <ManagerNav/>
-                </div>
-            <div className = "view-donations-section">
-                <h1 className = "view-donations-header">Donations</h1>
-                    <table className = "view-donations-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Description</th>
+        
+        <div className="managerView">
+            <div>
+                <ManagerNav/>
+            </div>
+            <div>
+            <h1>Donations</h1>
+                <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {donations.map(donation=>(
+                        <tr key={donation.DonationID}>
+                            <td>{donation.DonatorName}</td>
+                            <td>{donation.DonationID}</td>
+                            <td>{new Date(donation.DonateDate).toLocaleDateString()}</td>
+                            <td>{donation.DonateAmt}</td>
+                            <td>{donation.DonateDesc}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {donations.map(donation=>(
-                            <tr key={donation.DonationID}>
-                                <td>{donation.DonatorName}</td>
-                                <td>{donation.DonationID}</td>
-                                <td>{new Date(donation.DonateDate).toLocaleDateString()}</td>
-                                <td>{donation.DonateAmt}</td>
-                                <td>{donation.DonateDesc}</td>
-                            </tr>
-                            ))}
-                    </tbody>
-                    </table>
+                    ))}
+                </tbody>
+                </table>
                 
                 </div>
             </div>
-        </div>    
+            
         
     )
 }

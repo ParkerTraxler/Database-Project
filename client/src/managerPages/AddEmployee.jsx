@@ -3,16 +3,18 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import ManagerDashboard from './ManagerNav'
 import './ManagerDashboard.css'
-import './AddEmployee.css'
 
 const AddEmployee = () => {
     console.log("AddEmployee")
     const { user } = useAuth()
     const token = user.token
     console.log(token)
-    
+    const decoded = jwtDecode(token)
+    const managerMakingChangeEmail = decoded.email
+    console.log("User: " + managerMakingChangeEmail)
     const [employee, setEmployee] = useState({
         email:"",
         firstName:"",
@@ -34,10 +36,11 @@ const AddEmployee = () => {
         try{
             const res = await axios.post("http://localhost:3002/employees", {
                 email: employee.email,
-                firstName: employee.firstName,
-                lastName: employee.lastName,
+                //firstName: employee.firstName,
+                //lastName: employee.lastName,
                 position: employee.position,
                 managerEmail: employee.managerEmail,
+                managerMakingChangeEmail: managerMakingChangeEmail
                 
             },
             {
@@ -57,19 +60,18 @@ const AddEmployee = () => {
 
 
     return(
-        <div className="add-employee-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
             <div>
-                <div className="add-employee-form">
-                    <h1 className="add-employee-header">Add Employee</h1>
+                <div className="form">
+                    <h1>Add Employee</h1>
                     <input type="text" placeholder="email" onChange={handleChange} name="email"/>
                     <input type="text" placeholder="first name" onChange={handleChange} name="firstName"/>
                     <input type="text" placeholder="last name" onChange={handleChange} name="lastName"/>
                     <div>
-
+                    Position:
                     <select onChange={handleChange} name="position">
                         <option value="">---Choose an option---</option>
                         <option value="Curator">Curator</option>
@@ -78,10 +80,9 @@ const AddEmployee = () => {
                     </select>
                     </div>
                     <input type="text" placeholder="manager email" onChange={handleChange} name="managerEmail"/>
-                    <button className="add-employee-formButton" onClick={handleClick} >Add</button>
+                    <button className="formButton" onClick={handleClick} >Add</button>
                 </div>
             </div>  
-        </div>
         </div>
     )
 }

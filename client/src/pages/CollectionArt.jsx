@@ -1,22 +1,21 @@
 import React from 'react'
- import { useState, useEffect } from 'react'
- import axios from 'axios'
- import { Link } from 'react-router-dom'
- import { useNavigate } from 'react-router-dom'
- import { useLocation } from 'react-router-dom'
- import { useAuth } from '../utils/AuthContext'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
  
- const CollectionArt = () => {
-     console.log("CollectionArt")
+const CollectionArt = () => {
+    console.log("CollectionArt")
  
-     const [artwork, setArtwork] = useState([])
+    const [artwork, setArtwork] = useState([])
      
-     const location = useLocation()
+    const location = useLocation()
      
-     const urlTitle = location.pathname.split("/")[2]
-     const collectionTitle = urlTitle.replaceAll("%20", " ");
+    const urlTitle = location.pathname.split("/")[2]
+    const collectionTitle = urlTitle.replaceAll("%20", " ");
      
-     console.log(encodeURIComponent(collectionTitle))
+    console.log(encodeURIComponent(collectionTitle))
  
      useEffect(()=>{
          const fetchArtwork = async ()=>{

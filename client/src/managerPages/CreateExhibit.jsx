@@ -4,14 +4,16 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
-import './CreateExhibit.css'
 
 const CreateExhibit = () => {
     console.log("CreateExhibit")
     const { user } = useAuth()
     const token = user.token
     console.log(token)
+    const decoded = jwtDecode(token)
+    const email = decoded.email
         
     const [exhibit, setExhibit] = useState({
         exhibitname:"", 
@@ -39,6 +41,7 @@ const CreateExhibit = () => {
                 exhibitdesc: exhibit.exhibitdesc, 
                 exhibitpic: exhibit.exhibitpic,
                 isSpecial: 0,
+                managerEmail: email
             },
             {
                 headers: {
@@ -55,13 +58,12 @@ const CreateExhibit = () => {
     }
 
     return(
-        <div className="create-exhibit-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
             <div>
-                <div className="create-exhibit-form">
+                <div className="form">
                     <h1>Create Exhibit</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
                     <input type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
@@ -69,7 +71,7 @@ const CreateExhibit = () => {
                     <button className="formButton" onClick={handleClick} >Add</button>
                 </div>
             </div>
-        </div>   
+            
         </div>
     )
 }

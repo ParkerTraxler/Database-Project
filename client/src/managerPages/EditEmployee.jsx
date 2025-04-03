@@ -5,12 +5,15 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
+import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
 
 const EditEmployee = () => {
     console.log("EditEmployee")
     const { user } = useAuth()
     const token = user.token
+    const decoded = jwtDecode(token)
+    const managerEmail = decoded.email
     const [employee, setEmployee] = useState({
         hourlywage: "",
         weeklyhours: "",
@@ -48,6 +51,7 @@ const EditEmployee = () => {
                 managerID: employee.managerID,
                 gender: employee.gender,
                 email: email,
+                managerEmail: managerEmail
             },
             {
                 headers: {

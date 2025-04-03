@@ -10,7 +10,7 @@ const downgrade_employee = "UPDATE logininfo SET UserRole = 'Customer' WHERE Ema
 // Artwork Management Controller - artwork oriented queries
 const get_artwork_query = "SELECT * FROM artworks WHERE isDeleted = false";
 const get_specific_art = "SELECT * FROM artworks WHERE ArtID = ? AND isDeleted = false";
-const get_collection_art = "SELECT * FROM artworks WHERE Collection = ? AND isDeleted = false AND OnDisplay = true";
+const get_collection_art = "SELECT * FROM artworks WHERE (Collection = ? OR Collection IS NULL) AND isDeleted = false AND OnDisplay = true";
 const get_name_specific_art = "SELECT * FROM artworks WHERE ArtName = ? AND isDeleted = false";
 const insert_art_piece = "INSERT INTO artworks (ArtName, Artist, DateMade, ArtType, ArtVal, Collection, ArtDesc, ArtPic, OnDisplay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 const mark_art_for_deletion = "UPDATE artworks SET isDeleted = true WHERE ArtID = ? AND isDeleted = false";
@@ -21,34 +21,19 @@ const get_employee_query = "SELECT * FROM employees WHERE isDeleted = false";
 const get_email_specific_emp = "SELECT * FROM employees WHERE Email = ? AND isDeleted = false";
 const mark_emp_for_deletion = "UPDATE employees SET isDeleted = true WHERE Email = ? AND isDeleted = false";
 const get_manager_query = "SELECT ManagerID FROM managers, logininfo WHERE logininfo.Email = ? AND logininfo.UserID = managers.UserID";
-const insert_employee_info = "INSERT INTO employees (FirstName, LastName, EPosition, GiftShopName, ManagerID, Email) VALUES (?, ?, ?, ?, ?, ?)";
+const insert_employee_info = "INSERT INTO employees (FirstName, LastName, BirthDate, EPosition, GiftShopName, ManagerID, Gender, Email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 const update_employee_info = "UPDATE employees SET HourlyWage = ?, WeeklyHours = ?, FirstName = ?, LastName = ?, BirthDate = ?, EPosition = ?, ExhibitID = ?, GiftShopName = ?, ManagerID = ?, Gender = ? WHERE Email = ? AND isDeleted = false";
 // if an employee is being reinstated, use these two commands
 const check_employee_exist = "SELECT * FROM employees WHERE Email = ? AND isDeleted = TRUE";
-const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = ?, EPosition = ?, GiftShopName = ?, ManagerID = ?, isDeleted = FALSE WHERE Email = ?";
-
-// REPORT QUERY - report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
-const employee_exhibit_report = `SELECT 
-            e.EmployeeID as Employee_ID,
-            CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
-            e.Email as Employee_Email,
-            e.HourlyWage * e.WeeklyHours as Employee_Weekly_Wage,
-            ex.ExhibitName as Exhibit_Name,
-            CASE
-                WHEN e.isDeleted = FALSE THEN TRUE
-                WHEN e.isDeleted = TRUE THEN FALSE
-            END AS Employee_Active
-            FROM
-            employees as e,
-            exhibits as ex
-            WHERE
-            e.ExhibitID = ex.ExhibitID
-            ORDER BY ex.ExhibitID ASC, e.isDeleted ASC`;
+const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = ?, BirthDate = ?, EPosition = ?, GiftShopName = ?, ManagerID = ?, Gender = ?, isDeleted = FALSE WHERE Email = ?";
+// remove their customer profile on creation - I'm using delete here since the information is the same, it just moves tables entirely.
+const remove_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET isDeleted = TRUE WHERE logininfo.email = ?";
+const reinstate_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET FirstName = ?, LastName = ?, BirthDate = ?, Gender = ?, isDeleted = FALSE WHERE logininfo.email = ?";
 
 // Collections Management Controller
 const get_collections_query = "SELECT * FROM collections WHERE isDeleted = false";
 const get_specific_collection = "SELECT * FROM collections WHERE Title = ? AND isDeleted = false";
-const get_exhibit_collections = "SELECT * FROM artworks WHERE ExhibitID = ? AND isDeleted = false";
+const get_exhibit_collections = "SELECT * FROM collections WHERE (ExhibitID = ? OR ExhibitID IS NULL) AND isDeleted = false";
 const insert_new_collection = "INSERT INTO collections (Title, CollectDesc, CollectPic, ExhibitID) VALUES (?, ?, ?, ?)";
 const mark_collection_delete = "UPDATE collections SET isDeleted = true WHERE Title = ? AND isDeleted = false";
 const update_collection_query = "UPDATE collections SET CollectDesc = ?, CollectPic = ?, ExhibitID = ? WHERE Title = ? AND isDeleted = false";
@@ -106,16 +91,58 @@ const delete_item = "UPDATE items SET isDeleted = true WHERE ItemID = ? AND isDe
 const update_item = "UPDATE items SET ItemName = ?, ItemPrice = ?, GiftShopName = ? WHERE ItemID = ? AND isDeleted = false";
 const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE ItemID = ? AND isDeleted = false";
 
-// Transaction Controller - one query + the all_sales_report
-const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)";
+// Transaction Controller - one query to add a new transaction
+const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo JOIN customers ON logininfo.UserID = customers.UserID WHERE logininfo.Email = ?), ?, ?, ?)";
 
-// REPORT QUERY -- gets all transactions, including tickets. 
+// User Profile Queries
+const get_user_profile = `SELECT 
+		customers.CustomerID, 
+		FirstName, LastName, BirthDate, Gender, 
+		DateOfExpiration, isRenewing, YearsOfMembership,
+		CASE
+            WHEN DateOfExpiration IS NULL THEN FALSE
+            ELSE TRUE
+        	END AS isMember
+		FROM logininfo, customers 
+		LEFT JOIN membership ON customers.CustomerID = membership.CustomerID 
+		WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID`;
+const update_user_profile = "UPDATE customers INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.FirstName = ?, customers.LastName = ?, customers.BirthDate = ?, customers.Gender = ? WHERE logininfo.Email = ?";
+// User Profiles - membership stuff
+const get_user_member_info = "SELECT m.CustomerID, m.DateOfExpiration, m.IsRenewing, M.YearsOfMembership FROM membership AS m JOIN customers ON m.CustomerID = customers.CustomerID JOIN logininfo ON customers.UserID = logininfo.UserID WHERE logininfo.email = ?"
+const insert_new_member = "INSERT INTO membership (CustomerID, DateOfExpiration) VALUES (?, ?)"
+const renew_without_expire = "UPDATE membership SET isRenewing = TRUE WHERE CustomerID = ?";
+const renew_with_expire = "UPDATE membership SET isRenewing = TRUE, DateOfExpiration = ?, YearsOfMembership = YearsOfMembership+1 WHERE CustomerID = ?";
+const cancel_membership = "UPDATE membership SET isRenewing = FALSE WHERE CustomerID = ?"
+
+// All Review Queries
+const get_all_reviews = "SELECT reviews.CustomerID, CONCAT(customers.FirstName, ' ', customers.LastName) as Name, reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, customers WHERE customers.CustomerID = reviews.CustomerID";
+const get_user_review = "SELECT reviews.CustomerID, reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, logininfo, customers WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID AND customers.CustomerID = reviews.CustomerID"
+const new_user_review = `INSERT INTO reviews (CustomerID, StarCount, ReviewDesc, ReviewDate) 
+                            VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)`;
+const update_review = "UPDATE reviews INNER JOIN customers ON reviews.CustomerID = customers.CustomerID INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET reviews.StarCount = ?, reviews.ReviewDesc = ?, reviews.ReviewDate = ? WHERE logininfo.Email = ?";
+
+// A report that gets information on events
+const get_all_events = "SELECT * FROM eventlist WHERE isDeleted = false AND EventDate >= CURDATE()"; 
+const get_specific_event = "SELECT * FROM eventlist WHERE isDeleted = false AND EventID = ?";
+const get_event_employees = "SELECT employees.EmployeeID, CONCAT(employees.FirstName, ' ', employees.LastName) AS EmployeeName, employees.Email, eventworkers.EventID FROM eventworkers, employees WHERE EventID = ? AND eventworkers.EmployeeID = employees.EmployeeID AND employees.isDeleted = FALSE";
+const cancel_event = "UPDATE eventlist SET isDeleted = TRUE WHERE EventID = ?";
+const create_event = "INSERT INTO eventlist (EventName, EventDesc, EventDate, MemberOnly) VALUES (?, ?, ?, ?)";
+const add_event_employee = "INSERT INTO eventworkers (EventID, EmployeeID) VALUES (?, (SELECT EmployeeID FROM employees WHERE employees.Email = ? AND isDeleted = FALSE))";
+const update_event = "UPDATE eventlist SET EventName = ?, EventDesc = ?, EventDate = ?, MemberOnly = ? WHERE EventID = ?";
+// this is one of the only actual delete command in the whole DB - the history table will track when an employee gets unassigned, so no information is actually lost, but the table will actually remove things 
+const remove_event_employee = "DELETE FROM eventworkers WHERE EventID = ? AND EmployeeID = (SELECT EmployeeID FROM employees WHERE employees.Email = ? AND isDeleted = FALSE)";
+
+// history table command - incredibly important never touch these without asking Ash please!!
+const new_history_log = "INSERT INTO allhistory (UserID, ActionType, EffectedTable, EffectedEntry, DescOfAction) VALUES ((SELECT UserID FROM logininfo WHERE Email = ?), ?, ?, ?, ?)";
+
+// All report queries (for the report controller)
+// REPORT QUERY #1 -- gets all transactions, including tickets. 
 const all_sales_report = `SELECT
             s.PurchaseID as TransactionID,
 			CONCAT(c.FirstName, ' ', c.LastName) as CustomerName, 
 			i.ItemName as ItemName,
 			s.Quantity as ItemQuantity,
-			s.Price as TotalPrice,
+			s.FinalPrice as FinalPrice,
 			s.DatePurchased as DateofSale
 			FROM 
 			customers AS c,
@@ -125,22 +152,132 @@ const all_sales_report = `SELECT
 			s.CustomerID = c.CustomerID
 			AND
 			s.ItemID = i.ItemID
+            AND 
+            i.ItemID NOT IN (1, 2, 3, 4)
+            AND 
+            s.DatePurchased >= ?
             ORDER BY s.DatePurchased DESC`;
 
+const all_sales_aggregate = `SELECT 
+            COUNT(s.PurchaseID) as TransactionCount,
+            SUM(s.Quantity) as TotalQuantity, 
+            SUM(s.FinalPrice) as TotalPrice
+            FROM 
+            Sales as s
+            WHERE
+            s.DatePurchased >= ?
+            AND
+            ItemID NOT IN (1, 2, 3, 4)`;
 
-// User Profile Queries
-const get_user_profile = "SELECT Membership, FirstName, LastName, BirthDate, Gender FROM customers, logininfo WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID";
-const update_user_profile = "UPDATE customers INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.FirstName = ?, customers.LastName = ?, customers.BirthDate = ?, customers.Gender = ? WHERE logininfo.Email = ?";
-const update_membership = "UPDATE customers JOIN logininfo ON logininfo.UserID = customers.UserID SET customers.Membership = NOT customers.Membership WHERE logininfo.Email = ?";
+// REPORT QUERY #2 - A report that gets information on all the customers in the museum. Date of their last visit, total amount spent (donations + items + tickets + membership), etc.
+const customer_report_info = `SELECT
+        c.CustomerID as Customer_ID,
+        CONCAT(c.FirstName, ' ', c.LastName) as Customer_Name,
+        li.email as Customer_Email,
+        CASE
+            WHEN DateOfExpiration IS NULL then FALSE
+            ELSE TRUE
+        END AS Currently_Member,
+        MIN(ah.TimestampAction) AS Account_Creation_Date,
+        COALESCE((SELECT SUM(s.FinalPrice)
+	        FROM sales AS s
+            WHERE
+            s.CustomerID = c.CustomerID), 0)
+        + 
+        COALESCE((SELECT SUM(d.DonateAmt) 
+	        FROM donations as d
+            WHERE
+            d.CustomerID = c.CustomerID), 0)
+        +
+        COALESCE((SELECT YearsOfMembership*100
+	        FROM membership as m
+            WHERE
+            m.CustomerID = c.CustomerID), 0) AS Total_Amount_Spent,
+        (SELECT MAX(s.DatePurchased)
+	        FROM sales as S
+            WHERE
+            s.CustomerID = c.CustomerID
+            AND
+            s.ItemID IN (1, 2, 3, 4)) AS Last_Visit_Date,
+        CASE
+	        WHEN (SELECT MAX(s.DatePurchased)
+	        FROM sales as S
+            WHERE
+            s.CustomerID = c.CustomerID
+            AND
+            s.ItemID IN (1, 2, 3, 4)) <= CURDATE() - INTERVAL 1 MONTH 
+            AND
+            (SELECT COUNT(*) 
+            FROM sales AS s
+            WHERE 
+            s.ItemID IN (1, 2, 3, 4)) >= 2 THEN TRUE
+            ELSE FALSE
+        END AS Good_Promotion
+        FROM
+        customers AS c
+        LEFT JOIN
+        logininfo AS li
+        ON 
+        c.UserID = li.UserID
+        LEFT JOIN
+        membership as m
+        ON
+        c.CustomerID = m.CustomerID
+        LEFT JOIN
+        allhistory AS ah 
+        ON 
+            c.CustomerID = CAST(ah.EffectedEntry AS SIGNED)
+            AND ah.EffectedTable = 'Customers'
+            AND ah.ActionType = 'Created'
+        WHERE
+        li.UserRole = "Customer"
+        AND
+        ah.TimestampAction > ?
+        GROUP BY c.CustomerID`; // Groups it into a bunch of groups of size 1 that let the function work -- added dynamically at the end of the query
+    // First question mark: account creation date > time
+    // Then it groups by customers having two criterium defined earlier 
+    // If I get asked to explain this query, I will take 10 minutes but I will do it :')
 
-// All Review Queries
-const get_all_reviews = "SELECT reviews.CustomerID, CONCAT(customers.FirstName, ' ', customers.LastName) as Name, reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, customers WHERE customers.CustomerID = reviews.CustomerID";
-const get_user_review = "SELECT reviews.StarCount, reviews.ReviewDesc, reviews.ReviewDate FROM reviews, logininfo, customers WHERE logininfo.Email = ? AND customers.UserID = logininfo.UserID AND customers.CustomerID = reviews.CustomerID"
-const new_user_review = `INSERT INTO reviews (CustomerID, StarCount, ReviewDesc, ReviewDate) 
-                            VALUES ((SELECT CustomerID FROM logininfo, customers WHERE logininfo.Email = ? AND logininfo.UserID = customers.UserID), ?, ?, ?)`;
-const update_review = "UPDATE reviews INNER JOIN customers ON reviews.CustomerID = customers.CustomerID INNER JOIN logininfo ON logininfo.UserID = customers.UserID SET reviews.StarCount = ?, reviews.ReviewDesc = ?, reviews.ReviewDate = ? WHERE logininfo.Email = ?";
+// REPORT QUERY #3 -- report that gets the history of the mueseum - dynamic filtering
+const change_history_report = `SELECT
+            ah.HistoryID as TableKey,
+            CONCAT(COALESCE(m.FirstName, e.FirstName, c.FirstName), ' ', COALESCE(m.LastName, e.LastName, c.LastName)) AS Action_Done_By,
+            li.Email AS Email,
+            ah.ActionType AS Type_Of_Action,
+            ah.EffectedTable AS Table_Impacted,
+            ah.EffectedEntry AS PK_Effected,
+            ah.DescOfAction AS Description,
+            ah.TimestampAction AS Date_Time_Happened
+        FROM
+            allhistory AS ah,
+            logininfo AS li
+        LEFT JOIN
+            Managers AS m ON li.UserID = m.UserID
+        LEFT JOIN
+            Employees AS e ON li.Email = e.Email
+        LEFT JOIN
+            Customers AS c ON li.UserID = c.UserID
+        WHERE
+            ah.UserID = li.UserID`;
 
-// A report that gets information on exhibits 
+
+// REPORT QUERY #4 -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
+const employee_exhibit_report = `SELECT 
+            e.EmployeeID as Employee_ID,
+            CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
+            e.Email as Employee_Email,
+            e.HourlyWage * e.WeeklyHours as Employee_Weekly_Wage,
+            ex.ExhibitName as Exhibit_Name,
+            CASE
+                WHEN e.isDeleted = FALSE THEN TRUE
+                WHEN e.isDeleted = TRUE THEN FALSE
+            END AS Employee_Active
+            FROM
+            employees as e,
+            exhibits as ex
+            WHERE
+            e.ExhibitID = ex.ExhibitID
+            ORDER BY ex.ExhibitID ASC, e.isDeleted ASC`;
 
 // all the queries exported out
 module.exports = {
@@ -164,6 +301,8 @@ module.exports = {
     update_employee_info,
     check_employee_exist,
     reinstate_employee_info,
+    remove_customer_profile,
+    reinstate_customer_profile,
     get_collections_query,
     get_specific_collection,
     get_exhibit_collections,
@@ -188,13 +327,29 @@ module.exports = {
     update_item,
     restock_item,
     new_transaction,
-    all_sales_report,
     get_user_profile,
     update_user_profile,
-    update_membership,
+    get_user_member_info,
+    insert_new_member,
+    renew_without_expire,
+    renew_with_expire,
+    cancel_membership,
     get_all_reviews,
     get_user_review,
     new_user_review,
     update_review,
-    employee_exhibit_report,
+    get_all_events,
+    get_specific_event,
+    get_event_employees,
+    cancel_event,
+    create_event,
+    add_event_employee,
+    update_event,
+    remove_event_employee,
+    new_history_log,
+    all_sales_report,
+    all_sales_aggregate,
+    customer_report_info,
+    change_history_report,
+    employee_exhibit_report
 };

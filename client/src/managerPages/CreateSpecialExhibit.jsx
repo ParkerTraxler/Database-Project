@@ -4,14 +4,16 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
-import './CreateExhibit.css'
 
 const CreateSpecialExhibit = () => {
     console.log("CreateExhibit")
     const { user } = useAuth()
-        const token = user.token
-        console.log(token)
+    const token = user.token
+    console.log(token)
+    const decoded = jwtDecode(token)
+    const email = decoded.email
         
     const [specialExhibit, setSpecialExhibit] = useState({
         exhibitname:"", 
@@ -41,6 +43,7 @@ const CreateSpecialExhibit = () => {
                 enddate: specialExhibit.enddate,
                 fee: specialExhibit.fee,
                 isSpecial: 1,
+                managerEmail: email
             },
             {
                 headers: {
@@ -57,24 +60,23 @@ const CreateSpecialExhibit = () => {
     }
 
     return(
-        <div className="create-exhibit-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
-            <div className ="create-exhibit-form-wrapper">
-            <div className="create-exhibit-form">
+            <div>
+            <div className="form">
                     <h1>Create Special Exhibit</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
                     <input type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
                     <input type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/>
-                    <input type="date" placeholder="Start Date" onChange={handleChange} name="startdate"/>
-                    <input type="date" placeholder="End Date" onChange={handleChange} name="enddate" />
+                    <input type="date" onChange={handleChange} name="startdate"/>
+                    <input type="date" onChange={handleChange} name="enddate"/>
                     <input type="number" placeholder="fee" onChange={handleChange} name="fee"/>
                     <button className="formButton" onClick={handleClick} >Add</button>
                 </div>
             </div>
-        </div>   
+            
         </div>
     )
 }

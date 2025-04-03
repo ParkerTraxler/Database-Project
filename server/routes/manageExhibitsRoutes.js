@@ -10,11 +10,11 @@ const manageExhibitsRoutes = (req, res) => {
         const exhibitID = parseInt(urlParts[urlParts.length - 1]);
         getExhibit(req, res, exhibitID);
     } else if (req.url.startsWith('/exhibits') && req.method === 'POST') {
-        verifyToken('Manager')(req, res, () => {
+        verifyToken('Manager', null)(req, res, () => {
             createExhibit(req, res);
         });
     } else if (req.url.startsWith('/exhibits/') && req.method === 'PUT') {
-        verifyToken('Manager')(req, res, () => {
+        verifyToken('Manager', null)(req, res, () => {
             updateExhibit(req, res);
         });
     }
