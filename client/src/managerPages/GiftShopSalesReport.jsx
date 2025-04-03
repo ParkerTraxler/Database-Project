@@ -50,12 +50,13 @@ const GiftShopSalesReport = () => {
     );
 
     return (
+        <div className="customer-report-container">
         <div className="managerView">
             <div>
                 <ManagerNav />
             </div>
             <div>
-                <h1>Gift Shop Sales Report</h1>
+                <h1 className="report-header" >Gift Shop Sales Report</h1>
                 <label>Filter by time range: </label>
                 <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
                     <option value="all-time">All Time</option>
@@ -70,7 +71,7 @@ const GiftShopSalesReport = () => {
                         <input type="text" value={customerFilter} onChange={(e) => setCustomerFilter(e.target.value)}placeholder="Enter customer name"/>
                 </div>
                 <div>
-                    <button onClick={fetchSales}>Generate Report</button>
+                    <button className="generate-report-button" onClick={fetchSales}>Generate Report</button>
                 </div>
                 {/* render report values */}
                 {reportGenerated && reportValues && (
@@ -107,6 +108,7 @@ const GiftShopSalesReport = () => {
                     </table>
                 )}
             </div>
+        </div>
         </div>
     );
 };

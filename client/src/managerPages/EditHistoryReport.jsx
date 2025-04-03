@@ -50,13 +50,13 @@ const EditHistoryReport = () => {
 
     return(
         
-        
+        <div className="customer-report-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
-            <div>
-                <h1>Edit History Report</h1>
+            <div className="report-form">
+                <h1 className="report-header">Edit History Report</h1>
                 <label>Filter by start date: </label>
                 <input type="date" value={timeRange.startDate} onChange={(e) => setTimeRange({...timeRange, startDate: e.target.value})} />
                 <label>Filter by end date: </label>
@@ -88,7 +88,7 @@ const EditHistoryReport = () => {
                     <option value="SpecialExhibits">Special Exhibits</option>
                 </select>
                 <div>
-                    <button onClick={fetchReport}>Generate Report</button>
+                    <button className="generate-report-button" onClick={fetchReport}>Generate Report</button>
                 </div>
                 {reportGenerated && (
                     <table>
@@ -120,7 +120,7 @@ const EditHistoryReport = () => {
                     </table>
                 )}
             </div>
-            
+            </div>   
         </div>
     )
 }

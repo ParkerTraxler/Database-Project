@@ -46,13 +46,13 @@ const CustomersReport = () => {
 
     return(
         
-        
+        <div className="customer-report-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
-            <div>
-                <h1>Customer Report</h1>
+            <div className="report-form">
+                <h1 className="report-header">Customer Report</h1>
                 <label>Filter by time range: </label>
                 <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
                     <option value="all-time">All Time</option>
@@ -75,7 +75,7 @@ const CustomersReport = () => {
                     <option value="false">Not Ideal Targets</option>
                 </select>
                 <div>
-                    <button onClick={fetchCustomers}>Generate Report</button>
+                    <button className="generate-report-button" onClick={fetchCustomers}>Generate Report</button>
                 </div>
                 {reportGenerated && (
                     <table>
@@ -105,6 +105,7 @@ const CustomersReport = () => {
                         </tbody>
                     </table>
                 )}
+            </div>
             </div>
             
         </div>

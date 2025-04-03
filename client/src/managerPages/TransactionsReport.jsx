@@ -37,13 +37,13 @@ const TransactionsReport = () => {
 
     return(
         
-        
+        <div className="customer-report-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
             <div>
-                <h1>Transactions Report</h1>
+                <h1 className="report-header">Transactions Report</h1>
                 <table>
                     <thead>
                         <tr>
@@ -73,7 +73,7 @@ const TransactionsReport = () => {
                     </tbody>
                 </table>
             </div>
-            
+            </div>    
         </div>
     )
 }
