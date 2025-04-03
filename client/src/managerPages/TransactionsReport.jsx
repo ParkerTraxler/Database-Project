@@ -5,6 +5,7 @@ import { useAuth } from '../utils/AuthContext';
 import ManagerNav from './ManagerNav'
 
 import './ManagerDashboard.css'
+import './TransactionsReport.css'
 
 const TransactionsReport = () => {
     console.log("TransactionsReport")
@@ -37,14 +38,14 @@ const TransactionsReport = () => {
 
     return(
         
-        <div className="customer-report-container">
+        <div className="transactions-report-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
-            <div>
-                <h1 className="report-header">Transactions Report</h1>
-                <table>
+            <div className="transactions-report-section">
+                <h1 className="transactions-report-header">Transactions Report</h1>
+                <table className="transactions-report-table">
                     <thead>
                         <tr>
                             <th>Customer Name</th>
