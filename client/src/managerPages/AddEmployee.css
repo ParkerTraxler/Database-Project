@@ -5,11 +5,6 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 20px;
-    box-sizing: border-box;
 }
 
 .add-employee-form {

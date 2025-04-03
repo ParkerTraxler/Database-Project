@@ -57,7 +57,7 @@ const CreateSpecialExhibit = () => {
     }
 
     return(
-        <div clsssName="create-exhibit-container">
+        <div className="create-exhibit-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>

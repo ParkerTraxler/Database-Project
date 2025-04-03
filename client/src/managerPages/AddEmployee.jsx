@@ -57,7 +57,7 @@ const AddEmployee = () => {
 
 
     return(
-        <div classNmae="add-employee-container">
+        <div className="add-employee-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
