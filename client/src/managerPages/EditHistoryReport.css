@@ -1,4 +1,4 @@
-/* === Background Container === */
+
 .history-report-container {
     background-image: url('../assets/abstract-background-image.jpg'); 
     background-size: cover;
@@ -7,7 +7,6 @@
     background-attachment: fixed;
   }
   
-  /* === Main Content Box === */
   .history-report-form {
     width: 100%;
     max-width: 900px;
@@ -20,7 +19,6 @@
     flex-direction: column;
   }
   
-  /* === Header === */
   .history-report-header {
     font-size: 2rem;
     font-weight: 700;
@@ -29,7 +27,6 @@
     color: #333;
   }
   
-  /* === Form Labels === */
   .history-report-form label {
     display: block;
     margin-top: 1.25rem;
@@ -38,7 +35,6 @@
     color: #333;
   }
   
-  /* === Inputs and Selects === */
   .history-report-form input[type="date"],
   .history-report-form select {
     width: 100%;
@@ -58,7 +54,6 @@
     outline: none;
   }
   
-  /* === Generate Button === */
   .generate-history-report-button {
     margin-top: 2rem;
     padding: 0.75rem 1.5rem;
@@ -77,7 +72,6 @@
     background-color: #0056b3;
   }
   
-  /* === Table Styling === */
   .history-report-table {
     width: 100%;
     border-collapse: collapse;
@@ -104,7 +98,6 @@
     background-color: #f5f5f5;
   }
   
-  /* === Responsive Layout === */
   @media (max-width: 768px) {
     .history-report-form {
       padding: 1.5rem;
