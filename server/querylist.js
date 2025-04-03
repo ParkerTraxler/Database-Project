@@ -40,35 +40,31 @@ const update_collection_query = "UPDATE collections SET CollectDesc = ?, Collect
 
 // Exhibits Management Controller (very very long)
 const get_all_exhibits = 
-    `SELECT exhibits.ExhibitID, ExhibitName, ExhibitDesc, ExhibitPic, NULL as StartDate, NULL as EndDate, NULL as Fee, FALSE as IsSpecial
+    `SELECT 
+	exhibits.ExhibitID, ExhibitName, ExhibitDesc, ExhibitPic, 
+    StartDate, EndDate, Fee, 
+    CASE
+        WHEN specialexhibits.ExhibitID IS NULL THEN FALSE
+        ELSE TRUE
+	END AS IsSpecial
     FROM exhibits 
-    LEFT JOIN specialexhibits ON exhibits.ExhibitID = specialexhibits.ExhibitID 
-    WHERE specialexhibits.ExhibitID IS NULL
-
-    UNION
-
-    SELECT exhibits.ExhibitID, ExhibitName, ExhibitDesc, ExhibitPic, StartDate, EndDate, Fee, TRUE as IsSpecial
-    FROM exhibits, specialexhibits 
-    WHERE exhibits.ExhibitID = specialexhibits.ExhibitID AND specialexhibits.EndDate >= CURDATE()`;
+    LEFT JOIN specialexhibits ON exhibits.ExhibitID = specialexhibits.ExhibitID
+    WHERE EndDate > CURDATE() OR EndDate IS NULL
+    ORDER BY IsSpecial ASC`;
 
 const get_specific_exhibit = //coalesce checks to see if the value IS NOT null, and uses it if it is indeed not null
     `SELECT 
-        exhibits.ExhibitID,
-        ExhibitName,
-        ExhibitDesc,
-        ExhibitPic,
-        COALESCE(specialexhibits.StartDate, NULL) AS StartDate,
-        COALESCE(specialexhibits.EndDate, NULL) AS EndDate,
-        COALESCE(specialexhibits.Fee, NULL) AS Fee,
-        CASE
-            WHEN specialexhibits.ExhibitID IS NULL THEN FALSE
-            ELSE TRUE
-        END AS IsSpecial
-    FROM
-        exhibits
-    LEFT JOIN specialexhibits ON exhibits.ExhibitID = specialexhibits.ExhibitID
-    WHERE
-        exhibits.ExhibitID = ?`
+	exhibits.ExhibitID, ExhibitName, ExhibitDesc, ExhibitPic,
+	StartDate, EndDate, Fee,
+	CASE
+		WHEN specialexhibits.ExhibitID IS NULL THEN FALSE
+		ELSE TRUE
+	END AS IsSpecial
+	FROM
+	exhibits
+	LEFT JOIN specialexhibits ON exhibits.ExhibitID = specialexhibits.ExhibitID
+	WHERE
+	exhibits.ExhibitID = ?;`
 
 const create_exhibit = "INSERT INTO exhibits (ExhibitName, ExhibitDesc, ExhibitPic) VALUES (?, ?, ?)";
 const create_special_exhibit = "INSERT INTO specialexhibits (ExhibitID, StartDate, EndDate, Fee) VALUES (?, ?, ?, ?)";
@@ -92,7 +88,8 @@ const update_item = "UPDATE items SET ItemName = ?, ItemPrice = ?, GiftShopName 
 const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE ItemID = ? AND isDeleted = false";
 
 // Transaction Controller - one query to add a new transaction
-const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, FinalPrice, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo JOIN customers ON logininfo.UserID = customers.UserID WHERE logininfo.Email = ?), ?, ?, ?)";
+const new_transaction = "INSERT INTO sales (ItemID, CustomerID, Quantity, DatePurchased) VALUES (?, (SELECT CustomerID FROM logininfo JOIN customers ON logininfo.UserID = customers.UserID WHERE logininfo.Email = ?), ?, ?)";
+const specific_transaction = "SELECT FinalPrice FROM Sales WHERE PurchaseID = ?";
 
 // User Profile Queries
 const get_user_profile = `SELECT 
@@ -261,7 +258,7 @@ const change_history_report = `SELECT
             ah.UserID = li.UserID`;
 
 
-// REPORT QUERY #4 -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
+// REPORT QUERY #4 (currently unused) -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
 const employee_exhibit_report = `SELECT 
             e.EmployeeID as Employee_ID,
             CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
@@ -327,6 +324,7 @@ module.exports = {
     update_item,
     restock_item,
     new_transaction,
+    specific_transaction,
     get_user_profile,
     update_user_profile,
     get_user_member_info,

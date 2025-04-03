@@ -29,10 +29,14 @@ const ticketPurchase = async(req, res) =>{
     req.on('end', async () => {
         const { ticketArray, email, datepurchased } = JSON.parse(body);
         var itemIDs = [];
+        var send_back = [];
         try{
             for(let x = 0; x < 4; x++){
                 if(ticketArray[x] > 0){
                     itemIDs.push(x+1);
+                }
+                else{
+                    send_back[x] = 0;
                 }
             }
     
@@ -46,20 +50,20 @@ const ticketPurchase = async(req, res) =>{
                 return res.end(JSON.stringify({ error: 'Customer not authorized / no email given.'}));
             }
     
-            var finalprice = -1;
-    
             if(!datepurchased){
                 res.writeHead(400, {'Content-Type': 'application/json'});
                 return res.end(JSON.stringify({ error: 'Must supply a date of purchase.'}));
             }
     
             for(let ItemID of itemIDs){
-                var [ results ] = await db.query(queries.new_transaction, [ItemID, email, parseInt(ticketArray[ItemID-1]), finalprice, datepurchased]);
+                var [ results ] = await db.query(queries.new_transaction, [ItemID, email, parseInt(ticketArray[ItemID-1]), datepurchased]);
+                var [ get_price ] = await db.query(queries.specific_transaction, [results.insertId])
+                send_back[ItemID-1] = get_price[0].FinalPrice;
                 await db.query(queries.new_history_log, [email, "Created", "Sales", results.insertId, "A customer has purchased tickets. See transaction report for more details."]);
             }
     
             res.writeHead(201, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ message: 'Tickets purchased!' }));
+            return res.end(JSON.stringify(send_back));
         } catch (err) {
             console.error('Error processing ticket purchase: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
