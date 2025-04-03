@@ -39,7 +39,7 @@ const ManagerDashboard = () => {
                     {/* reports dropdown thingy (lowkey messy code, took me a while to get ts to work) */}
                     <li>
                         <button onClick={toggleReports} className='dropdown-toggle'>
-                            Reports {showReports ? '▲' : '▼'}
+                            View Reports {showReports ? '▲' : '▼'}
                         </button>
                         {showReports && (
                             <ul className='dropdown'>
