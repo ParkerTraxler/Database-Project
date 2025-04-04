@@ -1,11 +1,19 @@
 const http = require('http');
+const multer = require('multer')
 const queries = require('../querylist.js')
 const db = require('../db/db');
 
 const getAllCollections = async (req, res) => {
     try {
         // SQL QUERY - Retrieve collections from database
-        const [rows] = await db.query(queries.get_collections_query);
+        var [rows] = await db.query(queries.get_collections_query);
+
+        // Convert BLOB -> Base64 (for each collection)
+        let imageBase64;
+        for (let i = 0; i < rows.length; i++) {
+            imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
+            rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
+        }
 
         // Return collections to the frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -24,7 +32,14 @@ const getExhibitCollections = async (req, res, exhibitID) => {
             return res.end(JSON.stringify({ error: 'No exhibit ID supplied to search for'}));
         }
         // SQL QUERY - Retrieve collection from database
-        const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
+        var [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
+
+        // Convert BLOB -> Base64 (for each collection)
+        let imageBase64;
+        for (let i = 0; i < rows.length; i++) {
+            imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
+            rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
+        }
 
         // may return empty if exhibit hsa no collections in it
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -44,7 +59,7 @@ const createCollection = async (req, res) => {
     });
 
     req.on('end', async () => {
-        const { title, collectdesc, collectpic, exhibitid } = JSON.parse(body);
+        const { title, collectdesc, collectpic, exhibitid, email } = JSON.parse(body);
         try {
             if(!title){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -64,6 +79,8 @@ const createCollection = async (req, res) => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not accept entry. Invalid input?' }));
             }
+
+            await db.query(queries.new_history_log, [email, "Created", "Collections", title, "A new collection was added to the museum."]);
 
             // Return success message
             res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -86,7 +103,7 @@ const deleteCollection = async (req, res) => {
 
     req.on('end', async () => {
         try {
-            const { title } = JSON.parse(body);
+            const { title, email } = JSON.parse(body);
 
             // Ensure a name was provided
             if (!title) {
@@ -101,6 +118,8 @@ const deleteCollection = async (req, res) => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Failed to delete the entry. Is it already deleted?' }));
             }
+
+            await db.query(queries.new_history_log, [email, "Deleted", "Collections", title, "A collection has been removed from the museum entirely."])
 
             // Return success message
             res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -122,7 +141,7 @@ const updateCollection = (req, res) => {
 
     req.on('end', async () => {
         try {
-            var { title, collectdesc, collectpic, exhibitid } = JSON.parse(body);
+            var { title, collectdesc, collectpic, exhibitid, email } = JSON.parse(body);
 
             // If no collection name is provided, halt
             if (!title) {
@@ -157,6 +176,8 @@ const updateCollection = (req, res) => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
             }
+
+            await db.query(queries.new_history_log, [email, "Updated", "Collections", title, "A collection by the name of \"" + title + "\" belonging to exhibit ID " + exhibitid + " was updated."] );
  
              // Return success message
              res.writeHead(200, { 'Content-Type': 'application/json' });

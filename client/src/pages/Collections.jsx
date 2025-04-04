@@ -40,9 +40,18 @@ const Collections = () => {
                             }
                             <h2>{collection.Title}</h2>
                             <p>{collection.CollectDesc}</p>
-                        
+                            
                         </div>
                     ))}
+                    <div className="collectionC">
+                        <Link to={"/miscellaneous-artwork"}>
+                            <img src="default.png" alt="" />
+                        </Link>
+                            
+                        <h2>Miscellaneous Art</h2>
+                        <p>Artwork not contained in any collection</p>
+                    </div>
+                    
                 </div>
             </div>
         </div>

@@ -5,12 +5,13 @@
     margin-bottom: 15px;
 }
 .container-exhibit-report {
-    background-image: url('../assets/abstract-background-image.jpg'); 
+    background-image: url('../assets/abstract-background-image.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
+
 
 .report-section {
     display: flex;
@@ -31,6 +32,9 @@
 
 
 
+
+
+
 .search-bar {
     padding: 10px;
     border-radius: 8px;
@@ -43,6 +47,8 @@
 }
 
 
+
+
 .filter-label {
     font-weight: 600;
     color: #555;
@@ -50,6 +56,8 @@
     align-items: center;
     gap: 10px;
 }
+
+
 
 
 .filter-select {
@@ -63,10 +71,14 @@
 }
 
 
+
+
 .filter-select:hover,
 .filter-select:focus {
     border-color: #888;
 }
+
+
 
 
 .info-table {
@@ -81,12 +93,16 @@
 }
 
 
+
+
 .info-table th,
 .info-table td {
     padding: 12px 15px;
     text-align: center;
     border-bottom: 1px solid #e0e0e0;
 }
+
+
 
 
 .info-table th {

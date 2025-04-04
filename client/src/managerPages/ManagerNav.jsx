@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './ManagerDashboard.css'
 
 const ManagerDashboard = () => {
-    console.log("ManagerDashboard")
+    const [showReports, setShowReports] = useState(false)
 
-    return(
+    const toggleReports = () => {
+        setShowReports(prev => !prev)
+    }
+
+    return (
         <div className='managerDashboard'>
             <h1>Manager Dashboard</h1>
 
@@ -26,30 +30,39 @@ const ManagerDashboard = () => {
                         <a href='/manage-events'>Manage Events</a>
                     </li>
                     <li>
-                        <a href='/manage-collections'>Manage Collections</a>
-                    </li>
-                    <li>
                         <a href='/manage-tickets'>Manage Tickets</a>
-                    </li>
-                    <li>
-                        <a href='/manage-gift-shop'>Manage Gift Shop</a>
                     </li>
                     <li>
                         <a href='/view-donations'>View Donations</a>
                     </li>
+
+                    {/* reports dropdown thingy (lowkey messy code, took me a while to get ts to work) */}
                     <li>
-                        <a href='/log-transactions'>Log Transactions</a>
+                        <button onClick={toggleReports} className='dropdown-toggle'>
+                            View Reports {showReports ? '▲' : '▼'}
+                        </button>
+                        {showReports && (
+                            <ul className='dropdown'>
+                                <li>
+                                    <a href='/transactions-report'>Transactions Report</a>
+                                </li>
+                                <li>
+                                    <a href='/customers-report'>Customer Report</a>
+                                </li>
+                                <li>
+                                    <a href='/gift-shop-sales-report'>Gift Shop Sales Report</a>
+                                </li>
+                                <li>
+                                    <a href='/employee-exhibit-report'>Employee Exhibit Report</a>
+                                </li>
+                                <li>
+                                    <a href='/edit-history-report'>Edit History Report</a>
+                                </li>
+                            </ul>
+                        )}
                     </li>
-                    <li>
-                        <a href='/employee-exhibit-report'>Employee Exhibit Report</a>
-                    </li>
-                    <li>
-                        <a href='/transactions-report'>Transactions Report</a>
-                    </li>
-                    
                 </ul>
             </div>
-
         </div>
     )
 }

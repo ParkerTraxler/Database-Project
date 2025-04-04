@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import './ManagerDashboard.css'
+import './EditExhibit'
 
 const EditExhibit = () => {
     console.log("EditExhibit")
@@ -53,7 +54,7 @@ const EditExhibit = () => {
 
     return(
         
-        
+        <div className="edit-exhibit-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
@@ -68,7 +69,7 @@ const EditExhibit = () => {
                     
             </div>
             </div>
-            
+        </div>  
         </div>
     )
 }

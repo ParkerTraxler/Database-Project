@@ -53,6 +53,26 @@ const AccountDetails = () => {
             console.log(err);
         }
     };
+    const subscribeNow = async e => {
+        e.preventDefault()  //prevents page refresh on button click
+        try{
+            console.log("PUT Sent")
+            const res2 = axios.put('http://localhost:3002/profile/membership', {
+                email: email
+            },
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+            console.log(res2)
+            console.log("PUT Completed")
+            window.location.reload()
+        } catch (err){
+            console.log(err)
+        }
+        
+    }
 
     if (isLoading) {
         return <div>Loading account details...</div>; // Display while loading
@@ -70,12 +90,31 @@ const AccountDetails = () => {
                     <div className="detailC"><strong>Last Name:</strong> {info.LastName}</div>
                     <div className="detailC"><strong>Date of Birth:</strong> {new Date(info.BirthDate).toLocaleDateString() || "Not provided"}</div>
                     <div className="detailC"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
+                    <div className="detailC"><strong>Membership Status:</strong> {info.isMember ? "Member" : "Not a Member"}</div>
+                    {info.isMember == "1" && (
+                        <div className="detailC"><strong>Renewing Membership:</strong> {info.isRenewing ? "Yes" : "No"}</div>
+                    )}
+                    {info.isMember == "1" && (
+                        <div className="detailC"><strong>Years as a Member:</strong> {info.YearsOfMembership}</div>
+                    )}
+                    {info.isMember == "1" && (
+                        <div className="detailC"><strong>Membership End/Renewal Date:</strong> {new Date(info.DateOfExpiration).toLocaleDateString() || "Not provided"}</div>
+                    )}
                     <div className="detailC"><strong>Email:</strong> {email}</div>
                     <div className="detailC"><strong>Password:</strong> ********</div>
                 </div>
                 <div>
                     <button className="saveButtonC" onClick={handleClick}>Edit Account</button>
                 </div>
+            </div>
+            <div>
+                {info.isMember == "0" &&(
+                    <div>
+                        Not a Member?
+                        Want discounts on tickets and access to member exclusive events?
+                        <button onClick={subscribeNow}>Subscribe Now</button>
+                    </div>
+                )}
             </div>
         </div>
     );

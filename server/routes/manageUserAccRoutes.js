@@ -9,13 +9,13 @@ const manageProfileRoutes = (req, res) => {
             const email = decodeURIComponent(urlParts[urlParts.length - 1]);
             getProfile(req, res, email);
         });
-    } else if (req.url.startsWith('/profile/') && req.method === 'PUT') {
-        verifyToken('Customer', null) (req, res, () => {
-            updateProfile(req, res);
-        });
     } else if (req.url.startsWith('/profile/membership') && req.method === 'PUT') {
         verifyToken('Customer', null) (req, res, () => {
             toggleMembership(req, res);
+        });
+    } else if (req.url.startsWith('/profile/') && req.method === 'PUT') {
+        verifyToken('Customer', null) (req, res, () => {
+            updateProfile(req, res);
         });
     }
 };

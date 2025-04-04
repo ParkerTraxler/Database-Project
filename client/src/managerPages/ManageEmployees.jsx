@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import ManagerDashboard from './ManagerNav'
 import './ManagerDashboard.css'
+import './ManageEmployee.css'
 
 const ManageEmployees = () => {
     console.log("ManageEmployees")
@@ -49,13 +50,13 @@ const ManageEmployees = () => {
 
 
     return(
+        <div className="manage-employees-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
-            <div>
-                Manage Employees
-                <h1>Employees</h1>
+            <div className="manage-employees-section">
+                <h1 className="manage-employees-header">Employees</h1>
                 <table>
                 <thead>
                     <tr>
@@ -99,12 +100,11 @@ const ManageEmployees = () => {
                     ))}
                 </tbody>
                 </table>
-                
-                </div>
-                <button>
+                <button className="add-employee-button">
                     <Link to="/add-employee">Add Employee</Link>
                 </button>
-
+                </div>
+            </div>
             </div>
             
         
