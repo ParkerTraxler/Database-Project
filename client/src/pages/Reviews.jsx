@@ -39,42 +39,47 @@ const Reviews = () => {
                 <h1>Reviews</h1>
             </div>
             <div>
-                {loading ? (
-                    <p>Loading reviews...</p>  // Show a loading message while waiting for data
-                ) : (
-                    reviews.length > 0 ? (
-                    
-                    reviews.map(review=>(
-                    
-                        <div className="review" key={review.CustomerID}>
-                            <div>{review.Name}</div>
-                            <div>{new Date(review.ReviewDate).toLocaleDateString() || "Not provided"}</div>
-                            <p>{review.ReviewDesc}</p>
-                            <div className='starReview'>
-                            {stars.map((_, index) => {
-                                return (
-                                    <div key={index} >
-                                        <FaStarHalf size={24} color={(review.StarCount) > index ? 'gold' : 'grey'} />
-                                        <FaStarHalf className="mirroredStar" size={24} color={(review.StarCount) > index + 0.5 ? 'gold' : 'grey'}/>
-                                    </div>   
-                                );
-                            })}
+                <h1>Reviews</h1>
+                <div className="reviewsContainer">
+                    {loading ? (
+                        <p>Loading reviews...</p>  // Show a loading message while waiting for data
+                    ) : (
+                        reviews.length > 0 ? (
+                        
+                        reviews.map(review=>(
+                        
+                            <div className="review" key={review.CustomerID}>
+                                <div>{review.Name}</div>
+                                <div>{new Date(review.ReviewDate).toLocaleDateString() || "Not provided"}</div>
+                                <p>{review.ReviewDesc}</p>
+                                <div className='starReview'>
+                                {stars.map((_, index) => {
+                                    return (
+                                        <div key={index} >
+                                            <FaStarHalf size={24} color={(review.StarCount) > index ? 'gold' : 'grey'} />
+                                            <FaStarHalf className="mirroredStar" size={24} color={(review.StarCount) > index + 0.5 ? 'gold' : 'grey'}/>
+                                        </div>   
+                                    );
+                                })}
+                                </div>
                             </div>
+                        ))
+                    ) : (
+                        // Handle case when reviews array is empty
+                        <div>
+                            <p className="no-reviews-found">No reviews found!</p>
+                            {role == 'Customer' && (
+                            <a href="/write-review" className="be-the-first">Be the first!</a>
+                            )}
                         </div>
-                    ))
-                ) : (
-                    // Handle case when reviews array is empty
-                    <div>
-                        <p className="no-reviews-found">No reviews found!</p>
-                        {role == 'Customer' && (
-                        <a href="/write-review" className="be-the-first">Be the first!</a>
-                        )}
-                    </div>
-                ))}
+                    ))}
+                </div>
 
-                {role == 'Customer' && (
-                    <a href={reviews.length > 0 ? "/write-review" : ""} className={reviews.length > 0 ? "review-us" : ""}>{reviews.length > 0 ? "Review Us!" : ""}</a>
-                )}
+                <div className="reviewUsButtonContainer">
+                    {role == 'Customer' && (
+                        <a href={reviews.length > 0 ? "/write-review" : ""} className={reviews.length > 0 ? "review-us" : ""}>{reviews.length > 0 ? "Review Us!" : ""}</a>
+                    )}
+                </div>
             </div>
         </div>
     )

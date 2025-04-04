@@ -4,6 +4,7 @@ import { useAuth } from '../utils/AuthContext';
 import ManagerNav from './ManagerNav';
 import { jwtDecode } from 'jwt-decode';
 import './ManagerDashboard.css';
+import './GiftShopSalesReport.css';
 
 const GiftShopSalesReport = () => {
     console.log("GiftShopSalesReport");
@@ -50,12 +51,13 @@ const GiftShopSalesReport = () => {
     );
 
     return (
+        <div className="gift-shop-report-container">
         <div className="managerView">
             <div>
                 <ManagerNav />
             </div>
-            <div>
-                <h1>Gift Shop Sales Report</h1>
+            <div className="gift-shop-report-section">
+                <h1 className="gift-shop-report-header" >Gift Shop Sales Report</h1>
                 <label>Filter by time range: </label>
                 <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
                     <option value="all-time">All Time</option>
@@ -70,7 +72,7 @@ const GiftShopSalesReport = () => {
                         <input type="text" value={customerFilter} onChange={(e) => setCustomerFilter(e.target.value)}placeholder="Enter customer name"/>
                 </div>
                 <div>
-                    <button onClick={fetchSales}>Generate Report</button>
+                    <button className="generate-gift-shop-report-button" onClick={fetchSales}>Generate Report</button>
                 </div>
                 {/* render report values */}
                 {reportGenerated && reportValues && (
@@ -81,7 +83,7 @@ const GiftShopSalesReport = () => {
                     </div>
                 )}
                 {reportGenerated && (
-                    <table>
+                    <table className="gift-shop-report-table">
                         <thead>
                             <tr>
                                 <th>Customer Name</th>
@@ -107,6 +109,7 @@ const GiftShopSalesReport = () => {
                     </table>
                 )}
             </div>
+        </div>
         </div>
     );
 };

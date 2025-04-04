@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import ManagerNav from './ManagerNav'
 
 import './ManagerDashboard.css'
+import './EditHistoryReport.css'
 
 const EditHistoryReport = () => {
     console.log("EditHistoryReport")
@@ -50,13 +51,13 @@ const EditHistoryReport = () => {
 
     return(
         
-        
+        <div className="history-report-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
-            <div>
-                <h1>Edit History Report</h1>
+            <div className="history-report-form">
+                <h1 className="history-report-header">Edit History Report</h1>
                 <label>Filter by start date: </label>
                 <input type="date" value={timeRange.startDate} onChange={(e) => setTimeRange({...timeRange, startDate: e.target.value})} />
                 <label>Filter by end date: </label>
@@ -88,10 +89,10 @@ const EditHistoryReport = () => {
                     <option value="SpecialExhibits">Special Exhibits</option>
                 </select>
                 <div>
-                    <button onClick={fetchReport}>Generate Report</button>
+                    <button className="generate-history-report-button" onClick={fetchReport}>Generate Report</button>
                 </div>
                 {reportGenerated && (
-                    <table>
+                    <table className="history-report-table">
                         <thead>
                             <tr>
                                 <th>User</th>
@@ -120,7 +121,7 @@ const EditHistoryReport = () => {
                     </table>
                 )}
             </div>
-            
+            </div>   
         </div>
     )
 }
