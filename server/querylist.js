@@ -80,7 +80,7 @@ const add_new_donation = `INSERT INTO donations (CustomerID, DonateDate, DonateA
 // Item and Ticket Controller : )
 const get_all_normal_items = "SELECT * FROM items WHERE isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
 const get_a_normal_item = "SELECT * FROM items WHERE isDeleted = false AND ItemID = ?";
-const get_all_tickets = "SELECT ItemID, ItemName, ItemPrice, AmountInStock FROM items WHERE ItemID IN (1, 2, 3, 4)";
+const get_all_tickets = "SELECT ItemID, ItemName, ItemPrice, AmountInStock, isPurchasable FROM items WHERE ItemID IN (1, 2, 3, 4)";
 const get_specific_ticket = "SELECT * FROM items WHERE ItemID = ? AND ItemID IN (1, 2, 3, 4)";
 const insert_new_item = "INSERT INTO items (ItemName, AmountSold, ItemPrice, AmountInStock, GiftShopName) VALUES (?, 0, ?, ?, 'Museum Gift Shop')";
 const delete_item = "UPDATE items SET isDeleted = true WHERE ItemID = ? AND isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
@@ -258,23 +258,42 @@ const change_history_report = `SELECT
             ah.UserID = li.UserID`;
 
 
-// REPORT QUERY #4 (currently unused) -- report that gets all employees that work in exhibits, which exhibits, and whether they're active or not
-const employee_exhibit_report = `SELECT 
-            e.EmployeeID as Employee_ID,
-            CONCAT(e.FirstName, ' ', e.LastName) as Employee_Name,
-            e.Email as Employee_Email,
-            e.HourlyWage * e.WeeklyHours as Employee_Weekly_Wage,
-            ex.ExhibitName as Exhibit_Name,
-            CASE
-                WHEN e.isDeleted = FALSE THEN TRUE
-                WHEN e.isDeleted = TRUE THEN FALSE
-            END AS Employee_Active
-            FROM
-            employees as e,
-            exhibits as ex
-            WHERE
-            e.ExhibitID = ex.ExhibitID
-            ORDER BY ex.ExhibitID ASC, e.isDeleted ASC`;
+// REPORT QUERY #4 -- report that calculates how long exhibits have been running, how much the employees in that exhibit cost per week, and how many employees are in it
+const weekly_exhibit_cost = `SELECT 
+		ex.ExhibitID as Exhibit_ID,
+		ex.ExhibitName as Exhibit_Name, 
+	CASE
+		WHEN se.ExhibitID IS NULL THEN FALSE
+		ELSE TRUE
+	END AS Is_Special_Exhibit,
+    CASE 
+		WHEN se.ExhibitID IS NOT NULL AND se.EndDate < CURDATE() THEN "Ended"
+        WHEN se.ExhibitID IS NOT NULL AND se.StartDate > CURDATE() THEN "Has Not Started"
+        WHEN se.ExhibitID IS NULL THEN "N/A"
+        ELSE "Ongoing"
+    END AS Running_Status,
+    COUNT(em.EmployeeID) AS Total_Employees,
+    SUM(em.HourlyWage * em.WeeklyHours) AS Weekly_Exhibit_Cost,
+    CASE
+		WHEN se.ExhibitID IS NULL THEN FLOOR((DATEDIFF(CURDATE(), ah.TimestampAction))/7)
+        WHEN se.ExhibitID IS NOT NULL AND se.StartDate > CURDATE() THEN 0
+        WHEN se.ExhibitID IS NOT NULL AND se.EndDate < CURDATE() THEN FLOOR(DATEDIFF(se.EndDate, se.StartDate)/7)
+        ELSE FLOOR(DATEDIFF(CURDATE(), se.StartDate)/7)
+	END AS Weeks_Active
+FROM
+	exhibits as ex
+LEFT JOIN 
+	specialexhibits as se
+ON 
+	ex.ExhibitID = se.ExhibitID
+LEFT JOIN
+	employees as em
+ON 
+	ex.ExhibitID = em.ExhibitID AND em.isDeleted = FALSE
+LEFT JOIN
+	allhistory as ah
+ON
+	ah.ActionType = "Created" AND ah.EffectedTable = "Exhibits" AND  ex.ExhibitID = CAST(ah.EffectedEntry AS SIGNED)`;
 
 // all the queries exported out
 module.exports = {
@@ -349,5 +368,5 @@ module.exports = {
     all_sales_aggregate,
     customer_report_info,
     change_history_report,
-    employee_exhibit_report
+    weekly_exhibit_cost
 };

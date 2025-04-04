@@ -49,7 +49,7 @@ const giftshop_sales_report = async (req, res, email, period_of_time) => {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
     } catch (err) {
-        console.error('Error fetching reviews: ', err);
+        console.error('Error fetching giftshop sales report: ', err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'Error fetching the giftshop sales report.' }));
     }
@@ -66,14 +66,62 @@ const giftshop_aggregate = async(req, res, period_of_time) =>{
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
     } catch (err) {
-        console.error('Error fetching reviews: ', err);
+        console.error('Error fetching giftshop aggregate report: ', err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'Error fetching the giftshop aggregate report.' }));
     }
 }
 
-const aggregate_finance_report = async (req, res, email) =>{
+const exhibit_cost_report = async (req, res, email, upper_cost, lower_cost, exhibit_type) =>{
+    try{
+        var end_of_query = "";
 
+        // handle if there's an upper bound and a lower bound, or an upper bound with no lower bound
+        if(upper_cost != "all"){
+            end_of_query += ` WHERE SUM(em.HourlyWage * em.WeeklyHours) <= ${parseInt(upper_cost)}`
+            if(lower_cost != "all"){
+                end_of_query += ` AND SUM(em.HourlyWage * em.WeeklyHours >= ${parseInt(lower_cost)})`
+            }
+        }
+        // handle if there's a lower bound with no upper bound
+        else{
+            if(lower_cost != "all"){
+                end_of_query += ` WHERE SUM(em.HourlyWage * em.WeeklyHours >= ${parseInt(lower_cost)})`;
+            }
+        }
+
+        // handle if there's event filtering
+        if(exhibit_type != "all"){
+            if(upper_cost == "all" && lower_cost == "all"){
+                end_of_query += " WHERE";
+            }
+            else{
+                end_of_query += " AND";
+            }
+
+            if(exhibit_type == "special"){
+                end_of_query += " se.ExhibitID IS NOT NULL";
+            }
+
+            else if(exhibit_type == "normal"){
+                end_of_query += " se.ExhibitID IS NULL"
+            }
+        }
+
+        end_of_query += ` GROUP BY
+	ex.ExhibitID, ah.TimestampAction`;
+
+        // SQL QUERY - get the report 
+        const [ rows ] = await db.query(queries.weekly_exhibit_cost+end_of_query);
+
+        // Return report to frontend
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows));
+    } catch (err){
+        console.error('Error fetching exhibit cost report: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Error fetching the exhibit weekly cost report.' }));
+    }
 }
 
 const change_history_report = async (req, res, email, from_date, to_date, action_type, effected_table) =>{
@@ -95,6 +143,8 @@ const change_history_report = async (req, res, email, from_date, to_date, action
         if(effected_table != "all"){
             end_of_query += ` AND ah.EffectedTable = "${effected_table}"`
         }
+
+        end_of_query += " ORDER BY ah.TimestampAction DESC"
 
         const [ rows ] = await db.query(queries.change_history_report+end_of_query);
 
@@ -166,4 +216,4 @@ const customer_info_report = async(req, res, email, account_creation_period, pro
     }
 }
 
-module.exports = {giftshop_sales_report, giftshop_aggregate, aggregate_finance_report, change_history_report, customer_info_report};
+module.exports = {giftshop_sales_report, giftshop_aggregate, exhibit_cost_report, change_history_report, customer_info_report};

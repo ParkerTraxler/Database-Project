@@ -5,7 +5,7 @@ const db = require('../db/db');
 const getAllEvents = async (req, res) => {
     try {
         // SQL QUERY - Retrieve events from database
-        const [ rows ] = db.query(queries.get_all_events);
+        const [ rows ] = await db.query(queries.get_all_events);
 
         // Return events to the frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -25,7 +25,7 @@ const getEvent = async (req, res, eventid) => {
             return res.end(JSON.stringify({ error: 'No EventID specified to get!'}));
         }
 
-        const [ rows ] = db.query(queries.get_specific_event, [eventid]);
+        const [ rows ] = await db.query(queries.get_specific_event, [eventid]);
 
         if(rows.length == 0){
             res.writeHead(400, {'Content-Type': 'application/json'});
@@ -49,7 +49,7 @@ const getEventEmployees = async (req, res, eventid) => {
             return res.end(JSON.stringify({ error: 'No EventID specified to get!'}));
         }
 
-        const [ rows ] = db.query(queries.get_event_employees, [eventid]);
+        const [ rows ] = await db.query(queries.get_event_employees, [eventid]);
 
         if(rows.length == 0){
             res.writeHead(400, {'Content-Type': 'application/json'});
@@ -85,7 +85,7 @@ const createEvent = async (req, res) => {
                 return res.end(JSON.stringify({error: 'Events must have a planned date!'}))
             }
             // SQL QUERY - Create event and then add the employees to it (2 queries)
-            const [ result ] = db.query(queries.create_event, [eventname, eventdesc, eventdate, memberonly]);
+            const [ result ] = await db.query(queries.create_event, [eventname, eventdesc, eventdate, memberonly]);
 
             if(!result || result.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -140,7 +140,7 @@ const cancelEvent = async (req, res) => {
             }
 
             // SQL QUERY - cancel (delete) event by that ID - return if possible or not
-            const { result } = await db.queries(queries.cancel_event, [ eventid ])
+            const [ result ] = await db.query(queries.cancel_event, [ eventid ])
 
             if(result.length == 0){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -234,10 +234,13 @@ const updateEvent = (req, res) => {
             const failedToAdd = [];
 
             for(let employeeEmail of addedemployees){
-                const [ results ] = await db.query(queries.add_event_employee, [eventid, employeeEmail]);
-
-                if(!results || results.rowCount == 0){
-                    failedToAdd.push(employeeEmail);
+                try{
+                    const [ results ] = await db.query(queries.add_event_employee, [eventid, employeeEmail]);
+                    if(!results || results.rowCount == 0){
+                        failedToAdd.push(employeeEmail);
+                    }
+                } catch (err){
+                    continue;
                 }
             }
 

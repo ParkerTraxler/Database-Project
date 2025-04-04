@@ -52,6 +52,8 @@ import EditHistoryReport from './managerPages/EditHistoryReport.jsx';
 import ExhibitCollections from './pages/ExhibitCollections.jsx';
 import MiscellaneousArt from './pages/MiscellaneousArt.jsx';
 import MiscellaneousCollections from './pages/MiscellaneousCollections.jsx';
+import CreateEvent from './managerPages/CreateEvent.jsx';
+import EditEvent from './managerPages/EditEvent.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -141,6 +143,8 @@ function App() {
             <Route path="/gift-shop-sales-report" element={<GiftShopSalesReport/>}/>
             <Route path="/customers-report" element={<CustomersReport/>}/>
             <Route path="/edit-history-report" element={<EditHistoryReport/>}/>
+            <Route path="/add-event" element={<CreateEvent/>}/>
+            <Route path="/edit-event/:EventID" element={<EditEvent/>}/>
           </Route>
         </Routes>
       </BrowserRouter>
