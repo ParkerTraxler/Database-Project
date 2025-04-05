@@ -7,7 +7,7 @@ const manageReviewsRoutes = (req, res) => {
         getReviews(req, res);
     } else if (req.url.startsWith('/reviews/') && req.method === 'GET') {
         const urlParts = req.url.split('/');
-        const userEmail = parseInt(urlParts[urlParts.length - 1]);
+        const userEmail = decodeURIComponent(urlParts[urlParts.length - 1]);
         getUserReview(req, res, userEmail);
     } else if (req.url === '/reviews' && req.method === 'POST') {
         verifyToken('Customer', null)(req, res, () => {
