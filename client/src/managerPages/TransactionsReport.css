@@ -1,0 +1,58 @@
+/* TransactionsReport.css */
+
+.transactions-report-container {
+    background-image: url('../assets/abstract-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  
+  .transactions-report-header {
+    font-size: 2rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .transactions-report-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+  }
+  
+  .transactions-report-table {
+    width: 100%;
+    max-width: 800px;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  
+  .transactions-report-table th,
+  .transactions-report-table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .transactions-report-table th {
+    background-color: #007BFF;
+    color: white;
+    font-weight: 600;
+  }
+  

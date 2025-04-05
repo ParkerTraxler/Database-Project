@@ -1,10 +1,6 @@
 import React from 'react'
 import "./FrontPage.css"
 import { Link } from 'react-router-dom'
-import floor1Image from "../assets/floor1.png"
-import floor2Image from "../assets/floor2.png"
-import floor3Image from "../assets/floor3.png"
-import legendImage from "../assets/map_legend.png"
 import FAQPage from './FAQPage'
 
 
@@ -15,7 +11,6 @@ const FrontPage = () => {
         <div className = "frontPageContainer">
             <div className="firstPageContainer">
                 <div className="firstPageMessage">
-                    <h1>WELCOME TO</h1>
                     <h1>SHASTA'S</h1>
                     <h1>FINE</h1>
                     <h1>ARTS</h1>
@@ -134,11 +129,7 @@ const FrontPage = () => {
 
                 <div className="mapPageFloors">
                     <div className="mapFloorContainer">
-                        <img
-                            src={floor1Image}
-                            alt="Floor 1"
-                            className="mapFloorImage"
-                        />
+                        <div className="mapFloorImage1"></div>
                         <div className="mapFloorDesc">
                             <h3>Floor 1</h3>
                             <p>This floor houses the museum's main entrance, the ticketing area, the permanent exhibits, and the gift shop.</p>
@@ -146,11 +137,7 @@ const FrontPage = () => {
                     </div>
 
                     <div className="mapFloorContainer">
-                        <img
-                            src={floor2Image}
-                            alt="Floor 2"
-                            className="mapFloorImage"
-                        />
+                        <div className="mapFloorImage2"></div>
                         <div className="mapFloorDesc">
                             <h3>Floor 2</h3>
                             <p>This floor contains the permanent exhibits as well as some of the special exhibits that changes frequently.</p>
@@ -158,11 +145,7 @@ const FrontPage = () => {
                     </div>
 
                     <div className="mapFloorContainer">
-                        <img
-                            src={floor3Image}
-                            alt="Floor 3"
-                            className="mapFloorImage"
-                        />
+                        <div className="mapFloorImage3"></div>
                         <div className="mapFloorDesc">
                             <h3>Floor 3</h3>
                             <p>Floor 3 is dedicated to special exhibits and events such as workshops, performances, conferences, and networking.</p>
@@ -170,11 +153,7 @@ const FrontPage = () => {
                     </div>
 
                     <div className="mapFloorContainer">
-                        <img
-                            src={legendImage}
-                            alt="Floor 4"
-                            className="mapFloorImage"
-                        />
+                        <div className="mapLegendImage"></div>
                         <div className="mapFloorDesc">
                             <h3>Legend</h3>
                             <p>Each room are color coded based on their purposes. Only employees and managers are allowed in the operational rooms.</p>

@@ -5,15 +5,13 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
-import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
+import './EditExhibit'
 
 const EditExhibit = () => {
     console.log("EditExhibit")
     const { user } = useAuth()
     const token = user.token
-    const decoded = jwtDecode(token)
-    const email = decoded.email
     const [exhibit, setExhibit] = useState({
         exhibitname:"", 
         exhibitdesc:"", 
@@ -39,7 +37,6 @@ const EditExhibit = () => {
                 exhibitname: exhibit.exhibitname, 
                 exhibitdesc: exhibit.exhibitdesc, 
                 exhibitpic: exhibit.exhibitpic,
-                managerEmail: email
             },
             {
                 headers: {
@@ -57,7 +54,7 @@ const EditExhibit = () => {
 
     return(
         
-        
+        <div className="edit-exhibit-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
@@ -72,7 +69,7 @@ const EditExhibit = () => {
                     
             </div>
             </div>
-            
+        </div>  
         </div>
     )
 }

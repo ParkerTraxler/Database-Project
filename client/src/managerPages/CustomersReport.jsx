@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import ManagerNav from './ManagerNav'
 
 import './ManagerDashboard.css'
+import './CustomersReport.css'
 
 const CustomersReport = () => {
     console.log("CustomersReport")
@@ -46,13 +47,13 @@ const CustomersReport = () => {
 
     return(
         
-        
+        <div className="customer-report-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
-            <div>
-                <h1>Customer Report</h1>
+            <div className="customer-report-form">
+                <h1 className="customer-report-header">Customer Report</h1>
                 <label>Filter by time range: </label>
                 <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
                     <option value="all-time">All Time</option>
@@ -75,10 +76,10 @@ const CustomersReport = () => {
                     <option value="false">Not Ideal Targets</option>
                 </select>
                 <div>
-                    <button onClick={fetchCustomers}>Generate Report</button>
+                    <button className="generate-report-button" onClick={fetchCustomers}>Generate Report</button>
                 </div>
                 {reportGenerated && (
-                    <table>
+                    <table className="customer-report-table">
                         <thead>
                             <tr>
                                 <th>Customer Name</th>
@@ -105,6 +106,7 @@ const CustomersReport = () => {
                         </tbody>
                     </table>
                 )}
+            </div>
             </div>
             
         </div>

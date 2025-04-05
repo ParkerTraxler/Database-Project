@@ -5,7 +5,13 @@ const db = require('../db/db');
 const getAllEvents = async (req, res) => {
     try {
         // SQL QUERY - Retrieve events from database
-        const [ rows ] = await db.query(queries.get_all_events);
+        var [ rows ] = await db.query(queries.get_all_events);
+        // Convert BLOB -> Base64 (for each collection)
+        let imageBase64;
+        for (let i = 0; i < rows.length; i++) {
+            imageBase64 = Buffer.from(rows[i].EventPic).toString('base64');
+            rows[i].EventPic = `data:image/jpeg;base64,${imageBase64}`;
+        }
 
         // Return events to the frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -25,12 +31,16 @@ const getEvent = async (req, res, eventid) => {
             return res.end(JSON.stringify({ error: 'No EventID specified to get!'}));
         }
 
-        const [ rows ] = await db.query(queries.get_specific_event, [eventid]);
+        var [ rows ] = await db.query(queries.get_specific_event, [eventid]);
 
         if(rows.length == 0){
             res.writeHead(400, {'Content-Type': 'application/json'});
             return res.end(JSON.stringify({ error: 'Specified event does not exist! Has it been canceled?'}));
         }
+
+        // Convert BLOB -> Base64 (for each collection)
+        imageBase64 = Buffer.from(rows[0].EventPic).toString('base64');
+        rows[0].EventPic = `data:image/jpeg;base64,${imageBase64}`;
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows[0]));

@@ -1,11 +1,19 @@
 const http = require('http');
+const multer = require('multer')
 const queries = require('../querylist.js')
 const db = require('../db/db');
 
 const getAllCollections = async (req, res) => {
     try {
         // SQL QUERY - Retrieve collections from database
-        const [rows] = await db.query(queries.get_collections_query);
+        var [rows] = await db.query(queries.get_collections_query);
+
+        // Convert BLOB -> Base64 (for each collection)
+        let imageBase64;
+        for (let i = 0; i < rows.length; i++) {
+            imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
+            rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
+        }
 
         // Return collections to the frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -24,7 +32,14 @@ const getExhibitCollections = async (req, res, exhibitID) => {
             return res.end(JSON.stringify({ error: 'No exhibit ID supplied to search for'}));
         }
         // SQL QUERY - Retrieve collection from database
-        const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
+        var [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
+
+        // Convert BLOB -> Base64 (for each collection)
+        let imageBase64;
+        for (let i = 0; i < rows.length; i++) {
+            imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
+            rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
+        }
 
         // may return empty if exhibit hsa no collections in it
         res.writeHead(200, { 'Content-Type': 'application/json' });

@@ -1,5 +1,5 @@
 const http = require('http');
-const { createItem, deleteItem, updateItem, updateItemQuantity, getItems, getItem, getTickets, getTicket} = require('../controllers/manageItemsController');
+const { createItem, deleteItem, updateItem, updateTicket, updateItemQuantity, getItems, getItem, getTickets, getTicket} = require('../controllers/manageItemsController');
 const verifyToken = require('../middleware/authMiddleware');
 
 const manageItemsRoutes = (req, res) => {
@@ -25,6 +25,10 @@ const manageItemsRoutes = (req, res) => {
             deleteItem(req, res);
         });
     // both tickets & items can have the bottom 2 done to it
+    } else if (req.url.startsWith('/items/tickets') && req.method === 'PUT') {
+        verifyToken('Manager', null) (req, res, () => {
+            updateTicket(req, res);
+        });
     } else if (req.url.startsWith('/items/restock') && req.method === 'PUT'){
         verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
             updateItemQuantity(req, res);
