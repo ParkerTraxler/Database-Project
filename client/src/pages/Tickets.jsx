@@ -13,12 +13,37 @@ const Tickets = () => {
         quantity3:"0",
         quantity4:"0"
     })
+    const [showReceipt, setShowReceipt] = useState(false);
+    const [receiptData, setReceiptData] = useState(null);
     const [loading, setLoading] = useState(true);  // New loading state
+    const [info, setInfo] = useState(null);
     const { user } = useAuth()
     const role = user?.role
     const token = user?.token;
     const decoded = token ? jwtDecode(token) : null; // Only decode if token exists
     const email = decoded ? decoded.email : "";
+
+    useEffect(() => {
+        const fetchAccount = async () => {
+            console.log(encodeURIComponent(email));
+            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`, 
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+                .then((res) => {
+                    console.log(res.data);
+                    setInfo(res.data);
+                    
+                })
+                .catch((err) => {
+                    console.log(err);
+                    
+                });
+        };
+        fetchAccount();
+    }, [email]);
     
 
     const navigate = useNavigate()
@@ -35,6 +60,7 @@ const Tickets = () => {
                 const res = await axios.get("http://localhost:3002/items/tickets");
                 console.log(res.data)
                 setTickets(res.data);  // Store the data once fetched
+                
             } catch (err) {
                 console.error(err);
             } finally {
@@ -42,7 +68,7 @@ const Tickets = () => {
             }
         };
         fetchTickets();
-    }, []);
+    }, [info]);
 
     const now = new Date();
 
@@ -73,7 +99,8 @@ const Tickets = () => {
             })
             console.log("POST Completed")
             console.log(res.data)
-            
+            setReceiptData(res.data);
+            setShowReceipt(true);
             
             navigate("/tickets")
         }
@@ -82,6 +109,12 @@ const Tickets = () => {
         }
     }
 
+    const hideReciept = () => {
+        setShowReceipt(false);
+    };
+    
+
+    
 
     return (
         <div>
@@ -90,17 +123,29 @@ const Tickets = () => {
             </div>
             <div>
                 <h1>Tickets</h1>
+                <div>Members get a 10% discount on all tickets!</div>
                 <div className="ticketsBody">
                     {loading ? (
                         <p>Loading tickets...</p>  // Show a loading message while waiting for data
                     ) : (
                         tickets.length > 0 ? (
-                    
+                        
                         tickets.map(ticket=>(
-                    
+                            
                             <div className="ticket" key={ticket.ItemID}>
                                 <div>{ticket.ItemName}</div>
-                                <div>{"$" + ticket.ItemPrice}</div>
+                                {!info && (
+                                    <div>{"$" + ticket.ItemPrice}</div>
+                                )}
+                                {info?.isMember == '0' && (
+                                    <div>{"$" + ticket.ItemPrice}</div>
+                                )}
+                                {info?.isMember == '1' && (
+                                    <div>
+                                        <div className="oldPrice">{"$" + ticket.ItemPrice}</div>
+                                        {"$" + (ticket.ItemPrice*0.9).toFixed(2)}
+                                    </div>
+                                )}
                                 {role == 'Customer' && (
                                     <div>
                                         Quantity:
@@ -120,6 +165,32 @@ const Tickets = () => {
                         </div>
                         )}
                 </div>
+                {showReceipt && (
+                    <div className="popup-overlay">
+                    <div className="popup-content">
+                        <span className="close-button" onClick={hideReciept}>
+                            &times;
+                        </span>
+                        <h2>Receipt</h2>
+                        <p>Thank you for purchasing tickets!</p>
+                        {receiptData[0] > '0' && (
+                            <div>{tickets[0].ItemName + ": $" + receiptData[0]}</div>
+                        )}
+                        {receiptData[1] > '0' && (
+                            <div>{tickets[1].ItemName + ": $" + receiptData[1]}</div>
+                        )}
+                        {receiptData[2] > '0' && (
+                            <div>{tickets[2].ItemName + ": $" + receiptData[2]}</div>
+                        )}
+                        {receiptData[3] > '0' && (
+                            <div>{tickets[3].ItemName + ": $" + receiptData[3]}</div>
+                        )}
+                        <div>Final Price: {"$" + (Number(receiptData[0]) + Number(receiptData[1]) + Number(receiptData[2]) + Number(receiptData[3])).toFixed(2)}</div>
+                        
+                        
+                    </div>
+                    </div>
+                )}
             </div>
         </div>
     );

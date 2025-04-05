@@ -54,12 +54,11 @@ const ticketPurchase = async(req, res) =>{
                 res.writeHead(400, {'Content-Type': 'application/json'});
                 return res.end(JSON.stringify({ error: 'Must supply a date of purchase.'}));
             }
-            
     
             for(let ItemID of itemIDs){
                 var [ results ] = await db.query(queries.new_transaction, [ItemID, email, parseInt(ticketArray[ItemID-1]), datepurchased]);
                 var [ get_price ] = await db.query(queries.specific_transaction, [results.insertId])
-                send_back[ItemID-1] = get_price[0].FinalPrice || "-1";
+                send_back[ItemID-1] = get_price[0].FinalPrice;
                 await db.query(queries.new_history_log, [email, "Created", "Sales", results.insertId, "A customer has purchased tickets. See transaction report for more details."]);
             }
     

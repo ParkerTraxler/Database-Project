@@ -9,11 +9,11 @@ const getAllCollections = async (req, res) => {
         var [rows] = await db.query(queries.get_collections_query);
 
         // Convert BLOB -> Base64 (for each collection)
-        let imageBase64;
-        for (let i = 0; i < rows.length; i++) {
-            imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
-            rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
-        }
+        // let imageBase64;
+        // for (let i = 0; i < rows.length; i++) {
+        //     imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
+        //     rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
+        // }
 
         // Return collections to the frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -35,11 +35,11 @@ const getExhibitCollections = async (req, res, exhibitID) => {
         var [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
 
         // Convert BLOB -> Base64 (for each collection)
-        let imageBase64;
-        for (let i = 0; i < rows.length; i++) {
-            imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
-            rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
-        }
+        // let imageBase64;
+        // for (let i = 0; i < rows.length; i++) {
+        //     imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
+        //     rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
+        // }
 
         // may return empty if exhibit hsa no collections in it
         res.writeHead(200, { 'Content-Type': 'application/json' });
