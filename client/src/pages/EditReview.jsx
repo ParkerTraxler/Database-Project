@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../utils/AuthContext";
@@ -17,12 +17,34 @@ const EditReview = () => {
     const decoded = jwtDecode(token);
     const email = decoded.email;
     console.log(email)
+
+    useEffect(() => {
+        const fetchReview = async () => {
+            console.log(encodeURIComponent(email));
+            axios.get(`http://localhost:3002/reviews/${encodeURIComponent(email)}`, 
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+                .then((res) => {
+                    console.log(res.data);
+                    setReview(res.data);
+                    
+                })
+                .catch((err) => {
+                    console.log(err);
+                    
+                });
+            };
+        fetchReview();
+    }, [email]);
     
 
     const [hover, setHover] = useState(0);
 
     const handleClick = (index, isHalf) => {
-        setReview({ ...review, starcount: isHalf ? index + 0.5 : index + 1 });
+        setReview({ ...review, StarCount: isHalf ? index + 0.5 : index + 1 });
     };
 
     const handleHover = (index, isHalf) => {
@@ -42,8 +64,8 @@ const EditReview = () => {
             console.log("PUT Sent")
             const res = await axios.put("http://localhost:3002/reviews/", {
                 email: email,
-                starcount: review.starcount, 
-                reviewdesc: review.reviewdesc
+                starcount: review.StarCount, 
+                reviewdesc: review.ReviewDesc
             },
             {
                 headers: {
@@ -70,8 +92,8 @@ const EditReview = () => {
                     {/* Star Rating Section */}
                     <div className="starReview" onMouseLeave={handleMouseLeave}>
                         {[...Array(5)].map((_, index) => {
-                            const fullStar = (hover || review.starcount) > index + 0.5;
-                            const halfStar = (hover || review.starcount) > index && (hover || review.starcount) < index + 1;
+                            const fullStar = (hover || review.StarCount) > index + 0.5;
+                            const halfStar = (hover || review.StarCount) > index && (hover || review.StarCount) < index + 1;
 
                             return (
                                 <span key={index} style={{ cursor: "pointer", position: "relative" }}>
@@ -120,7 +142,8 @@ const EditReview = () => {
                         placeholder="What should other customers know?" 
                         maxLength="300"
                         name="review"
-                        onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
+                        value={review.ReviewDesc}
+                        onChange={(e) => setReview({ ...review, ReviewDesc: e.target.value })}
                     ></textarea>
                 </div>
                 <button className="submitReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
