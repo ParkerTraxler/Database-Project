@@ -73,36 +73,36 @@ const SignUp = () => {
     }
 
     return(
-        <div className="container">
+        <div className="loginContainer">
             <div className="login-box">
                 
                 <h1>Sign Up</h1>
                 <div className="error">{errorMessage}</div>
-                <div className="input-group">
+                <div className="input-groupLogin">
                     First Name
-                    <input type="text" onChange={handleChange} maxLength="30" placeholder="First Name" name="firstName"/>
+                    <input className="loginInput" type="text" onChange={handleChange} maxLength="30" placeholder="First Name" name="firstName"/>
                 </div>
-                <div className="input-group">
+                <div className="input-groupLogin">
                     Last Name
-                    <input type="text" onChange={handleChange} maxLength="30" placeholder="Last Name" name="lastName"/>
+                    <input className="loginInput" type="text" onChange={handleChange} maxLength="30" placeholder="Last Name" name="lastName"/>
                 </div>
-                <div className="input-group">
+                <div className="input-groupLogin">
                     Email
-                    <input type="email" onChange={handleChange} maxLength="30" placeholder="Enter your email" name="email"/>
+                    <input className="loginInput" type="email" onChange={handleChange} maxLength="30" placeholder="Enter your email" name="email"/>
                 </div>
 
-                <div className="input-group">
+                <div className="input-groupLogin">
                     Password (8-16 characters)
-                    <input type="password" onChange={handleChange} maxLength="16" placeholder="Enter your password"  name="password1"/>
+                    <input className="loginInput" type="password" onChange={handleChange} maxLength="16" placeholder="Enter your password"  name="password1"/>
                 </div>
-                <div className="input-group">
+                <div className="input-groupLogin">
                     Re-enter Password
-                    <input type="password" onChange={handleChange} maxLength="16" placeholder="Re-enter your password"  name="password2"/>
+                    <input className="loginInput" type="password" onChange={handleChange} maxLength="16" placeholder="Re-enter your password"  name="password2"/>
                 </div>
                 <div className="no-account">
                     <a href="/log-in" style={{textDecoration: "none", color: "inherit"}}>Already have an account? Log In</a>
                 </div>
-                <button onClick={handleClick} className="submit-button">Sign up</button> 
+                <button onClick={handleClick} className="submit-buttonLogin">Sign up</button> 
             </div>
         </div>
     )

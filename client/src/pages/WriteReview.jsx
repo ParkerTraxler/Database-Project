@@ -60,10 +60,10 @@ const WriteReview = () => {
     };
 
     return (
-        <div className="reviewPage">
-            <div className="Review-box">
+        <div className="writeReviewPage">
+            <div className="writeReview-box">
                 <h1 className="Header">Write a Review</h1>
-                <div className="input-group">
+                <div className="input-groupWriteReview">
 
                     {/* Star Rating Section */}
                     <div className="starReview" onMouseLeave={handleMouseLeave}>
@@ -114,14 +114,14 @@ const WriteReview = () => {
 
                     {/* Review Input */}
                     <label>Write a Review:</label>
-                    <textarea className="Review"
+                    <textarea className="writingReviewArea"
                         placeholder="What should other customers know?" 
                         maxLength="300"
                         name="review"
                         onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>
                 </div>
-                <button className="submitReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
+                <button className="submitWriteReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
 
                 <a href = "/edit-review">Edit a Review</a>
             </div>
