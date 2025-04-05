@@ -48,19 +48,27 @@ const EditAccount = () => {
     }, [email]);
 
     const handleChange = (e) =>{ // given target to given value  
-        setDetails(prev=>({...prev, [e.target.name]: e.target.value}))
+        setInfo(prev=>({...prev, [e.target.name]: e.target.value}))
         console.log(details)
     }
+
+    const formatDate = (date) => {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0'); // Add leading zero if month is a single digit
+        const day = String(d.getDate()).padStart(2, '0'); // Add leading zero if day is a single digit
+        return `${year}-${month}-${day}`;
+    };
 
     
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
             const res = await axios.put("http://localhost:3002/profile/", {
-                firstname: details.firstname, 
-                lastname: details.lastname, 
-                birthdate: details.birthdate, 
-                gender: details.gender,
+                firstname: info.FirstName, 
+                lastname: info.LastName, 
+                birthdate: formatDate(info.BirthDate), 
+                gender: info.Gender,
                 email: email
             },
             {
@@ -70,7 +78,7 @@ const EditAccount = () => {
             })
             console.log(res.end)
 
-            if(details.cancelMembership === "on"){
+            if(info.cancelMembership === "on"){
                 console.log("PUT Sent")
                 const res2 = axios.put('http://localhost:3002/profile/membership', {
                     email: email
@@ -105,19 +113,19 @@ const EditAccount = () => {
             <div className="detailsBoxC">
                 <div className="detailC">
                     <strong>First Name:</strong>
-                    <input type="text" maxLength="28" onChange={handleChange} name="firstname"></input>
+                    <input type="text"  value={info.FirstName} maxLength="28" onChange={handleChange} name="FirstName"></input>
                 </div>
                 <div className="detailC">
                     <strong>Last Name:</strong>
-                    <input type="text" maxLength="28" onChange={handleChange} name="lastname"></input>
+                    <input type="text" value={info.LastName} maxLength="28" onChange={handleChange} name="LastName"></input>
                 </div>
                 <div className="detailC">
                     <strong>Date of Birth:</strong>
-                    <input type="date" onChange={handleChange} name="birthdate"></input>
+                    <input type="date" value={info.BirthDate} onChange={handleChange} name="BirthDate"></input>
                 </div>
                 <div className="detailC">
                     <strong>Gender:  </strong>
-                    <select onChange={handleChange} name="gender">
+                    <select onChange={handleChange} name="Gender" value={info.Gender}>
                         <option value="">---Choose an option---</option>
                         <option value="Female">Female</option>
                         <option value="Male">Male</option>

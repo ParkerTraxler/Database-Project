@@ -1,5 +1,5 @@
 const http = require('http');
-const {giftshop_sales_report, giftshop_aggregate, aggregate_finance_report, change_history_report, customer_info_report} = require('../controllers/manageAllReports');
+const {giftshop_sales_report, giftshop_aggregate, exhibit_cost_report, change_history_report, customer_info_report} = require('../controllers/manageAllReports');
 const verifyToken = require('../middleware/authMiddleware');
 
 
@@ -20,11 +20,14 @@ const manageReportsRoutes = (req, res) => {
         });
     
     // second report stuff
-    } else if (req.url.startsWith('/reports/aggregate-revenue') && req.method === 'GET') {
+    } else if (req.url.startsWith('/reports/exhibit-cost') && req.method === 'GET') {
         verifyToken('Manager', null)(req, res, () => {
             const urlParts = req.url.split('/');
-            const email = decodeURIComponent(urlParts[urlParts.length - 1]);
-            aggregate_finance_report(req, res, email);
+            const email = decodeURIComponent(urlParts[urlParts.length - 4]);
+            const upper_cost = urlParts[urlParts.length - 3];
+            const lower_cost = urlParts[urlParts.length - 2];
+            const exhibit_type = urlParts[urlParts.length - 1];
+            exhibit_cost_report(req, res, email, upper_cost, lower_cost, exhibit_type);
         });
     
     // third report stuff
