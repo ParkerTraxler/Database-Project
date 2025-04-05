@@ -106,16 +106,18 @@ const AccountDetails = () => {
                 <div>
                     <button className="saveButtonC" onClick={handleClick}>Edit Account</button>
                 </div>
+                
+                <div className='accountMembershipDetailsContainer'>
+                    {info.isMember == "0" &&(
+                        <div className='accountMembershipDetailsArea'>
+                            <p>Not a Member?</p>
+                            <button className="membershipSubscribeButton" onClick={subscribeNow}>Subscribe Now</button>
+                        </div>
+                    )}
+                </div>
+
             </div>
-            <div>
-                {info.isMember == "0" &&(
-                    <div>
-                        Not a Member?
-                        Want discounts on tickets and access to member exclusive events?
-                        <button onClick={subscribeNow}>Subscribe Now</button>
-                    </div>
-                )}
-            </div>
+            
         </div>
     );
 };
