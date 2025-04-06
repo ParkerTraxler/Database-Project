@@ -13,7 +13,7 @@ const createItem = (req, res) => {
     });
 
     req.on('end', async () => {
-        const { itemname, itemprice, amountinstock, email } = JSON.parse(body);
+        const { itemname, itemprice, itemimage, amountinstock, email } = JSON.parse(body);
         try {
             if(!itemname){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -26,7 +26,7 @@ const createItem = (req, res) => {
              }
 
             // SQL Query - Create a new item
-             const [ result ] = await db.query(queries.insert_new_item, [itemname, itemprice, amountinstock]);
+             const [ result ] = await db.query(queries.insert_new_item, [itemname, itemprice, itemimage, amountinstock]);
 
             if(!result || result.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -88,6 +88,7 @@ const deleteItem = (req, res) => {
 }
 
 const updateItem = (req, res) => {
+    console.log("API call is correct");
     // Get fields from request
     let body = '';
     req.on('data', (chunk) => {
@@ -96,7 +97,7 @@ const updateItem = (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async () => {
-        var { itemid, itemname, itemprice, giftshopname, email } = JSON.parse(body);
+        var { itemid, itemname, itemprice, itemimage, giftshopname, email } = JSON.parse(body);
         try {
             if(!itemid){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -116,11 +117,15 @@ const updateItem = (req, res) => {
                 itemprice = curr_item[0].ItemPrice;
             }
 
+            if(itemimage == null || itemimage == ""){
+                itemimage = curr_item[0].ItemImage;
+            }
+
             if(giftshopname == null || giftshopname == ""){
                 giftshopname = curr_item[0].GiftShopName;
             }
 
-            const [ results ] = await db.query(queries.update_item, [itemname, itemprice, giftshopname, itemid]);
+            const [ results ] = await db.query(queries.update_item, [itemname, itemprice, itemimage, giftshopname, itemid]);
             if(!results || results.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not update item. Invalid input?' }));
@@ -135,59 +140,6 @@ const updateItem = (req, res) => {
             console.error('Error updating item: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error updating item.' }));
-        }
-    });
-}
-
-const updateTicket = (req, res) => {
-    // Get fields from request
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    });
-
-    // Process the request once it is received, send response
-    req.on('end', async () => {
-        var { itemid, itemprice, email } = JSON.parse(body);
-        try {
-            if(!itemid){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'Invalid item ID.'}));
-            }
-
-            if(!([1, 2, 3, 4].includes(itemid))){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'Item attempting to be updated is not a ticket.'}));
-            }
-
-            // get the item from the DB / confirm it exists
-            const [ curr_item ] = await db.query(queries.get_specific_ticket, [itemid]);
-
-
-            // SQL QUERY - update the item
-            itemname = curr_item[0].ItemName;
-
-            if(itemprice == null || itemprice == ""){
-                itemprice = curr_item[0].ItemPrice;
-            }
-
-            giftshopname = null;
-
-            const [ results ] = await db.query(queries.update_item, [itemname, itemprice, giftshopname, itemid]);
-            if(!results || results.affectedRows == 0){
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'Database could not update ticket. Invalid input?' }));
-            }
-
-            await db.query(queries.new_history_log, [email, "Updated", "Items", itemid, "Ticket (Category: " + itemname + ") has had its price updated."])
-
-            // Return success message
-            res.writeHead(204, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ message: 'Ticket successfully updated.' }));
-        } catch (err) {
-            console.error('Error updating ticket: ', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Error updating ticket.' }));
         }
     });
 }
@@ -237,14 +189,7 @@ const updateItemQuantity = (req, res) => {
 const getItems = async(req, res) =>{
     try {
         // SQL Query - get all non-ticket items
-        var [ result ] = await db.query(queries.get_all_normal_items);
-
-        // Convert BLOB -> Base64 (for each item)  
-        let imageBase64;
-        for (let i = 0; i < result.length; i++) {
-            imageBase64 = Buffer.from(result[i].ItemPic).toString('base64');
-            result[i].ItemPic = `data:image/jpeg;base64,${imageBase64}`;
-        }
+        const [ result ] = await db.query(queries.get_all_normal_items);
 
         // Return success message
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -270,24 +215,20 @@ const getItem = async(req, res, itemID) =>{
         }
 
         // SQL QUERY - Get item itself if checks are passed
-        var [ result ] = await db.query(queries.get_a_normal_item, itemID);
+        const [ result ] = await db.query(queries.get_a_normal_item, itemID);
 
-        if(!result.length){
+        if(result.affectedRows == 0){
             res.writeHead(400, { 'Content-Type':  'application/json' });
             return res.end(JSON.stringify({ error: 'No item by that ID found! Was it deleted?' }));
         }
 
-        // Convert BLOB -> Base64 (for each collection)
-        let imageBase64 = Buffer.from(result[0].ItemPic).toString('base64');
-        result[0].ItemPic = `data:image/jpeg;base64,${imageBase64}`;
-
         // Return success message
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify(result[0]));
+        res.writeHead(204, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(JSON.stringify(result[0])));
     } catch (err) {
-        console.error('Error retrieving item: ', err);
+        console.error('Error updating item quantity.');
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({ error: 'Error retrieving item.' }));
+        return res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
     }
 }
 
@@ -337,4 +278,4 @@ const getTicket =  async(req, res, itemID) => {
     }
 }
 
-module.exports = { createItem, deleteItem, updateItem, updateTicket, updateItemQuantity, getItems, getItem, getTickets, getTicket };
+module.exports = { createItem, deleteItem, updateItem, updateItemQuantity, getItems, getItem, getTickets, getTicket };

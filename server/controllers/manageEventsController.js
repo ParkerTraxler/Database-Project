@@ -5,13 +5,7 @@ const db = require('../db/db');
 const getAllEvents = async (req, res) => {
     try {
         // SQL QUERY - Retrieve events from database
-        var [ rows ] = await db.query(queries.get_all_events);
-        // Convert BLOB -> Base64 (for each collection)
-        let imageBase64;
-        for (let i = 0; i < rows.length; i++) {
-            imageBase64 = Buffer.from(rows[i].EventPic).toString('base64');
-            rows[i].EventPic = `data:image/jpeg;base64,${imageBase64}`;
-        }
+        const [ rows ] = db.query(queries.get_all_events);
 
         // Return events to the frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -31,17 +25,13 @@ const getEvent = async (req, res, eventid) => {
             return res.end(JSON.stringify({ error: 'No EventID specified to get!'}));
         }
 
-        var [ rows ] = await db.query(queries.get_specific_event, [eventid]);
+        const [ rows ] = db.query(queries.get_specific_event, [eventid]);
 
         if(rows.length == 0){
             res.writeHead(400, {'Content-Type': 'application/json'});
             return res.end(JSON.stringify({ error: 'Specified event does not exist! Has it been canceled?'}));
         }
-
-        // Convert BLOB -> Base64 (for each collection)
-        imageBase64 = Buffer.from(rows[0].EventPic).toString('base64');
-        rows[0].EventPic = `data:image/jpeg;base64,${imageBase64}`;
-
+    
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows[0]));
     } catch (err) {
@@ -59,13 +49,13 @@ const getEventEmployees = async (req, res, eventid) => {
             return res.end(JSON.stringify({ error: 'No EventID specified to get!'}));
         }
 
-        const [ rows ] = await db.query(queries.get_event_employees, [eventid]);
+        const [ rows ] = db.query(queries.get_event_employees, [eventid]);
 
         if(rows.length == 0){
             res.writeHead(400, {'Content-Type': 'application/json'});
             return res.end(JSON.stringify({ error: 'Specified event has no employees assigned.'}));
         }
-
+    
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
     } catch (err) {
@@ -83,7 +73,7 @@ const createEvent = async (req, res) => {
     });
 
     req.on('end', async () => {
-        const { eventname, eventdesc, eventdate, memberonly, employeelist, email } = JSON.parse(body);
+        const { eventname, eventdesc, eventdate, eventpic, memberonly, employeelist } = JSON.parse(body);
         try {
             if(!eventname){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -95,25 +85,23 @@ const createEvent = async (req, res) => {
                 return res.end(JSON.stringify({error: 'Events must have a planned date!'}))
             }
             // SQL QUERY - Create event and then add the employees to it (2 queries)
-            const [ result ] = await db.query(queries.create_event, [eventname, eventdesc, eventdate, memberonly]);
+            const [ result ] = db.query(queries.create_event, [eventname, eventdesc, eventdate, eventpic, memberonly]);
 
             if(!result || result.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Failed to create new event! Invalid input?' }));
             }
+
             const failedToAdd = [];
 
             for(let employeeEmail of employeelist){
-                const [ results ] = await db.query(queries.add_event_employee, [result.insertId, employeeEmail]);
+                const [ results ] = db.query(queries.add_event_employee, [result.insertId, employeeEmail]);
 
                 if(!results || results.rowCount == 0){
                     failedToAdd.push(employeeEmail);
                 }
             }
 
-            await db.query(queries.new_history_log, [email, "Created", "EventList", result.insertId, "An event by the name of " + eventname + " has been created with the following employees: " + employeelist.join(", ")]);
-
-            
             if(failedToAdd.length > 0){
                 let employee_failure = failedToAdd.join(", ");
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -141,7 +129,7 @@ const cancelEvent = async (req, res) => {
 
     req.on('end', async () => {
         try {
-            const { eventid, email } = JSON.parse(body);
+            const { eventid } = JSON.parse(body);
 
             // Ensure an event name was provided
             if (!eventid) {
@@ -150,15 +138,12 @@ const cancelEvent = async (req, res) => {
             }
 
             // SQL QUERY - cancel (delete) event by that ID - return if possible or not
-            const [ result ] = await db.query(queries.cancel_event, [ eventid ])
+            const { result } = db.queries(queries.cancel_event, [ eventid ])
 
             if(result.length == 0){
                 res.writeHead(400, {'Content-Type': 'application/json'});
                 return res.end(JSON.stringify({ error: 'Specified event does not exist! Has it already been canceled?'}));
             }
-
-            // rewrite if time permits
-            await db.query(queries.new_history_log, [email, "Deleted", "EventList", eventid, "Event has been deleted."])
 
             // Return success message
             res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -180,7 +165,7 @@ const updateEvent = (req, res) => {
     });
 
     req.on('end', async () => {
-        var { eventid, eventname, eventdesc, eventdate, memberonly, addedemployees, removedemployees, email } = JSON.parse(body);
+        var { eventid, eventname, eventdesc, eventdate, eventpic, memberonly, addedemployees, removedemployees } = JSON.parse(body);
         try {
 
             if(!eventid){
@@ -189,7 +174,7 @@ const updateEvent = (req, res) => {
             }
 
             // First, SQL QUERY to check if the event even exists (and is not deleted)
-            const [ event ] = await db.query(queries.get_specific_event, [eventid]);
+            const [ event ] = db.query(queries.get_specific_event, [eventid]);
 
             if(!event || event.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -208,30 +193,30 @@ const updateEvent = (req, res) => {
                 eventdate = event[0].EventDate;
             }
 
+            if(eventpic == null || eventpic == ""){
+                eventpic = event[0].EventPic;
+            }
+
             if(memberonly == null || memberonly == ""){
                 memberonly = event[0].MemberOnly;
             }
 
             // first update the event itself
-            const [ results ] = await db.query(queries.update_event, [eventname, eventdesc, eventdate, memberonly, eventid]);
+            const [ results ] = db.query(queries.update_event, [eventname, eventdesc, eventdate, eventpic, memberonly, eventid]);
 
             if(!results || results.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Failed to update event! Stopping before employees are added/removed' }));
             }
 
-            await db.query(queries.new_history_log, [email, "Updated", "EventList", eventid, "The event " + eventname + " has been updated."])
-
             const failedToRemove = []
             for(let employeeEmail of removedemployees){
-                const [ results ] = await db.query(queries.remove_event_employee, [eventid, employeeEmail]);
+                const [ results ] = db.query(queries.remove_event_employee, [eventid, employeeEmail]);
 
                 if(!results || results.rowCount == 0){
                     failedToRemove.push(employeeEmail);
                 }
             }
-
-            await db.query(queries.new_history_log, [email, "Deleted", "EventWorkers", eventid, "The following employees have been removed from "+ eventname + ": " + removedemployees.join(", ")]);
 
             if(failedToRemove.length > 0){
                 let employee_failure = failedToAdd.join(", ");
@@ -240,21 +225,16 @@ const updateEvent = (req, res) => {
             }
 
 
-            // then we add all the employees
+            // then we add all the employees 
             const failedToAdd = [];
 
             for(let employeeEmail of addedemployees){
-                try{
-                    const [ results ] = await db.query(queries.add_event_employee, [eventid, employeeEmail]);
-                    if(!results || results.rowCount == 0){
-                        failedToAdd.push(employeeEmail);
-                    }
-                } catch (err){
-                    continue;
+                const [ results ] = db.query(queries.add_event_employee, [eventid, employeeEmail]);
+
+                if(!results || results.rowCount == 0){
+                    failedToAdd.push(employeeEmail);
                 }
             }
-
-            await db.query(queries.new_history_log, [email, "Created", "EventWorkers", eventid, "The following employees have been added to "+ eventname + ": " + addedemployees.join(", ")]);
 
             if(failedToAdd.length > 0){
                 let employee_failure = failedToAdd.join(", ");

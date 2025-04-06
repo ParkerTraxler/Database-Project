@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
+import './CollectionArt.css';
  
 const CollectionArt = () => {
     console.log("CollectionArt")
@@ -41,9 +42,9 @@ const CollectionArt = () => {
              
              <div>
                  <h1>{collectionTitle}</h1>
-                 <div className="artwork">
+                 <div className="artworksCu">
                  {artwork.map(art=>(
-                     <div className="art" key={art.ArtID}>
+                     <div className="artCu" key={art.ArtID}>
                          {art.ArtPic && 
                              <img src={art.ArtPic} alt="" />                     
                          }

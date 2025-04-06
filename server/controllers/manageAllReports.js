@@ -76,28 +76,9 @@ const exhibit_cost_report = async (req, res, email, upper_cost, lower_cost, exhi
     try{
         var end_of_query = "";
 
-        // handle if there's an upper bound and a lower bound, or an upper bound with no lower bound
-        if(upper_cost != "all"){
-            end_of_query += ` WHERE SUM(em.HourlyWage * em.WeeklyHours) <= ${parseInt(upper_cost)}`
-            if(lower_cost != "all"){
-                end_of_query += ` AND SUM(em.HourlyWage * em.WeeklyHours >= ${parseInt(lower_cost)})`
-            }
-        }
-        // handle if there's a lower bound with no upper bound
-        else{
-            if(lower_cost != "all"){
-                end_of_query += ` WHERE SUM(em.HourlyWage * em.WeeklyHours >= ${parseInt(lower_cost)})`;
-            }
-        }
-
         // handle if there's event filtering
         if(exhibit_type != "all"){
-            if(upper_cost == "all" && lower_cost == "all"){
-                end_of_query += " WHERE";
-            }
-            else{
-                end_of_query += " AND";
-            }
+            end_of_query += " WHERE"
 
             if(exhibit_type == "special"){
                 end_of_query += " se.ExhibitID IS NOT NULL";
@@ -108,9 +89,23 @@ const exhibit_cost_report = async (req, res, email, upper_cost, lower_cost, exhi
             }
         }
 
-        end_of_query += ` GROUP BY
-	ex.ExhibitID, ah.TimestampAction`;
+        end_of_query += ` GROUP BY ex.ExhibitID, ah.TimestampAction`
 
+        // handle if there's an upper bound and a lower bound, or an upper bound with no lower bound
+        if(upper_cost != "all"){
+            end_of_query += ` HAVING SUM(em.HourlyWage * em.WeeklyHours) <= ${parseInt(upper_cost)}`
+            if(lower_cost != "all"){
+                end_of_query += ` AND SUM(em.HourlyWage * em.WeeklyHours >= ${parseInt(lower_cost)})`
+            }
+        }
+        // handle if there's a lower bound with no upper bound
+        else{
+            if(lower_cost != "all"){
+                end_of_query += ` HAVING SUM(em.HourlyWage * em.WeeklyHours >= ${parseInt(lower_cost)})`;
+            }
+        }
+
+        
         // SQL QUERY - get the report 
         const [ rows ] = await db.query(queries.weekly_exhibit_cost+end_of_query);
 
