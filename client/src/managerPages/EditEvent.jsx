@@ -22,7 +22,8 @@ const EditEvent = () => {
         eventdate:"", 
         memberonly:"", 
         addedemployees:"", 
-        removedemployees:""
+        removedemployees:"",
+        eventpic: ""
     });
     const { user } = useAuth()
     const token = user.token
@@ -77,7 +78,8 @@ const EditEvent = () => {
                 memberonly: prevEvent.MemberOnly, 
                 addedemployees: employeeList, 
                 removedemployees: removedemployees,
-                email: email
+                email: email,
+                eventpic: prevEvent.eventpic
             },
             {
                 headers: {
@@ -146,6 +148,7 @@ const EditEvent = () => {
                     <h1>Edit Event</h1>
                     <input type="text" value={prevEvent?.EventName || ""} placeholder="Event Name" onChange={handleChange} name="EventName" />
                     <input type="text" value={prevEvent?.EventDesc || ""} placeholder="Event Description" onChange={handleChange} name="EventDesc" />
+                    <input type="text" value={prevEvent?.EventPic || ""} placeholder="Image URL" onChange={handleChange} name="eventpic" />
                     <input type="date" value={prevEvent?.EventDate ? new Date(prevEvent.EventDate).toISOString().split("T")[0] : ""} onChange={handleChange} name="EventDate" />
                     <div>
                         <label>

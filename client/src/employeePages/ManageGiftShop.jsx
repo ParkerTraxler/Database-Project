@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import EmployeeNav from './EmployeeNav'
 import './EmployeeDashboard.css'
+import './ManageGiftShop.css'
 
 const ManageGiftShop = () => {
     console.log("ManagerGiftShop")
@@ -56,14 +57,18 @@ const ManageGiftShop = () => {
             <div>
                 <EmployeeNav/>
             </div>
-            <div>
+            <div className="giftshopSectionEm">
                 <h1>Manage Gift Shop</h1>
+                <div className="giftshopEm">
                 {loading ? (
                     <p>Loading items...</p>  // Show a loading message while waiting for data
                 ) : (
                     items.length > 0 ? (
                     items.map(item=>(
-                        <div className="item" key={item.ItemID}>
+                        <div className="itemEm" key={item.ItemID}>
+                            {item.ItemImage && 
+                                <img src={item.ItemImage} alt="" />
+                            }
                             <div>{item.ItemName}</div>
                             <div>{"$" + item.ItemPrice}</div>
                             <div>Stock: {item.AmountInStock}</div>
@@ -74,6 +79,7 @@ const ManageGiftShop = () => {
                 ) : (
                     <p>No items found.</p>  // Handle case when tickets array is empty
                 ))}
+                </div>
                 <button>
                     <Link to="/add-item">Add Item</Link>
                 </button>

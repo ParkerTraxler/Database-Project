@@ -1,0 +1,4 @@
+.transactionContainerEm {
+    display: flex;
+    flex-direction: column;
+}

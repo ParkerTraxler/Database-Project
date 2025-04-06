@@ -34,16 +34,21 @@ const GiftShop = () => {
             </div>
             <div>
                 <h1>Gift Shop</h1>
-                <div className="giftshopBody">
+                <div className="giftshopCu">
                     {loading ? (
                         <p>Loading items...</p>  // Show a loading message while waiting for data
                     ) : (
                         items.length > 0 ? (
                         items.map(item=>(
-                            <div className="item" key={item.ItemID}>
+                            <div className="itemCu" key={item.ItemID}>
+                                {item.ItemImage && 
+                                    <img src={item.ItemImage} alt="" />
+                                }
                                 <div>{item.ItemName}</div>
                                 <div>{"$" + item.ItemPrice}</div>
-                                <div>Stock: {item.AmountInStock}</div>
+                                {item.isPurchasable == '0' && (
+                                    <div>Out of Stock.</div>
+                                )}
                                 
                             </div>
                         ))

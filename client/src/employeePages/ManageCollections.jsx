@@ -52,8 +52,7 @@ const ManageCollections = () => {
             <div>
                 <EmployeeNav/>
             </div>
-            <div>
-                Manage Collections
+            <div className="manageCollectionSectionEm">
                 <h1>Collections</h1>
                 <div className="collectionsM">
                 {collections.map(collection=>(

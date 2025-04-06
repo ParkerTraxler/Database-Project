@@ -102,8 +102,6 @@ const processTransaction = async(req, res) => {
                 return res.end(JSON.stringify({ error: 'Inequal number of quantities to items being purchased.'}));
             }
 
-            var finalprice = -1;
-
             if(!datepurchased){
                 res.writeHead(400, {'Content-Type': 'application/json'});
                 return res.end(JSON.stringify({ error: 'Must supply a date of purchase.'}));
@@ -121,7 +119,7 @@ const processTransaction = async(req, res) => {
                     continue;
                 }
 
-                var [ result ] = await db.query(queries.new_transaction, [itemid, email, quantity, finalprice, datepurchased]);
+                var [ result ] = await db.query(queries.new_transaction, [itemid, email, quantity, datepurchased]);
 
                 if(!result || result.affectedRows == 0){
                     console.log("Failed to process transaction for ID: " + itemid);

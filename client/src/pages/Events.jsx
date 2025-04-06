@@ -31,10 +31,10 @@ const Events = () => {
             </div>
             <div>
                 <h1>Events</h1>
-                <div className="eventsBody">
+                <div className="eventsCu">
                 {events.map(event=>(
-                        <div className="eventC" key={event.EventID}>
-                            
+                        <div className="eventCu" key={event.EventID}>
+                            {event.EventPic && <img src={event.EventPic} alt="" />}
                             <h2>{event.EventName}</h2>
                             <div>{new Date(event.EventDate).toLocaleDateString() || "Not provided"}</div>
                             <p>{event.EventDesc}</p>
