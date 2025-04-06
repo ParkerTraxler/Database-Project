@@ -114,8 +114,6 @@ const Tickets = () => {
     };
     
 
-    
-
     return (
         <div>
             <div className="ticketsBanner">
@@ -123,7 +121,7 @@ const Tickets = () => {
             </div>
             <div>
                 <h1>Tickets</h1>
-                <div>Members get a 10% discount on all tickets!</div>
+                <h3 className="ticketsCuPageh3">Members get a 10% discount on all tickets!</h3>
                 <div className="ticketsBody">
                     {loading ? (
                         <p>Loading tickets...</p>  // Show a loading message while waiting for data
@@ -132,7 +130,7 @@ const Tickets = () => {
                         
                         tickets.map(ticket=>(
                             
-                            <div className="ticket" key={ticket.ItemID}>
+                            <div className="ticketCu" key={ticket.ItemID}>
                                 <div>{ticket.ItemName}</div>
                                 {!info && (
                                     <div>{"$" + ticket.ItemPrice}</div>
@@ -142,7 +140,7 @@ const Tickets = () => {
                                 )}
                                 {info?.isMember == '1' && (
                                     <div>
-                                        <div className="oldPrice">{"$" + ticket.ItemPrice}</div>
+                                        <div className="regularPriceTickets">{"$" + ticket.ItemPrice}</div>
                                         {"$" + (ticket.ItemPrice*0.9).toFixed(2)}
                                     </div>
                                 )}
@@ -160,15 +158,15 @@ const Tickets = () => {
                 </div>
                 <div>
                     {role == 'Customer' && (
-                        <div>
-                            <button className="formButton" onClick={handleClick}>Purchase Tickets</button>
+                        <div className="purchaseTicketsButtonContainer">
+                            <button className="puchaseTicketsButton" onClick={handleClick}>Purchase Tickets</button>
                         </div>
                         )}
                 </div>
                 {showReceipt && (
-                    <div className="popup-overlay">
-                    <div className="popup-content">
-                        <span className="close-button" onClick={hideReciept}>
+                    <div className="receiptPopUpBox">
+                    <div className="receiptPopUpBoxInfo">
+                        <span className="receiptCloseButton" onClick={hideReciept}>
                             &times;
                         </span>
                         <h2>Receipt</h2>
