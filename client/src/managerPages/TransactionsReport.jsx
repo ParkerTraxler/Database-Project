@@ -18,7 +18,7 @@ const TransactionsReport = () => {
         const fetchTransactions = async () => {
             try {
                 console.log("GET Sent")
-                const res = await axios.get("http://localhost:3002/transactions/", {
+                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/transactions/", {
                     headers: {
                         'authorization': `Bearer ${token}`,
                     },

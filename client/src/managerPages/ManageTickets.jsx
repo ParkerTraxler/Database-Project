@@ -16,7 +16,7 @@ const ManageTickets = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const res = await axios.get("http://localhost:3002/items/tickets");
+                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/tickets");
                 console.log(res.data)
                 setTickets(res.data);  // Store the data once fetched
             } catch (err) {

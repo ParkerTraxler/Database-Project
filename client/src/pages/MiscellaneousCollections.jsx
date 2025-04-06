@@ -12,7 +12,7 @@ const MiscellaneousCollections = () => {
         const fetchCollections = async ()=>{
             
             try{
-                const res = await axios.get(`http://localhost:3002/collections/exhibit/${null}`);
+                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/exhibit/${null}`);
                 console.log(res.data)
                 setCollections(res.data)
                 console.log(collections.data)

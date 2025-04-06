@@ -42,7 +42,7 @@ const MakeDonation = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post("http://localhost:3002/donations", {
+            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/donations", {
                 donatedate: formattedDate, 
                 donateamt: donation.donateamt, 
                 donatedesc: donation.donatedesc,

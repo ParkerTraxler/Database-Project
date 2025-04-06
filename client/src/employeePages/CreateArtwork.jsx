@@ -43,7 +43,7 @@ import EmployeeNav from './EmployeeNav'
          console.log(collectionTitle)
          console.log(artwork)
          try{
-             const res = await axios.post("http://localhost:3002/artworks/", {
+             const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/", {
                  artName: artwork.artName, 
                  artist: artwork.artist, 
                  dateMade: artwork.dateMade, 

@@ -39,14 +39,14 @@ const EditEvent = () => {
         const fetchPrevEvent = async ()=>{
             try{
                 console.log("GET Sent")
-                const res = await axios.get(`http://localhost:3002/events/${EventID}`)
+                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events/${EventID}`)
                 console.log("GET Completed")
                 console.log(res.data)
                 setPrevEvent(res.data)
                 console.log(event)
 
                 console.log("GET Sent")
-                const res2 = await axios.get(`http://localhost:3002/events/employees/${EventID}`, {
+                const res2 = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events/employees/${EventID}`, {
                     headers: {
                         'authorization': `Bearer ${token}`
                     },

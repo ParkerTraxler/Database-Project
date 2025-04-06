@@ -38,7 +38,7 @@ const EditItem = () => {
         console.log("ID: " + ItemID)
         try{
             console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/items/", {
+            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/", {
                 itemid: ItemID, 
                 itemname: item.itemname, 
                 itemprice: item.itemprice, 
@@ -53,7 +53,7 @@ const EditItem = () => {
             console.log(res.data)
 
             console.log("PUT Sent")
-            const res2 = await axios.put("http://localhost:3002/items/restock", {
+            const res2 = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/restock", {
                 itemid: ItemID,
                 amounttoadd: item.amounttoadd
             },

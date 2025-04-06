@@ -36,7 +36,7 @@ const EditTicket = () => {
         console.log(ticket.price)
         try{
             console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/items/", {
+            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/", {
                 itemid: ticketID,
                 itemprice: ticket.price,
                 email: email

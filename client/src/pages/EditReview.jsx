@@ -40,7 +40,7 @@ const EditReview = () => {
         console.log(review)
         try{
             console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/reviews/", {
+            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reviews/", {
                 email: email,
                 starcount: review.starcount, 
                 reviewdesc: review.reviewdesc

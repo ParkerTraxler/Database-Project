@@ -26,7 +26,7 @@ const Tickets = () => {
     useEffect(() => {
         const fetchAccount = async () => {
             console.log(encodeURIComponent(email));
-            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`, 
+            axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/profile/${encodeURIComponent(email)}`, 
             {
                 headers: {
                     'authorization': `Bearer ${token}`
@@ -57,7 +57,7 @@ const Tickets = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const res = await axios.get("http://localhost:3002/items/tickets");
+                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/tickets");
                 console.log(res.data)
                 setTickets(res.data);  // Store the data once fetched
                 
@@ -87,7 +87,7 @@ const Tickets = () => {
         
         try{
             console.log("POST Sent")
-            const res = await axios.post("http://localhost:3002/transactions/tickets", {
+            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/transactions/tickets", {
                 ticketArray: ticketArray, 
                 email: email, 
                 datepurchased: formattedDate
