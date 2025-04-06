@@ -46,7 +46,9 @@ const GiftShop = () => {
                                 }
                                 <div>{item.ItemName}</div>
                                 <div>{"$" + item.ItemPrice}</div>
-                                <div>Stock: {item.AmountInStock}</div>
+                                {item.isPurchasable == '0' && (
+                                    <div>Out of Stock.</div>
+                                )}
                                 
                             </div>
                         ))

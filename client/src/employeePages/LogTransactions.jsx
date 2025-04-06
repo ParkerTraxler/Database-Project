@@ -123,9 +123,15 @@ const LogTransactions = () => {
                                 <div>{item.ItemName}</div>
                                 <div>{"$" + item.ItemPrice}</div>
                                 <div>Stock: {item.AmountInStock}</div>
-                                <div>
-                                    <button disabled={isInCart(item.ItemID)} onClick={() => addItemToCart(item)}>{isInCart(item.ItemID) ? "In Cart" : "Add to Cart"}</button>
-                                </div>
+                                {item.isPurchasable == '1' && (
+                                    <div>
+                                        <button disabled={isInCart(item.ItemID)} onClick={() => addItemToCart(item)}>{isInCart(item.ItemID) ? "In Cart" : "Add to Cart"}</button>
+                                    </div>
+                                )}
+                                {item.isPurchasable == '0' && (
+                                    <div>Out of Stock.</div>
+                                )}
+                                
                             </div>
                         ))
                     ) : (
@@ -143,6 +149,7 @@ const LogTransactions = () => {
                                     Quantity:
                                     <input type="number" min="0" placeholder="amount to buy" onChange={(e) => handleChange(e, cartItem.ItemID)} name={"quantity"}/>
                                 </div>
+                                
                                 <div>
                                     <button onClick={() => removeFromCart(cartItem.ItemID)}>Remove from Cart</button>
                                 </div>
