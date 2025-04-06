@@ -34,7 +34,7 @@ const Events = () => {
                 <div className="eventsBody">
                 {events.map(event=>(
                         <div className="eventC" key={event.EventID}>
-                            
+                            {event.EventPic && <img src={event.EventPic} alt="" />}
                             <h2>{event.EventName}</h2>
                             <div>{new Date(event.EventDate).toLocaleDateString() || "Not provided"}</div>
                             <p>{event.EventDesc}</p>
