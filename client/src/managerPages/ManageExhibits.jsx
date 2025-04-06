@@ -19,7 +19,7 @@ const ManageExhibits = () => {
     useEffect(()=>{
         const fetchAllExhibits = async ()=>{
             try{
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits")
+                const res = await axios.get("http://localhost:3002/exhibits")
                 console.log(res.data)
                 const regularExhibits = res.data.filter(exhibit => exhibit.IsSpecial !== 1);
                 const specialExhibits = res.data.filter(exhibit => exhibit.IsSpecial === 1);
@@ -35,13 +35,13 @@ const ManageExhibits = () => {
 
 
     return(
+        <div className="manage-exhibits-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
-            <div>
-                Manage Exhibits
-                <h1>Exhibits</h1>
+            <div className="manage-exhibits-section">
+                <h1 className="manage-exhibits-header">Exhibits</h1>
                 <div className="exhibitsM">
                 {exhibits.map(exhibit=>(
                     <div className="exhibitM" key={exhibit.ExhibitID}>
@@ -52,7 +52,7 @@ const ManageExhibits = () => {
                     </div>
                 ))}
                 </div>
-                <button>
+                <button className="create-exhibit-button">
                     <Link to="/add-exhibit">Create Exhibit</Link>
                 </button>
 
@@ -66,11 +66,12 @@ const ManageExhibits = () => {
                     </div>
                 ))}
                 </div>
-                <button>
+                <button className="add-special-exhibit-button">
                     <Link to="/add-special-exhibit">Create Special Exhibit</Link>
                 </button>
             </div>
-        </div>  
+        </div>
+        </div>
         
     )
 }

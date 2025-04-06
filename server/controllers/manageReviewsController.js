@@ -1,101 +1,73 @@
 const http = require('http');
+const queries = require('../querylist.js')
 const db = require('../db/db');
 
 const getReviews = async (req, res) => {
     try {
-        /* SQL QUERY */
-
-        /* END SQL QUERY */
+        // SQL QUERY - get all reviews + name
+        const [ rows ] = await db.query(queries.get_all_reviews);
 
         // Return reviews to frontend
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows));
     } catch (err) {
         console.error('Error fetching reviews: ', err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Error fetching reviews.' }));
+        return res.end(JSON.stringify({ error: 'Error fetching reviews.' }));
     }
 }
 
-const getReview = (req, res) => {
+const getUserReview = async (req, res, email) => {
+    try {
+        // SQL Query - Get specific user's review, if it exists. Might return null.
+        const [ rows ] = await db.query(queries.get_user_review, [email]);
+
+        // Return review to frontend
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows[0]));
+        } catch (err) {
+            console.error('Error fetching review: ', err);
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({ error: 'Error fetching review.' }));
+        }
+}
+
+const createReview = (req, res) => {
     // Get data from request
     let body = '';
     req.on('data', (chunk) => {
         body += chunk.toString();
     });
 
-    // Process request and return response
     req.on('end', async () => {
-        try {
-            // Get field from the frontend
+        try{
+            const { email, starcount, reviewdesc } = JSON.parse(body);
             
-            // Check that the field was provided 
+            if(!email || !starcount ){
+                res.writeHead(400, { 'Content-Type':  'application/json' });
+                return res.end(JSON.stringify({ error: 'Missing required information for reviews.' }));
+            }
 
-            /* SQL QUERY */
+            let reviewdate = new Date();
+            reviewdate = reviewdate.getFullYear() + "-" + String(reviewdate.getMonth()+1).padStart(2, '0') + "-" + String(reviewdate.getDate()).padStart(2, '0');
 
-            /* END SQL QUERY */
+            //  SQL QUERY - Create a new review
+            const [ result ] = await db.query(queries.new_user_review, [email, starcount, reviewdesc, reviewdate]);
 
-            // Check that the review exists
+            if(!result || result.rowCount == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not accept entry. Invalid input?' }));
+            }
 
-            // Return review to frontend
-        } catch (err) {
-            console.error('Error fetching review: ', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error fetching review.' }));
-        }
-    });
-}
-
-const createReview = (req, res) => {
-    // Get fields from request
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    });
-
-    req.on('end', async () => {
-        try {
-            // Store necessary fields from frontend to create the entity.
-
-            /* SQL QUERY */
-
-            /* END SQL QUERY */
+            await db.query(queries.new_history_log, [email, "Created", "Reviews", result.insertId, "A customer has left a new review"])
 
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Successfully created review.' }));
+            return res.end(JSON.stringify({ message: 'Successfully created review.' }));
         } catch (err) {
-            console.error('Error creating review.');
+            console.error('Error creating review: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error creating review.' }));
-        }
-    });
-}
-
-const deleteReview = (req, res) => {
-    // Get fields from request
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    }); 
-
-    // Process the request once it is received, send response
-    req.on('end', async () => {
-        try {
-            // Store the necessary field to delete the review
-
-            // Check that the necessary field was provided, return error if not
-
-            /* SQL QUERY */
-            
-
-            /* END SQL QUERY */
-
-            // Return successful delete message
-            res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Review successfully deleted.' }));
-        } catch (err) {
-            console.error('Error deleting review.');
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error deleting review.' }));
+            return res.end(JSON.stringify({ error: 'Error creating review.' }));
         }
     });
 }
@@ -110,23 +82,51 @@ const updateReview = (req, res) => {
     // Process the request once it is received, send response 
     req.on('end', async () => {
         try {
-            // Get necessary fields from the request
+            var { email, starcount, reviewdesc } = JSON.parse(body);
+            
+            if(!email){
+                res.writeHead(400, { 'Content-Type':  'application/json' });
+                return res.end(JSON.stringify({ error: 'Missing required information (email) for editing reviews.' }));
+            }
 
-            // Check that at least one (or some?) fields were provided
+            // SQL QUERY - Update an employee's information, by first checking if they exist
+            const [ rows ] = await db.query(queries.get_user_review, [email]);
 
-            /* SQL QUERY */
+            if(rows.length == 0){
+                res.writeHead(400, {'Content-Type': 'application/json'});
+                return res.end(JSON.stringify({ error: 'User does not have a review to edit.'}));
+            }
 
-            /* END SQL QUERY */
+            if(starcount == null || starcount == ""){
+                starcount = rows[0].StarCount;
+            }
+
+            if(reviewdesc == null || reviewdesc == ""){
+                reviewdesc = rows[0].ReviewDesc;
+            }
+
+            let reviewdate = new Date();
+            reviewdate = reviewdate.getFullYear() + "-" + String(reviewdate.getMonth()+1).padStart(2, '0') + "-" + String(reviewdate.getDate()).padStart(2, '0');
+
+            //  SQL QUERY - Create a new review
+            const [ result ] = await db.query(queries.update_review, [starcount, reviewdesc, reviewdate, email]);
+
+            if(!result || result.rowCount == 0){
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Database could not update the review. Invalid input?' }));
+            }
+
+            await db.query(queries.new_history_log, [email, "Updated", "Reviews", rows[0].CustomerID, "A customer has updated their review."])
 
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Review successfully updated.' }));
+            return res.end(JSON.stringify({ message: 'Review successfully updated.' }));
         } catch (err) {
-            console.error('Error updating review.');
+            console.error('Error updating review: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error updating review.' }));
+            return res.end(JSON.stringify({ error: 'Error updating review.' }));
         }
     });
 }
 
-module.exports = { getReview, getReviews, createReview, deleteReview, updateReview };
+module.exports = {getReviews, getUserReview, createReview, updateReview };

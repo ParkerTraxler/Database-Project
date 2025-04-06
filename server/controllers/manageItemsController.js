@@ -13,7 +13,7 @@ const createItem = (req, res) => {
     });
 
     req.on('end', async () => {
-        const { itemname, itemprice, amountinstock } = JSON.parse(body);
+        const { itemname, itemprice, itemimage, amountinstock, email } = JSON.parse(body);
         try {
             if(!itemname){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -26,20 +26,22 @@ const createItem = (req, res) => {
              }
 
             // SQL Query - Create a new item
-             const [ result ] = await db.query(queries.insert_new_item, [itemname, itemprice, amountinstock]);
+             const [ result ] = await db.query(queries.insert_new_item, [itemname, itemprice, itemimage, amountinstock]);
 
             if(!result || result.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not input new item. Invalid input?' }));
             }
 
+            await db.query(queries.new_history_log, [email, "Created", "Items", result.insertId, "A new item with name " + itemname + " has been added to the Museum Gift Shop"]);
+
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Successfully created item.' }));
+            return res.end(JSON.stringify({ message: 'Successfully created item.' }));
         } catch (err) {
-            console.error('Error creating item.');
+            console.error('Error creating item: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error creating item.' }));
+            return res.end(JSON.stringify({ error: 'Error creating item.' }));
         }
     });
 }
@@ -53,7 +55,7 @@ const deleteItem = (req, res) => {
 
     // Process the request once it is received, send response
     req.on('end', async () => {
-        const { itemid } = JSON.parse(body);
+        const { itemid, email } = JSON.parse(body);
         try {
             if(!itemid){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -72,18 +74,21 @@ const deleteItem = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Database could not delete the item. Is it already deleted?' }));
             }
 
+            await db.query(queries.new_history_log, [email, "Deleted", "Items", itemid, "An item has been deleted from the museum."]);
+
             // Return successful delete message
             res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Item successfully deleted.' }));
+            return res.end(JSON.stringify({ message: 'Item successfully deleted.' }));
         } catch (err) {
             console.error('Error deleting item: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error deleting item.' }));
+            return res.end(JSON.stringify({ error: 'Error deleting item.' }));
         }
     });
 }
 
 const updateItem = (req, res) => {
+    console.log("API call is correct");
     // Get fields from request
     let body = '';
     req.on('data', (chunk) => {
@@ -92,7 +97,7 @@ const updateItem = (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async () => {
-        const { itemid, itemname, itemprice, giftshopname } = JSON.parse(body);
+        var { itemid, itemname, itemprice, itemimage, giftshopname, email } = JSON.parse(body);
         try {
             if(!itemid){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -100,7 +105,8 @@ const updateItem = (req, res) => {
             }
 
             // get the item from the DB / confirm it exists
-            const [ curr_item ] = await db.query(get_a_normal_item, [itemid]);
+            const [ curr_item ] = await db.query(queries.get_a_normal_item, [itemid]);
+
 
             // SQL QUERY - update the item 
             if(itemname == null || itemname == ""){
@@ -111,23 +117,29 @@ const updateItem = (req, res) => {
                 itemprice = curr_item[0].ItemPrice;
             }
 
+            if(itemimage == null || itemimage == ""){
+                itemimage = curr_item[0].ItemImage;
+            }
+
             if(giftshopname == null || giftshopname == ""){
                 giftshopname = curr_item[0].GiftShopName;
             }
 
-            const [ results ] = await db.query(queries.update_item, [itemname, itemprice, giftshopname, itemid]);
+            const [ results ] = await db.query(queries.update_item, [itemname, itemprice, itemimage, giftshopname, itemid]);
             if(!results || results.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not update item. Invalid input?' }));
             }
 
+            await db.query(queries.new_history_log, [email, "Updated", "Items", itemid, "An item by the name of " + itemname + " has been updated."])
+
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Item successfully updated.' }));
+            return res.end(JSON.stringify({ message: 'Item successfully updated.' }));
         } catch (err) {
-            console.error('Error updating item.');
+            console.error('Error updating item: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error updating item.' }));
+            return res.end(JSON.stringify({ error: 'Error updating item.' }));
         }
     });
 }
@@ -141,7 +153,7 @@ const updateItemQuantity = (req, res) => {
 
     // Process the request once it is received, send response 
     req.on('end', async () => {
-        const { itemid, amounttoadd } = JSON.parse(body);
+        const { itemid, amounttoadd, email } = JSON.parse(body);
         try {
             if(!itemid){
                 res.writeHead(400, {'Content-Type': 'application/json'});
@@ -160,33 +172,33 @@ const updateItemQuantity = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Failed to restock item. Has it been deleted?' }));
             }
 
+            await db.query(queries.new_history_log, [email, "Updated", "Items", itemid, "An item has been restocked. Amount added = " + amounttoadd + "."]);
+
             // Return success message
             res.writeHead(204, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Item quantity successfully updated.' }));
+            return res.end(JSON.stringify({ message: 'Item quantity successfully updated.' }));
         } catch (err) {
-            console.error('Error updating item quantity.');
+            console.error('Error updating item quantity: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
+            return res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
         }
     });
 }
 
 // get all non-ticket items
 const getItems = async(req, res) =>{
-    req.on('end', async () => {
-        try {
-            // SQL Query - get all non-ticket items
-            const [ result ] = await db.query(queries.get_all_normal_items);
+    try {
+        // SQL Query - get all non-ticket items
+        const [ result ] = await db.query(queries.get_all_normal_items);
 
-            // Return success message
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(JSON.stringify(result)));
-        } catch (err) {
-            console.error('Error retrieving all items: ', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error retrieving all items' }));
-        }
-    });
+        // Return success message
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(result));
+    } catch (err) {
+        console.error('Error retrieving all items: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Error retrieving all items' }));
+    }
 }
 
 const getItem = async(req, res, itemID) =>{
@@ -203,7 +215,7 @@ const getItem = async(req, res, itemID) =>{
         }
 
         // SQL QUERY - Get item itself if checks are passed
-        const [ result ] = await db.query(get_a_normal_item, itemID);
+        const [ result ] = await db.query(queries.get_a_normal_item, itemID);
 
         if(result.affectedRows == 0){
             res.writeHead(400, { 'Content-Type':  'application/json' });
@@ -212,29 +224,27 @@ const getItem = async(req, res, itemID) =>{
 
         // Return success message
         res.writeHead(204, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(JSON.stringify(result[0])));
+        return res.end(JSON.stringify(JSON.stringify(result[0])));
     } catch (err) {
         console.error('Error updating item quantity.');
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
+        return res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
     }
 }
 
 const getTickets = async (req, res) => {
-    req.on('end', async () => {
-        try {
-            // SQL Query - get all ticket_items
-            const [ result ] = await db.query(queries.get_all_tickets);
+    try {
+         // SQL Query - get all ticket_items
+        const [ result ] = await db.query(queries.get_all_tickets);
 
-            // Return success message
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(JSON.stringify(result)));
-        } catch (err) {
-            console.error('Error retrieving tickets: ', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Error retrieving tickets' }));
-        }
-    });
+        // Return success message
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(result));
+    } catch (err) {
+        console.error('Error retrieving tickets: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Error retrieving tickets' }));
+    }
 }
 
 const getTicket =  async(req, res, itemID) => {
@@ -242,7 +252,7 @@ const getTicket =  async(req, res, itemID) => {
     try {
         if(!itemID){
             res.writeHead(400, { 'Content-Type':  'application/json' });
-            return res.end(JSON.stringify({ error: 'No item ID supplied to search for' }));
+            return res.end(JSON.stringify({ error: 'No ticket ID supplied to search for' }));
         }
 
         if(!([1, 2, 3, 4].includes(itemid))){
@@ -251,7 +261,7 @@ const getTicket =  async(req, res, itemID) => {
         }
 
         // SQL QUERY - Get ticket itself if checks are passed
-        const [ result ] = await db.query(get_specific_ticket, itemID);
+        const [ result ] = await db.query(queries.get_specific_ticket, itemID);
 
         if(result.affectedRows == 0){
             res.writeHead(400, { 'Content-Type':  'application/json' });
@@ -260,11 +270,11 @@ const getTicket =  async(req, res, itemID) => {
 
         // Return success message
         res.writeHead(204, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(JSON.stringify(result[0])));
+        return res.end(JSON.stringify(JSON.stringify(result[0])));
     } catch (err) {
         console.error('Error updating item quantity.');
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
+        return res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
     }
 }
 

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import './ManagerDashboard.css'
+import './CreateExhibit.css'
 
 const CreateSpecialExhibit = () => {
     console.log("CreateExhibit")
@@ -32,7 +33,7 @@ const CreateSpecialExhibit = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits", {
+            const res = await axios.post("http://localhost:3002/exhibits", {
                 exhibitname: specialExhibit.exhibitname, 
                 exhibitdesc: specialExhibit.exhibitdesc, 
                 exhibitpic: specialExhibit.exhibitpic,
@@ -56,23 +57,24 @@ const CreateSpecialExhibit = () => {
     }
 
     return(
+        <div className="create-exhibit-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
-            <div>
-            <div className="form">
+            <div className ="create-exhibit-form-wrapper">
+            <div className="create-exhibit-form">
                     <h1>Create Special Exhibit</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
                     <input type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
                     <input type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/>
-                    <input type="date" onChange={handleChange} name="startdate"/>
-                    <input type="date" onChange={handleChange} name="enddate"/>
+                    <input type="date" placeholder="Start Date" onChange={handleChange} name="startdate"/>
+                    <input type="date" placeholder="End Date" onChange={handleChange} name="enddate" />
                     <input type="number" placeholder="fee" onChange={handleChange} name="fee"/>
                     <button className="formButton" onClick={handleClick} >Add</button>
                 </div>
             </div>
-            
+        </div>   
         </div>
     )
 }

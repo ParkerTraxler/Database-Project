@@ -2,120 +2,112 @@ import React, { useState, useEffect } from 'react';
 import ManagerNav from './ManagerNav';
 import axios from 'axios'; // API calls
 import { useAuth } from '../utils/AuthContext';
-
+import { jwtDecode } from 'jwt-decode';
 import './ManagerDashboard.css';
+import './EmployeeExhibitReport.css';
 
 const EmployeeExhibitReport = () => {
     console.log("EmployeeExhibitReport");
-
-    const [employees, setEmployees] = useState([]);
-    const [filteredEmployees, setFilteredEmployees] = useState([]);
-    const [exhibitFilter, setExhibitFilter] = useState('');
-    const [searchTerm, setSearchTerm] = useState(''); // New state for search term
+    const [report, setReport] = useState([]);
+    const [exhibitTypeFilter, setExhibitTypeFilter] = useState("all")
+    const [reportGenerated, setReportGenerated] = useState(false);
+    const [costRange, setCostRange] = useState({
+        upperCost: "all",
+        lowerCost: "all"
+    })
     const { user } = useAuth();
-    const token = user.token;
+    const token = user.token; 
     console.log("token: " + token);
+    const decoded = jwtDecode(token);
+    const email = decoded.email;
 
-    useEffect(() => {
-        const fetchAllEmployees = async () => {
-            try {
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/report", {
-                    headers: {
-                        'authorization': `Bearer ${token}`,
-                    },
-                });
-                console.log(res.data);
-                setEmployees(res.data);
-                setFilteredEmployees(res.data); // Initialize with the full employee list
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        fetchAllEmployees();
-    }, [token]);
+    const fetchReport = async () => {
+        console.log(email);
+        const upper = costRange.upperCost === "" ? "all" : costRange.upperCost;
+        const lower = costRange.lowerCost === "" ? "all" : costRange.lowerCost;
 
-    const handleExhibitChange = (e) => {
-        const selectedExhibit = e.target.value;
-        setExhibitFilter(selectedExhibit);
-        filterEmployees(selectedExhibit, searchTerm);
-    };
+        console.log("upper cost: " + upper);
+        console.log("lower cost: " + lower);
+        console.log("exhibit filter: " + exhibitTypeFilter);
 
-    const handleSearchChange = (e) => {
-        const newSearchTerm = e.target.value;
-        setSearchTerm(newSearchTerm);
-        filterEmployees(exhibitFilter, newSearchTerm);
-    };
-
-    const filterEmployees = (exhibit, name) => {
-        let filteredList = employees;
-
-        if (exhibit) {
-            filteredList = filteredList.filter(employee => employee.Exhibit_Name === exhibit);
+        
+        try {
+            console.log("GET Sent");
+            const res = await axios.get(`http://localhost:3002/reports/exhibit-cost/${encodeURIComponent(email)}/${upper}/${lower}/${exhibitTypeFilter}`, {
+                headers: {
+                    'authorization': `Bearer ${token}`,
+                },
+            });
+            console.log("GET Completed");
+            
+            console.log(res.data);
+            setReport(res.data);
+            setReportGenerated(true);
+        } catch (err) {
+            console.log(err);
         }
-        if (name) {
-            filteredList = filteredList.filter(employee =>
-                employee.Employee_Name.toLowerCase().includes(name.toLowerCase())
-            );
-        }
-        setFilteredEmployees(filteredList);
     };
 
-    // Extract unique exhibit names for the filter dropdown
-    const exhibitNames = [...new Set(employees.map(employee => employee.Exhibit_Name))];
+    
 
+    
     return (
+        <div className="container-exhibit-report">
         <div className="managerView">
             <div>
                 <ManagerNav />
             </div>
-            <div>
-                <h1>Employee Exhibit Report</h1>
+            <div className = "report-section">
+                <h1 className="header">Exhibit Cost Report</h1>
 
-                {/* Search Bar for Employee Name */}
-                <input
-                    type="text"
-                    placeholder="Search by employee name"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    className="search-bar"
-                />
+                
 
-                {/* Exhibit Filter Dropdown */}
-                <label htmlFor="exhibitFilter">Filter by Exhibit:</label>
-                <select id="exhibitFilter" value={exhibitFilter} onChange={handleExhibitChange}>
-                    <option value="">All Exhibits</option>
-                    {exhibitNames.map(exhibit => (
-                        <option key={exhibit} value={exhibit}>
-                            {exhibit}
-                        </option>
-                    ))}
+                <label>Lower Cost Range (no range by default): </label>
+                <input type="number" value={costRange.lowerCost} onChange={(e) => setCostRange({...costRange, lowerCost: e.target.value})} />
+                <label>Upper Cost Range (no range by default): </label>
+                <input type="number" value={costRange.upperCost} onChange={(e) => setCostRange({...costRange, upperCost: e.target.value})} />
+
+                {/* use filter-select or search-bar className*/}
+                <label>Filter by time range: </label>
+                <select value={exhibitTypeFilter} onChange={(e) => setExhibitTypeFilter(e.target.value)} className="filter-select">
+                    <option value="all">All Exhibits</option>
+                    <option value="special">Special Exhibits</option>
+                    <option value="normal">Main Exhibits</option>
+                    
                 </select>
 
-                <table>
+                <div>
+                    <button onClick={fetchReport}>Generate Report</button>
+                </div>
+
+                <table className="info-table">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Email</th>
+                            <th>Exhibit Name</th>
+                            <th>Exhibit Type</th>
+                            <th>Running Status</th>
+                            <th>Total Employees</th>
+                            <th>Weekly Cost</th>
+                            <th>Weeks Active</th>
                             <th>ID</th>
-                            <th>Weekly Wage</th>
-                            <th>Exhibit</th>
-                            <th>Active</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredEmployees.map(employee => (
-                            <tr key={employee.EmployeeID}>
-                                <td>{employee.Employee_Name}</td>
-                                <td>{employee.Employee_Email}</td>
-                                <td>{employee.Employee_ID}</td>
-                                <td>{employee.Employee_Weekly_Wage}</td>
-                                <td>{employee.Exhibit_Name}</td>
-                                <td>{employee.Employee_Active == "1" ? "True" : "False"}</td>
-                            </tr>
-                        ))}
+                        {report.map(info => (
+                            <tr key={info.Exhibit_ID}>
+                                <td>{info.Exhibit_Name}</td>
+                                <td>{info.Is_Special_Exhibit ? "Special Exhibit" : "Main Exhibit"}</td>
+                                    <td>{info.Running_Status}</td>
+                                    <td>{info.Total_Employees}</td>
+                                    <td>{info.Weekly_Exhibit_Cost}</td>
+                                    <td>{info.Weeks_Active}</td>
+                                    <td>{info.Exhibit_ID}</td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>
+        </div>
         </div>
     );
 };

@@ -40,11 +40,7 @@ const LogIn = () => {
             e.preventDefault()  //prevents page refresh on button click
             
             try{
-                const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/auth/login",   userData, {
-                    headers:{
-                        'Content-Type' : 'application/json'
-                    }
-                }); 
+                const res = await axios.post("http://localhost:3002/auth/login", userData)
                 const { message, token, error } = res.data
                 console.log(res.data)
                 console.log(message)
@@ -63,24 +59,24 @@ const LogIn = () => {
     }
 
     return(
-        <div className="container">
+        <div className="loginContainer">
             <div className="login-box">
                 
                 <h1>Log In</h1>
                 <div className="error">{errorMessage}</div>
-                <div className="input-group">
+                <div className="input-groupLogin">
                     Email
-                    <input type="email" placeholder="Enter your email"  maxLength="30" onChange={handleChange} name="email"/>
+                    <input className="loginInput" type="email" placeholder="Enter your email"  maxLength="30" onChange={handleChange} name="email"/>
                 </div>
 
-                <div className="input-group">
+                <div className="input-groupLogin">
                     Password
-                    <input type="password" placeholder="Enter your password" maxLength="16" onChange={handleChange} name="password"/>
+                    <input className="loginInput" type="password" placeholder="Enter your password" maxLength="16" onChange={handleChange} name="password"/>
                 </div>
                 <div className="no-account">
-                    Don't have an account? <a href="/sign-up">Sign Up</a>
+                  <a href="/sign-up" style={{textDecoration: "none", color: "inherit"}}>Don't have an account? Sign Up</a>
                 </div>
-                <button onClick={handleClick}>Log In</button> 
+                <button onClick={handleClick} className="submit-buttonLogin">Log In</button> 
             </div>
         </div>
         

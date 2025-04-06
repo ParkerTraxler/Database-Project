@@ -15,6 +15,7 @@ import ReportProblem from './pages/ReportProblem'
 import EditAccount from './pages/EditAccount.jsx'
 import MakeDonation from './pages/MakeDonation.jsx';
 import ManagerDashboard from './managerPages/ManagerDashboard.jsx';
+import EmployeeDashboard from './employeePages/EmployeeDashboard.jsx'; 
 import EditManagerAccount from './managerPages/EditManagerAccount.jsx';
 import ManageEmployees from './managerPages/ManageEmployees.jsx';
 import ManageEvents from './managerPages/ManageEvents.jsx';
@@ -23,10 +24,9 @@ import ManagerAccountDetails from './managerPages/ManagerAccountDetails.jsx';
 import EditAccountEmployee from './employeePages/EditAccountEmployee'
 import ViewAccountEmployee from './employeePages/AccountDetailsEmployee'
 import EmployeeManageExhibits from './employeePages/ManageExhibits'
-import ManageGiftShop from './employeePages/ManageGiftShop'
-import ManageCollections from './managerPages/ManageCollections.jsx';
-import ManagerAddCollection from './managerPages/ManagerAddCollection.jsx'
-import ManagerEditCollection from './managerPages/ManagerEditCollection.jsx';
+import ManageCollections from './employeePages/ManageCollections.jsx';
+import ManagerAddCollection from './employeePages/ManagerAddCollection.jsx'
+import ManagerEditCollection from './employeePages/ManagerEditCollection.jsx';
 import AddEmployee from './managerPages/AddEmployee.jsx';
 import EditEmployee from './managerPages/EditEmployee.jsx';
 import CreateExhibit from './managerPages/CreateExhibit.jsx';
@@ -34,11 +34,26 @@ import CreateSpecialExhibit from './managerPages/CreateSpecialExhibit.jsx';
 import EditExhibit from './managerPages/EditExhibit.jsx';
 import EditSpecialExhibit from './managerPages/EditSpecialExhibits.jsx';
 import ViewDonations from './managerPages/ViewDonations.jsx';
-import ManageCollectionArt from './managerPages/ManageCollectionArt.jsx';
-import CreateArtwork from './managerPages/CreateArtwork.jsx';
-import EditArtwork from './managerPages/EditArtwork.jsx';
+import ManageCollectionArt from './employeePages/ManageCollectionArt.jsx';
+import CreateArtwork from './employeePages/CreateArtwork.jsx';
+import EditArtwork from './employeePages/EditArtwork.jsx';
 import CollectionArt from './pages/CollectionArt.jsx';
 import EmployeeExhibitReport from './managerPages/EmployeeExhibitReport.jsx';
+import ManageTickets from './managerPages/ManageTickets.jsx';
+import EditTicket from './managerPages/EditTicket.jsx';
+import ManageGiftShop from './employeePages/ManageGiftShop.jsx';
+import EditItem from './employeePages/EditItem.jsx';
+import CreateItem from './employeePages/CreateItem.jsx';
+import TransactionsReport from './managerPages/TransactionsReport.jsx';
+import LogTransactions from './employeePages/LogTransactions.jsx';
+import GiftShopSalesReport from './managerPages/GiftShopSalesReport.jsx';
+import CustomersReport from './managerPages/CustomersReport.jsx';
+import EditHistoryReport from './managerPages/EditHistoryReport.jsx';
+import ExhibitCollections from './pages/ExhibitCollections.jsx';
+import MiscellaneousArt from './pages/MiscellaneousArt.jsx';
+import MiscellaneousCollections from './pages/MiscellaneousCollections.jsx';
+import CreateEvent from './managerPages/CreateEvent.jsx';
+import EditEvent from './managerPages/EditEvent.jsx';
 import Navbar from "./Navbar.js"
 import Footer from "./Footer.jsx"
 import ProtectedRoutes from './utils/ProtectedRoutes.jsx';
@@ -76,6 +91,9 @@ function App() {
           
           <Route path="/report-problem" element={<ReportProblem/>}/>
           <Route path="/collection-art/:Title" element={<CollectionArt/>}/>
+          <Route path="/exhibit-collections/:ExhibitID" element={<ExhibitCollections/>}/>
+          <Route path="/miscellaneous-artwork" element={<MiscellaneousArt/>}/>
+          <Route path="/miscellaneous-collections" element={<MiscellaneousCollections/>}/>
           
           
 
@@ -88,10 +106,20 @@ function App() {
           </Route>
 
           <Route element={<ProtectedEmployeeRoutes/>}>
+			      <Route path="/employee-dashboard" element={<EmployeeDashboard/>}/> 
             <Route path="/edit-employee-account" element={<EditAccountEmployee/>}/>
             <Route path="/employee-account-details" element={<ViewAccountEmployee/>}/>
             <Route path="/employee-exhibits" element={<EmployeeManageExhibits/>}/>
-            <Route path="/employee-gift-shop" element={<ManageGiftShop/>}/>
+            <Route path="/manage-collections" element={<ManageCollections/>}/>
+            <Route path="/add-collection" element={<ManagerAddCollection/>}/>
+            <Route path="/edit-collection/:Title" element={<ManagerEditCollection/>}/>
+            <Route path="/manage-collection-art/:Title" element={<ManageCollectionArt/>}/>
+            <Route path="/add-artwork/:Title" element={<CreateArtwork/>}/>
+            <Route path="/edit-artwork/:ArtID" element={<EditArtwork/>}/>
+            <Route path="/manage-gift-shop" element={<ManageGiftShop/>}/>
+            <Route path="/edit-item/:GiftShopName/:ItemID" element={<EditItem/>}/>
+            <Route path="/add-item" element={<CreateItem/>}/>
+            <Route path="/log-transactions" element={<LogTransactions/>}/>
           </Route>
 
           <Route element={<ProtectedManagerRoutes/>}>
@@ -101,9 +129,6 @@ function App() {
             <Route path="/manage-employees" element={<ManageEmployees/>}/>
             <Route path="/manager-account-details" element={<ManagerAccountDetails/>}/>
             <Route path="/edit-manager-account" element={<EditManagerAccount/>}/>
-            <Route path="/manage-collections" element={<ManageCollections/>}/>
-            <Route path="/add-collection" element={<ManagerAddCollection/>}/>
-            <Route path="/edit-collection/:Title" element={<ManagerEditCollection/>}/>
             <Route path="/add-employee" element={<AddEmployee/>}/>
             <Route path="/edit-employee/:Email" element={<EditEmployee/>}/>
             <Route path="/add-exhibit" element={<CreateExhibit/>}/>
@@ -111,10 +136,15 @@ function App() {
             <Route path="/edit-exhibit/:ExhibitID" element={<EditExhibit/>}/>
             <Route path="/edit-special-exhibit/:ExhibitID" element={<EditSpecialExhibit/>}/>
             <Route path="/view-donations" element={<ViewDonations/>}/>
-            <Route path="/manage-collection-art/:Title" element={<ManageCollectionArt/>}/>
-            <Route path="/add-artwork/:Title" element={<CreateArtwork/>}/>
-            <Route path="/edit-artwork/:ArtID" element={<EditArtwork/>}/>
             <Route path="/employee-exhibit-report" element={<EmployeeExhibitReport/>}/>
+            <Route path="/manage-tickets" element={<ManageTickets/>}/>
+            <Route path="/edit-ticket/:ItemID" element={<EditTicket/>}/>
+            <Route path="/transactions-report" element={<TransactionsReport/>}/>
+            <Route path="/gift-shop-sales-report" element={<GiftShopSalesReport/>}/>
+            <Route path="/customers-report" element={<CustomersReport/>}/>
+            <Route path="/edit-history-report" element={<EditHistoryReport/>}/>
+            <Route path="/add-event" element={<CreateEvent/>}/>
+            <Route path="/edit-event/:EventID" element={<EditEvent/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

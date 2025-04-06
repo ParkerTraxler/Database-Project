@@ -12,7 +12,7 @@ const Collections = () => {
     useEffect(()=>{
         const fetchAllCollections = async ()=>{
             try{
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections")
+                const res = await axios.get("http://localhost:3002/collections")
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){
@@ -25,11 +25,14 @@ const Collections = () => {
 
     return(
         <div>
+            <div className="collectionsBanner">
+                <h1>Collections</h1>
+            </div>
             <div>
                 <h1>Collections</h1>
-                    <div className="collections">
+                    <div className="collectionsC">
                     {collections.map(collection=>(
-                        <div className="collection" key={collection.Title}>
+                        <div className="collectionC" key={collection.Title}>
                             {collection.CollectPic && 
                                 <Link to={`/collection-art/${collection.Title}`}>
                                     <img src={collection.CollectPic} alt="" />
@@ -37,9 +40,18 @@ const Collections = () => {
                             }
                             <h2>{collection.Title}</h2>
                             <p>{collection.CollectDesc}</p>
-                        
+                            
                         </div>
                     ))}
+                    <div className="collectionC">
+                        <Link to={"/miscellaneous-artwork"}>
+                            <img src="default.png" alt="" />
+                        </Link>
+                            
+                        <h2>Miscellaneous Art</h2>
+                        <p>Artwork not contained in any collection</p>
+                    </div>
+                    
                 </div>
             </div>
         </div>

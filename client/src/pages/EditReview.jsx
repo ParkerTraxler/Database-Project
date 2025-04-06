@@ -1,18 +1,28 @@
 import React, { useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../utils/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./EditReview.css";
 
 const EditReview = () => {
     const [review, setReview] = useState({
-        rating: 0,
-        description: "",
-        reviewDate: null,
+        email:"",
+        starcount:"", 
+        reviewdesc:""
     });
+    const { user } = useAuth();
+    const token = user.token;
+    const decoded = jwtDecode(token);
+    const email = decoded.email;
+    console.log(email)
+    
 
     const [hover, setHover] = useState(0);
 
     const handleClick = (index, isHalf) => {
-        setReview({ ...review, rating: isHalf ? index + 0.5 : index + 1 });
+        setReview({ ...review, starcount: isHalf ? index + 0.5 : index + 1 });
     };
 
     const handleHover = (index, isHalf) => {
@@ -23,21 +33,45 @@ const EditReview = () => {
         setHover(0);
     };
 
+    const navigate = useNavigate()
+
+    const handleSubmit = async e => {
+        e.preventDefault()  //prevents page refresh on button click
+        console.log(review)
+        try{
+            console.log("PUT Sent")
+            const res = await axios.put("http://localhost:3002/reviews/", {
+                email: email,
+                starcount: review.starcount, 
+                reviewdesc: review.reviewdesc
+            },
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+            console.log("PUT Completed")
+            console.log(res.end)
+            
+            navigate("/reviews")
+        }
+        catch(err){
+            console.log(err)
+        }
+    };
+
+
     return (
-        <div className="container">
-            <div className="Review-box">
+        <div className="editReviewPage">
+            <div className="editReview-box">
                 <h1 className="Header">Edit your Review</h1>
-                <div className="input-group">
-                    <label>First Name:</label>
-                    <input className="names" type="text" placeholder="First Name" maxLength="30" name="firstname" />
-                    <label>Last Name:</label>
-                    <input className="names" type="text" placeholder="Last Name" maxLength="30" name="lastname" />
+                <div className="input-groupWriteReview">
 
                     {/* Star Rating Section */}
                     <div className="starReview" onMouseLeave={handleMouseLeave}>
                         {[...Array(5)].map((_, index) => {
-                            const fullStar = (hover || review.rating) > index + 0.5;
-                            const halfStar = (hover || review.rating) > index && (hover || review.rating) < index + 1;
+                            const fullStar = (hover || review.starcount) > index + 0.5;
+                            const halfStar = (hover || review.starcount) > index && (hover || review.starcount) < index + 1;
 
                             return (
                                 <span key={index} style={{ cursor: "pointer", position: "relative" }}>
@@ -82,14 +116,14 @@ const EditReview = () => {
 
                     {/* Review Input */}
                     <label>Write a Review:</label>
-                    <textarea className="Review"
+                    <textarea className="writingReviewArea"
                         placeholder="What should other customers know?" 
                         maxLength="300"
                         name="review"
-                        onChange={(e) => setReview({ ...review, description: e.target.value })}
+                        onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>
                 </div>
-                <button onClick={handleClick}>Submit Review</button> {/*TEMPORARY*/ }
+                <button className="submitWriteReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
             </div>
         </div>
     );

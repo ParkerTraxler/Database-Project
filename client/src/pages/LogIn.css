@@ -1,5 +1,6 @@
 
-.container {
+
+.loginContainer {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,6 +13,7 @@
     flex-direction: column;
     box-sizing: border-box;
 }
+
 
 .login-box {
     display: flex;
@@ -29,18 +31,41 @@
     box-sizing: border-box;
 }
 
-input{
+
+.loginInput {
     width: 250px;
     padding: 10px;
     border: 1px solid grey;
     border-radius: 12px;
 }
 
-.input-group {
+
+.input-groupLogin {
     display: flex;
     flex-direction: column;
 }
 
+
 .error {
     color: red;
+}
+
+
+.submit-buttonLogin {
+    background-color: #d4d8df;
+    color: #1a1a1a;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+ 
+.submit-buttonLogin:hover {
+    background-color: #bfc3c9;
+}
+ 
+.no-account:hover{
+    text-decoration: underline;
 }

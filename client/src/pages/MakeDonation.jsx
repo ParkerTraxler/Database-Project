@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import { jwtDecode } from "jwt-decode";
+import './MakeDonation.css'
 
 const MakeDonation = () => {
     console.log("MakeDonation")
@@ -41,7 +42,7 @@ const MakeDonation = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/donations", {
+            const res = await axios.post("http://localhost:3002/donations", {
                 donatedate: formattedDate, 
                 donateamt: donation.donateamt, 
                 donatedesc: donation.donatedesc,
@@ -64,11 +65,16 @@ const MakeDonation = () => {
 
     return(
         <div>
-            <div className="form">
-                <h1>Make a Donation</h1>
-                <input type="number" step="0.01" placeholder="amount" onChange={handleChange} name="donateamt"/>
-                <input type="text" placeholder="desc" onChange={handleChange} name="donatedesc"/>
-                <button className="formButton" onClick={handleClick} >Donate</button>
+            <div className="donationBanner">
+                <h1>Want to Donate?</h1>
+            </div>
+            <div className="donationPage">
+                <div className="donationForm">
+                    <h1>Make a Donation</h1>
+                    <input type="number" step="0.01" placeholder="amount" onChange={handleChange} name="donateamt"/>
+                    <input type="text" placeholder="desc" onChange={handleChange} name="donatedesc"/>
+                    <button className="donationButton" onClick={handleClick} >Donate</button>
+                </div>
             </div>
         </div>
     )

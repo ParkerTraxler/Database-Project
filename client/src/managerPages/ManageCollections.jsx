@@ -19,7 +19,7 @@ const ManageCollections = () => {
     useEffect(()=>{
         const fetchAllCollections = async ()=>{
             try{
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections")
+                const res = await axios.get("http://localhost:3002/collections")
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){
@@ -32,7 +32,7 @@ const ManageCollections = () => {
     const handleDelete = async (title)=>{
         console.log(title)
         try{
-            const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/", {
+            const res = await axios.delete("http://localhost:3002/collections/", {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },
@@ -48,12 +48,12 @@ const ManageCollections = () => {
 
 
     return(
+        <div className="manage-collections-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
-            <div>
-                Manage Collections
+            <div className="manage-collections-section">
                 <h1>Collections</h1>
                 <div className="collectionsM">
                 {collections.map(collection=>(
@@ -71,10 +71,10 @@ const ManageCollections = () => {
                 ))}
                 </div>
                 <button>
-                    <Link to="/add-collection">Create Collection</Link>
+                    <Link to="/add-collection" className="create-collection-button">Create Collection</Link>
                 </button>
             </div>
-            
+        </div>    
         </div>
     )
 }

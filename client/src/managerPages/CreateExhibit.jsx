@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import './ManagerDashboard.css'
+import './CreateExhibit.css'
 
 const CreateExhibit = () => {
     console.log("CreateExhibit")
@@ -33,7 +34,7 @@ const CreateExhibit = () => {
         console.log("Exhibit object being sent:", exhibit);  // Debug the exhibit state before sending
         
         try{
-            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits/", {
+            const res = await axios.post("http://localhost:3002/exhibits/", {
                 exhibitname: exhibit.exhibitname, 
                 exhibitdesc: exhibit.exhibitdesc, 
                 exhibitpic: exhibit.exhibitpic,
@@ -54,12 +55,13 @@ const CreateExhibit = () => {
     }
 
     return(
+        <div className="create-exhibit-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
             <div>
-                <div className="form">
+                <div className="create-exhibit-form">
                     <h1>Create Exhibit</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
                     <input type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
@@ -67,7 +69,7 @@ const CreateExhibit = () => {
                     <button className="formButton" onClick={handleClick} >Add</button>
                 </div>
             </div>
-            
+        </div>   
         </div>
     )
 }

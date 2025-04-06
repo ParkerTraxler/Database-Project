@@ -10,7 +10,9 @@ const manageDonationsRoutes = (req, res) => {
         const email = decodeURIComponent(urlParts[urlParts.length - 1]);
         getDonationsForUser(req, res, email);
     } else if (req.url === '/donations' && req.method === 'POST') {
-        createDonation(req, res);
+        verifyToken('Customer', null)(req, res, () => {
+            createDonation(req, res);
+        });
     }
 };
 

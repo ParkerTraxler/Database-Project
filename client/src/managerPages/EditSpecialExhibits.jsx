@@ -5,12 +5,15 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
+import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
 
 const EditSpecialExhibit = () => {
     console.log("EditSpecialExhibit")
     const { user } = useAuth()
     const token = user.token
+    const decoded = jwtDecode(token)
+    const email = decoded.email
     const [specialExhibit, setSpecialExhibit] = useState({
         exhibitname:"", 
         exhibitdesc:"", 
@@ -34,7 +37,7 @@ const EditSpecialExhibit = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits/", {
+            const res = await axios.put("http://localhost:3002/exhibits/", {
                 exhibitid: exhibitID,
                 exhibitname: specialExhibit.exhibitname, 
                 exhibitdesc: specialExhibit.exhibitdesc, 
@@ -42,6 +45,7 @@ const EditSpecialExhibit = () => {
                 startdate: specialExhibit.startdate,
                 enddate: specialExhibit.enddate,
                 fee: specialExhibit.fee,
+                managerEmail: email
             },
             {
                 headers: {

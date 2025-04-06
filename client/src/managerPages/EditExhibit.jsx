@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import './ManagerDashboard.css'
+import './EditExhibit'
 
 const EditExhibit = () => {
     console.log("EditExhibit")
@@ -31,7 +32,7 @@ const EditExhibit = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits/", {
+            const res = await axios.put("http://localhost:3002/exhibits/", {
                 exhibitid: exhibitID,
                 exhibitname: exhibit.exhibitname, 
                 exhibitdesc: exhibit.exhibitdesc, 
@@ -53,7 +54,7 @@ const EditExhibit = () => {
 
     return(
         
-        
+        <div className="edit-exhibit-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
@@ -66,9 +67,9 @@ const EditExhibit = () => {
                 <input type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/> 
                 <button className="formButton" onClick={handleClick} >Update</button>
                     
-                </div>
             </div>
-            
+            </div>
+        </div>  
         </div>
     )
 }

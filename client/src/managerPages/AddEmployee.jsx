@@ -5,6 +5,7 @@ import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import ManagerDashboard from './ManagerNav'
 import './ManagerDashboard.css'
+import './AddEmployee.css'
 
 const AddEmployee = () => {
     console.log("AddEmployee")
@@ -31,7 +32,7 @@ const AddEmployee = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees", {
+            const res = await axios.post("http://localhost:3002/employees", {
                 email: employee.email,
                 firstName: employee.firstName,
                 lastName: employee.lastName,
@@ -56,21 +57,31 @@ const AddEmployee = () => {
 
 
     return(
+        <div className="add-employee-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
             <div>
-                <div className="form">
-                    <h1>Add Employee</h1>
+                <div className="add-employee-form">
+                    <h1 className="add-employee-header">Add Employee</h1>
                     <input type="text" placeholder="email" onChange={handleChange} name="email"/>
                     <input type="text" placeholder="first name" onChange={handleChange} name="firstName"/>
                     <input type="text" placeholder="last name" onChange={handleChange} name="lastName"/>
-                    <input type="text" placeholder="position" onChange={handleChange} name="position"/>
+                    <div>
+
+                    <select onChange={handleChange} name="position">
+                        <option value="">---Choose an option---</option>
+                        <option value="Curator">Curator</option>
+                        <option value="GiftShopTeam">GiftShopTeam</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    </div>
                     <input type="text" placeholder="manager email" onChange={handleChange} name="managerEmail"/>
-                    <button className="formButton" onClick={handleClick} >Add</button>
+                    <button className="add-employee-formButton" onClick={handleClick} >Add</button>
                 </div>
             </div>  
+        </div>
         </div>
     )
 }

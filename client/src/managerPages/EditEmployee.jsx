@@ -5,12 +5,15 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
+import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
 
 const EditEmployee = () => {
     console.log("EditEmployee")
     const { user } = useAuth()
     const token = user.token
+    const decoded = jwtDecode(token)
+    const managerEmail = decoded.email
     const [employee, setEmployee] = useState({
         hourlywage: "",
         weeklyhours: "",
@@ -37,7 +40,7 @@ const EditEmployee = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/", {
+            const res = await axios.put("http://localhost:3002/employees/", {
                 hourlywage: employee.hourlywage,
                 weeklyhours: employee.weeklyhours,
                 firstname: employee.firstname,
@@ -48,6 +51,7 @@ const EditEmployee = () => {
                 managerID: employee.managerID,
                 gender: employee.gender,
                 email: email,
+                managerEmail: managerEmail
             },
             {
                 headers: {

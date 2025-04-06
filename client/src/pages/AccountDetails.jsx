@@ -25,7 +25,12 @@ const AccountDetails = () => {
     useEffect(() => {
         const fetchAccount = async () => {
             console.log(encodeURIComponent(email));
-            axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/profile/${encodeURIComponent(email)}`)
+            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`, 
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
                 .then((res) => {
                     console.log(res.data);
                     setInfo(res.data);
@@ -48,30 +53,71 @@ const AccountDetails = () => {
             console.log(err);
         }
     };
+    const subscribeNow = async e => {
+        e.preventDefault()  //prevents page refresh on button click
+        try{
+            console.log("PUT Sent")
+            const res2 = axios.put('http://localhost:3002/profile/membership', {
+                email: email
+            },
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+            console.log(res2)
+            console.log("PUT Completed")
+            window.location.reload()
+        } catch (err){
+            console.log(err)
+        }
+        
+    }
 
     if (isLoading) {
         return <div>Loading account details...</div>; // Display while loading
     }
 
     return (
-        <div className="AccountPage">
-            <div className="AccountDetails">
+        <div className="AccountPageC">
+            <div className="AccountDetailsC">
                 <h1>Account Details</h1>
                 {!info.FirstName && (
                     <div>Loading Info...</div>
                 )}
-                <div className="detailsBox">
-                    <div className="detail"><strong>First Name:</strong> {info.FirstName}</div>
-                    <div className="detail"><strong>Last Name:</strong> {info.LastName}</div>
-                    <div className="detail"><strong>Date of Birth:</strong> {info.BirthDate || "Not provided"}</div>
-                    <div className="detail"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
-                    <div className="detail"><strong>Email:</strong> {email}</div>
-                    <div className="detail"><strong>Password:</strong> ********</div>
+                <div className="detailsBoxC">
+                    <div className="detailC"><strong>First Name:</strong> {info.FirstName}</div>
+                    <div className="detailC"><strong>Last Name:</strong> {info.LastName}</div>
+                    <div className="detailC"><strong>Date of Birth:</strong> {new Date(info.BirthDate).toLocaleDateString() || "Not provided"}</div>
+                    <div className="detailC"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
+                    <div className="detailC"><strong>Membership Status:</strong> {info.isMember ? "Member" : "Not a Member"}</div>
+                    {info.isMember == "1" && (
+                        <div className="detailC"><strong>Renewing Membership:</strong> {info.isRenewing ? "Yes" : "No"}</div>
+                    )}
+                    {info.isMember == "1" && (
+                        <div className="detailC"><strong>Years as a Member:</strong> {info.YearsOfMembership}</div>
+                    )}
+                    {info.isMember == "1" && (
+                        <div className="detailC"><strong>Membership End/Renewal Date:</strong> {new Date(info.DateOfExpiration).toLocaleDateString() || "Not provided"}</div>
+                    )}
+                    <div className="detailC"><strong>Email:</strong> {email}</div>
+                    <div className="detailC"><strong>Password:</strong> ********</div>
                 </div>
                 <div>
-                    <button className="saveButton" onClick={handleClick}>Edit Account</button>
+                    <button className="saveButtonC" onClick={handleClick}>Edit Account</button>
                 </div>
+                
+                <div className='accountMembershipDetailsContainer'>
+                    {info.isMember == "0" &&(
+                        <div className='accountMembershipDetailsArea'>
+                            <p>Not a Member?</p>
+                            <button className="membershipSubscribeButton" onClick={subscribeNow}>Subscribe Now</button>
+                        </div>
+                    )}
+                </div>
+
             </div>
+            
         </div>
     );
 };

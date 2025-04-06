@@ -27,7 +27,7 @@ const getDonationsForUser = async (req, res, email) => {
         // SQL QUERY - Return all the donations given by that user - MIGHT BE NONE.  
         const [ rows ] = await db.query(queries.get_specific_dons, [email]);
 
-            // Return donations to frontend
+        // Return donations to frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
     } catch (err) {
@@ -68,6 +68,8 @@ const createDonation = (req, res) => {
                 res.writeHead(400, {'Content-Type': 'application/json'});
                 return res.end(JSON.stringify({ error: 'Something has gone wrong inserting the donation into the table.'}));
             }
+
+            await db.query(queries.new_history_log, [email, "Created", "Donations", results.insertId, "A customer has donated $" + donateamt + " to the museum!"])
 
             // Return success message
             res.writeHead(201, { 'Content-Type': 'application/json' });

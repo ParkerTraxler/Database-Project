@@ -47,7 +47,7 @@ const createArtwork = async (req, res) => {
     });
 
     req.on('end', async () => {
-        const { artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay } = JSON.parse(body);
+        const { artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay, email} = JSON.parse(body);
 
         try {
             // Ensure artName and onDisplay were provided.
@@ -68,13 +68,21 @@ const createArtwork = async (req, res) => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'This art piece seems to already exist!' }));
             }
+            
+            if(dateMade == ""){
+                dateMade = null;
+            }
+
             // SQL Query - Insert new artwork into database
-            const result = await db.query(queries.insert_art_piece, [artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay]);
+            const [ result ] = await db.query(queries.insert_art_piece, [artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay]);
 
             if(!result || result.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Database could not accept entry. Invalid input?' }));
             }
+
+            // add to the history log
+            await db.query(queries.new_history_log, [email, "Created", "Artworks", result.insertId, "A new artwork has been added to the museum."])
 
             // Return success message
             res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -97,7 +105,7 @@ const deleteArtwork = async (req, res) => {
 
     req.on('end', async () => {
         try {
-            const { artID } = JSON.parse(body);
+            const { artID, email } = JSON.parse(body);
 
             // Ensure an ID was provided
             if (!artID) {
@@ -105,12 +113,14 @@ const deleteArtwork = async (req, res) => {
                 return res.end(JSON.stringify({ error: 'Please select an art piece to delete' }))
             }
             // SQL QUERY - Delete artwork in the database with the same name (change to ID later?)
-            const result = await db.query(queries.mark_art_for_deletion, [artID]);
+            const [ result ] = await db.query(queries.mark_art_for_deletion, [artID]);
 
             if (!result || result.rowCount == 0) {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Failed to delete art piece into the database.' }))
             }
+
+            await db.query(queries.new_history_log, [email, "Deleted", "Artworks", artID, "An artwork has been removed from the museum entirely."])
 
             // Return success message
             res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -133,7 +143,7 @@ const updateArtwork = (req, res) => {
     req.on('end', async () => {
         try {
             // Store all the updated fields
-            var {artID, artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay } = JSON.parse(body);
+            var {artID, artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay, email} = JSON.parse(body);
 
             // If no art ID is provided, halt
             if (!artID) {
@@ -192,6 +202,7 @@ const updateArtwork = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
             }
 
+            await db.query(queries.new_history_log, [email, "Updated", "Artworks", artID, "Artwork by the name of \"" + artName + "\" belonging to collection \"" + collection + "\" was updated."] );
              // Return success message
              res.writeHead(200, { 'Content-Type': 'application/json' });
              return res.end(JSON.stringify({ message: 'Artwork updated successfully.' }));
