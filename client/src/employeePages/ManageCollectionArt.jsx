@@ -7,6 +7,7 @@ import EmployeeNav from './EmployeeNav'
  import { useLocation } from 'react-router-dom'
  import { useAuth } from '../utils/AuthContext'
  import './EmployeeDashboard.css'
+ import './ManageCollectionArt.css'
  
  const ManageCollectionArt = () => {
      console.log("ManageCollectionArt")
@@ -64,11 +65,11 @@ import EmployeeNav from './EmployeeNav'
              <div>
                 <EmployeeNav/>
              </div>
-             <div>
+             <div className="manageCollectionArtSectionEm">
                  <h1>{collectionTitle}</h1>
-                 <div className="artwork">
+                 <div className="artworkEm">
                  {artwork.map(art=>(
-                     <div className="art" key={art.ArtID}>
+                     <div className="artEm" key={art.ArtID}>
                          {art.ArtPic && 
                              <img src={art.ArtPic} alt="" />                     
                          }

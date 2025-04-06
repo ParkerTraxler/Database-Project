@@ -1,0 +1,31 @@
+.manageEventsSectionM {
+    display: flex;
+    flex-direction: column;
+}
+
+.eventsM {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.eventM {
+    background-color: rgb(245, 245, 245);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.eventM img {
+    width: 400px;
+    height: 290px;
+    border-radius: 5px;
+}
+
+@media (max-width: 1000px) {
+    .eventsM {
+        grid-template-columns: 1fr;
+    }
+}

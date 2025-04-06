@@ -13,6 +13,7 @@ const CreateEvent = () => {
         eventdesc: "", 
         eventdate: "",
         memberonly: false, 
+        eventpic: "",
     });
     const [employeeEmail, setEmployeeEmail] = useState("");
     const [employeeList, setEmployeeList] = useState([]);
@@ -56,7 +57,8 @@ const CreateEvent = () => {
                 eventdate: event.eventdate,
                 memberonly: event.memberonly, 
                 employeelist: employeeList,
-                email: managerEmail
+                email: managerEmail,
+                eventpic: event.eventpic
                 
             },
             {
@@ -84,6 +86,7 @@ const CreateEvent = () => {
                     <h1>Create Event</h1>
                     <input type="text" placeholder="Event Name" onChange={handleChange} name="eventname" />
                     <input type="text" placeholder="Event Description" onChange={handleChange} name="eventdesc" />
+                    <input type="text" placeholder="Image URL" onChange={handleChange} name="eventpic" />
                     <input type="date" onChange={handleChange} name="eventdate" />
                     <div>
                         <label>
