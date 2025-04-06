@@ -41,6 +41,9 @@ const GiftShop = () => {
                         items.length > 0 ? (
                         items.map(item=>(
                             <div className="item" key={item.ItemID}>
+                                {item.ItemImage && 
+                                    <img src={item.ItemImage} alt="" />
+                                }
                                 <div>{item.ItemName}</div>
                                 <div>{"$" + item.ItemPrice}</div>
                                 <div>Stock: {item.AmountInStock}</div>

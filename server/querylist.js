@@ -82,9 +82,9 @@ const get_all_normal_items = "SELECT * FROM items WHERE isDeleted = false AND It
 const get_a_normal_item = "SELECT * FROM items WHERE isDeleted = false AND ItemID = ?";
 const get_all_tickets = "SELECT ItemID, ItemName, ItemPrice, AmountInStock, isPurchasable FROM items WHERE ItemID IN (1, 2, 3, 4)";
 const get_specific_ticket = "SELECT * FROM items WHERE ItemID = ? AND ItemID IN (1, 2, 3, 4)";
-const insert_new_item = "INSERT INTO items (ItemName, AmountSold, ItemPrice, AmountInStock, GiftShopName) VALUES (?, 0, ?, ?, 'Museum Gift Shop')";
+const insert_new_item = "INSERT INTO items (ItemName, AmountSold, ItemPrice, ItemImage, AmountInStock, GiftShopName) VALUES (?, 0, ?, ?, ?, 'Museum Gift Shop')";
 const delete_item = "UPDATE items SET isDeleted = true WHERE ItemID = ? AND isDeleted = false AND ItemID NOT IN (1, 2, 3, 4)";
-const update_item = "UPDATE items SET ItemName = ?, ItemPrice = ?, GiftShopName = ? WHERE ItemID = ? AND isDeleted = false";
+const update_item = "UPDATE items SET ItemName = ?, ItemPrice = ?, ItemImage = ?, GiftShopName = ? WHERE ItemID = ? AND isDeleted = false";
 const restock_item = "UPDATE items SET AmountInStock = AmountInStock + ? WHERE ItemID = ? AND isDeleted = false";
 
 // Transaction Controller - one query to add a new transaction
@@ -123,9 +123,9 @@ const get_all_events = "SELECT * FROM eventlist WHERE isDeleted = false AND Even
 const get_specific_event = "SELECT * FROM eventlist WHERE isDeleted = false AND EventID = ?";
 const get_event_employees = "SELECT employees.EmployeeID, CONCAT(employees.FirstName, ' ', employees.LastName) AS EmployeeName, employees.Email, eventworkers.EventID FROM eventworkers, employees WHERE EventID = ? AND eventworkers.EmployeeID = employees.EmployeeID AND employees.isDeleted = FALSE";
 const cancel_event = "UPDATE eventlist SET isDeleted = TRUE WHERE EventID = ?";
-const create_event = "INSERT INTO eventlist (EventName, EventDesc, EventDate, MemberOnly) VALUES (?, ?, ?, ?)";
+const create_event = "INSERT INTO eventlist (EventName, EventDesc, EventDate, EventPic, MemberOnly) VALUES (?, ?, ?, ?, ?)";
 const add_event_employee = "INSERT INTO eventworkers (EventID, EmployeeID) VALUES (?, (SELECT EmployeeID FROM employees WHERE employees.Email = ? AND isDeleted = FALSE))";
-const update_event = "UPDATE eventlist SET EventName = ?, EventDesc = ?, EventDate = ?, MemberOnly = ? WHERE EventID = ?";
+const update_event = "UPDATE eventlist SET EventName = ?, EventDesc = ?, EventDate = ?, EventPic = ?, MemberOnly = ? WHERE EventID = ?";
 // this is one of the only actual delete command in the whole DB - the history table will track when an employee gets unassigned, so no information is actually lost, but the table will actually remove things 
 const remove_event_employee = "DELETE FROM eventworkers WHERE EventID = ? AND EmployeeID = (SELECT EmployeeID FROM employees WHERE employees.Email = ? AND isDeleted = FALSE)";
 

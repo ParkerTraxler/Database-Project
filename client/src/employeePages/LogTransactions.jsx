@@ -78,6 +78,7 @@ const LogTransactions = () => {
         
         console.log(itemIDs)
         console.log(quantities)
+        
         try{
             console.log("POST Sent")
             const res = await axios.post("http://localhost:3002/transactions/items", {

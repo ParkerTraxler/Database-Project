@@ -17,6 +17,7 @@ const EditItem = () => {
         itemname:"", 
         itemprice:"", 
         amounttoadd:"0",
+        itemimage: ""
     })
 
     const handleChange = (e) =>{ // given target to given value
@@ -42,6 +43,7 @@ const EditItem = () => {
                 itemid: ItemID, 
                 itemname: item.itemname, 
                 itemprice: item.itemprice, 
+                itemimage: item.itemimage,
                 giftshopname: GiftShopName
             },
             {
@@ -82,6 +84,7 @@ const EditItem = () => {
                 <div className="form">
                     <h1>Edit Item</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="itemname"/>
+                    <input type="text" placeholder="image url" onChange={handleChange} name="itemimage"/>
                     <input type="text" min="0" placeholder="price" onChange={handleChange} name="itemprice"/>
                     <input type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
                     <div>
