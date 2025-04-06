@@ -68,6 +68,11 @@ const createArtwork = async (req, res) => {
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'This art piece seems to already exist!' }));
             }
+            
+            if(dateMade == ""){
+                dateMade = null;
+            }
+
             // SQL Query - Insert new artwork into database
             const [ result ] = await db.query(queries.insert_art_piece, [artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay]);
 
