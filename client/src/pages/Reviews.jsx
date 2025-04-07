@@ -22,7 +22,7 @@ const Reviews = () => {
                 setReviews(res.data)
                 console.log(reviews)
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             } finally {
                 setLoading(false);  // Stop loading after request completes
             }

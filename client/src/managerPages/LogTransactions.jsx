@@ -26,7 +26,7 @@ const LogTransactions = () => {
                 setItems(res.data);  // Store the data once fetched
                 console.log(items)
             } catch (err) {
-                console.error(err);
+                window.alert(err.response.data.error);
             } finally {
                 setLoading(false);  // Stop loading after request completes
             }
@@ -99,7 +99,7 @@ const LogTransactions = () => {
 
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

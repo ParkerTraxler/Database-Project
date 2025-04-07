@@ -76,7 +76,6 @@ const EditAccount = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log(res.end)
 
             if(info.cancelMembership === "on"){
                 console.log("PUT Sent")
@@ -88,14 +87,12 @@ const EditAccount = () => {
                         'authorization': `Bearer ${token}`
                     },
                 })
-                console.log(res2)
-                console.log("PUT Completed")
             }
             
             navigate("/account-details")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

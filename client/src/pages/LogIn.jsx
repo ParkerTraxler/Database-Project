@@ -21,7 +21,6 @@ const LogIn = () => {
 
     const handleChange = (e) =>{ // given target to given value
         setLogin(prev=>({...prev, [e.target.name]: e.target.value}))
-        console.log(userData)
     }
 
     const navigate = useNavigate()
@@ -46,18 +45,14 @@ const LogIn = () => {
                     }
                 }); 
                 const { message, token, error } = res.data
-                console.log(res.data)
-                console.log(message)
                 const decoded = jwtDecode(token)
                 const role = decoded.role
-                console.log("Role: " + role)
-                console.log(error)
                 
                 login(userData.email, role, token)
                 navigate('/')
             }
             catch(err){
-                console.log(err);
+                window.alert(err.response.data.error);
             }
         }
     }

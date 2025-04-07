@@ -16,7 +16,7 @@ const Collections = () => {
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             }
         }
         fetchAllCollections()

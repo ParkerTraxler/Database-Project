@@ -44,7 +44,7 @@ const EditHistoryReport = () => {
             
             setReportGenerated(true);
         } catch (err) {
-            console.log(err);
+            window.alert(err.response.data.error);
         }
     };
     

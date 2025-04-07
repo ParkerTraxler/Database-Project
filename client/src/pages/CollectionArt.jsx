@@ -27,7 +27,7 @@ const CollectionArt = () => {
                  setArtwork(res.data)
                  console.log(artwork.data)
              }catch(err){
-                 console.log(err)
+                window.alert(err.response.data.error);
              }
          }
          fetchArtwork()
@@ -52,7 +52,7 @@ const CollectionArt = () => {
                          <div>Artist: {art.Artist}</div>
                          <div>Value: {art.ArtVal}</div>
                          
-                         <div>Date Made: {new Date(art.DateMade).toLocaleDateString()}</div>
+                         <div>Date Made: {art.DateMade ? new Date(art.DateMade).toLocaleDateString() : "Unknown"}</div>
                          <p>Desc: {art.ArtDesc}</p>
                          
                          

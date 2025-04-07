@@ -64,7 +64,7 @@ const EditTicket = () => {
             navigate("/manage-tickets")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

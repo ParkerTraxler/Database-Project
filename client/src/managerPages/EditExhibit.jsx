@@ -48,7 +48,7 @@ const EditExhibit = () => {
             navigate("/manage-exhibits")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

@@ -43,13 +43,10 @@ const CreateItem = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log(res.end)
-            console.log("POST Completed")
-            
             navigate("/manage-gift-shop")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

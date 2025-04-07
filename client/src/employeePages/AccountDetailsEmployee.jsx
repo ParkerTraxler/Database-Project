@@ -41,7 +41,7 @@ const AccountDetailsEmployee = () => {
                 <div className="detail"><strong>Last Name:</strong> {details.lastName}</div>
                 <div className="detail"><strong>Position:</strong> {details.Eposition}</div>
                 <div className="detail"><strong>Address:</strong> {details.address}</div>
-                <div className="detail"><strong>Date of Birth:</strong> {details.birthDate}</div>
+                <div className="detail"><strong>Date of Birth:</strong> {details.birthDate ? new Date(details.birthDate).toLocaleDateString() : "Not provided"}</div>
                 <div className="detail"><strong>Gender:</strong> {details.gender}</div>
                 <div className="detail"><strong>Email:</strong> {details.email}</div>
                 <div className="detail"><strong>Password:</strong> ********</div>

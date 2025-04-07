@@ -47,12 +47,10 @@ const CreateSpecialExhibit = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log(res.end)
-            
             navigate("/manage-exhibits")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

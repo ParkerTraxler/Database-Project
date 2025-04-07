@@ -29,7 +29,7 @@ const TransactionsReport = () => {
                 console.log(transactions)
                 
             } catch (err) {
-                console.log(err);
+                window.alert(err.response.data.error);
             }
         };
         fetchTransactions();

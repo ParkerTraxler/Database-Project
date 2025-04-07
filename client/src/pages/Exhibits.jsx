@@ -22,7 +22,7 @@ const Exhibits = () => {
                 setExhibits(regularExhibits);
                 setSpecialExhibits(specialExhibits);
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             }
         }
         fetchAllExhibits()

@@ -26,10 +26,7 @@ import React from 'react'
      })
  
      const handleChange = (e) =>{ // given target to given value
-         console.log(e.target.name, e.target.value);
-         
          setArtwork(prev=>({...prev, [e.target.name]: e.target.value}))
-         console.log(artwork)
      }
  
      const navigate = useNavigate()
@@ -39,8 +36,6 @@ import React from 'react'
  
      const handleClick = async e =>{ //do async for api requests
          e.preventDefault()  //prevents page refresh on button click
-         console.log("ID: " + artID)
-         console.log(artwork)
          try{
              const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/", {
                  artID: artID,
@@ -59,12 +54,10 @@ import React from 'react'
                      'authorization': `Bearer ${token}`
                  },
              })
-             console.log(res.end)
-             
              navigate("/manage-collections")
          }
          catch(err){
-             console.log(err)
+            window.alert(err.response.data.error);
          }
      }
  

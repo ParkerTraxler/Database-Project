@@ -25,7 +25,6 @@ const MakeDonation = () => {
 
     const handleChange = (e) =>{ // given target to given value
         setDonation(prev=>({...prev, [e.target.name]: e.target.value}))
-        console.log(donation)
     }
 
     const now = new Date();
@@ -53,12 +52,11 @@ const MakeDonation = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log(res.end)
             
             navigate("/")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

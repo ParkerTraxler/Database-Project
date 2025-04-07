@@ -55,7 +55,7 @@ const WriteReview = () => {
             navigate("/reviews")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     };
 

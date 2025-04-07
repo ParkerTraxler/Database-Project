@@ -37,7 +37,7 @@ const AccountDetails = () => {
                     setIsLoading(false); // Set loading to false when done
                 })
                 .catch((err) => {
-                    console.log(err);
+                    window.alert(err.response.data.error);
                     setIsLoading(false); // Even on error, stop loading
                 });
         };
@@ -50,7 +50,7 @@ const AccountDetails = () => {
         try {
             navigate("/account-details/edit");
         } catch (err) {
-            console.log(err);
+            window.alert(err.response.data.error);
         }
     };
     const subscribeNow = async e => {
@@ -69,7 +69,7 @@ const AccountDetails = () => {
             console.log("PUT Completed")
             window.location.reload()
         } catch (err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
         
     }
@@ -88,7 +88,7 @@ const AccountDetails = () => {
                 <div className="detailsBoxC">
                     <div className="detailC"><strong>First Name:</strong> {info.FirstName}</div>
                     <div className="detailC"><strong>Last Name:</strong> {info.LastName}</div>
-                    <div className="detailC"><strong>Date of Birth:</strong> {new Date(info.BirthDate).toLocaleDateString() || "Not provided"}</div>
+                    <div className="detailC"><strong>Date of Birth:</strong> {info.BirthDate ? new Date(info.BirthDate).toLocaleDateString() : "Not provided"}</div>
                     <div className="detailC"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
                     <div className="detailC"><strong>Membership Status:</strong> {info.isMember ? "Member" : "Not a Member"}</div>
                     {info.isMember == "1" && (

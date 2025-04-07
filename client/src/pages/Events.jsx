@@ -11,14 +11,10 @@ const Events = () => {
     useEffect(()=>{
         const fetchAllEvents = async ()=>{
             try{
-                console.log("GET Sent")
                 const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events")
-                console.log("GET Completed")
-                console.log(res.data)
                 setEvents(res.data)
-                console.log(events)
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             }
         }
         fetchAllEvents()

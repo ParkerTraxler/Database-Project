@@ -11,14 +11,10 @@ const GiftShop = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                console.log("GET Sent")
                 const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items");
-                console.log("GET Completed")
-                console.log(res.data)
                 setItems(res.data);  // Store the data once fetched
-                console.log(items)
             } catch (err) {
-                console.error(err);
+                window.alert(err.response.data.error);
             } finally {
                 setLoading(false);  // Stop loading after request completes
             }

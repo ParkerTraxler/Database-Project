@@ -35,7 +35,6 @@ const EditEmployee = () => {
     }
 
     const email = location.pathname.split("/")[2]
-    console.log(email)
 
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
@@ -63,7 +62,7 @@ const EditEmployee = () => {
             navigate("/manage-employees")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

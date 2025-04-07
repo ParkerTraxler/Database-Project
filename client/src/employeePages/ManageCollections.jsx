@@ -42,7 +42,7 @@ const ManageCollections = () => {
             window.location.reload() //refreshes the page
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

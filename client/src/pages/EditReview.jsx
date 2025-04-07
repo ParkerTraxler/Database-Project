@@ -16,7 +16,6 @@ const EditReview = () => {
     const token = user.token;
     const decoded = jwtDecode(token);
     const email = decoded.email;
-    console.log(email)
     
 
     const [hover, setHover] = useState(0);
@@ -37,9 +36,7 @@ const EditReview = () => {
 
     const handleSubmit = async e => {
         e.preventDefault()  //prevents page refresh on button click
-        console.log(review)
         try{
-            console.log("PUT Sent")
             const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reviews/", {
                 email: email,
                 starcount: review.starcount, 
@@ -50,13 +47,10 @@ const EditReview = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log("PUT Completed")
-            console.log(res.end)
-            
             navigate("/reviews")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     };
 

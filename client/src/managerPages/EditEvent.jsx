@@ -91,7 +91,7 @@ const EditEvent = () => {
             navigate("/manage-events")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

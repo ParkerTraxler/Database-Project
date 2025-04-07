@@ -21,7 +21,7 @@ const ExhibitCollections = () => {
                 setCollections(res.data)
                 console.log(collections.data)
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             }
         }
         fetchCollections()
