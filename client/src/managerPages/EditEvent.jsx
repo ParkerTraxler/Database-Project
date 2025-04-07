@@ -70,7 +70,7 @@ const EditEvent = () => {
         console.log(employeeList)
         try{
             console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/events/", {
+            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events/", {
                 eventid: EventID, 
                 eventname: prevEvent.EventName, 
                 eventdesc: prevEvent.EventDesc, 

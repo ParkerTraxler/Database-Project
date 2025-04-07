@@ -49,7 +49,7 @@ const EditTicket = () => {
             console.log("PUT Completed")
             console.log(res.data)
             console.log("PUT Sent")
-            const res2 = await axios.put("http://localhost:3002/items/restock", {
+            const res2 = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/restock", {
                 itemid: ticketID,
                 amounttoadd: ticket.amounttoadd,
                 email: email

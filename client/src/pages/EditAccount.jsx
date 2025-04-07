@@ -80,7 +80,7 @@ const EditAccount = () => {
 
             if(info.cancelMembership === "on"){
                 console.log("PUT Sent")
-                const res2 = axios.put('http://localhost:3002/profile/membership', {
+                const res2 = axios.put('https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/profile/membership', {
                     email: email
                 },
                 {
