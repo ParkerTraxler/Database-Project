@@ -40,7 +40,7 @@ const CustomersReport = () => {
             
             setReportGenerated(true);
         } catch (err) {
-            window.alert(err.response.data.error);
+            console.log(err);
         }
     };
     
@@ -97,7 +97,7 @@ const CustomersReport = () => {
                                     <td>{customer.Customer_Name}</td>
                                     <td>{customer.Customer_Email}</td>
                                     <td>{"$" + customer.Total_Amount_Spent}</td>
-                                    <td>{new Date(customer.Last_Visit_Date).toLocaleDateString()}</td>
+                                    <td>{customer.Last_Visit_Date ? new Date(customer.Last_Visit_Date).toLocaleDateString() : "Not Yet Visited"}</td>
                                     <td>{customer.Currently_Member ? "Member" : "Not a Member"}</td>
                                     <td>{new Date(customer.Account_Creation_Date).toLocaleDateString()}</td>
                                     <td>{customer.Good_Promotion ? "Ideal Target" : "Not Ideal Target"}</td>
