@@ -57,7 +57,7 @@ const AccountDetails = () => {
         e.preventDefault()  //prevents page refresh on button click
         try{
             console.log("PUT Sent")
-            const res2 = axios.put('https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/profile/membership', {
+            const res2 = await axios.put('https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/profile/membership', {
                 email: email
             },
             {

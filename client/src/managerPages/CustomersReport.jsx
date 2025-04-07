@@ -99,7 +99,7 @@ const CustomersReport = () => {
                                     <td>{"$" + customer.Total_Amount_Spent}</td>
                                     <td>{customer.Last_Visit_Date ? new Date(customer.Last_Visit_Date).toLocaleDateString() : "Not Yet Visited"}</td>
                                     <td>{customer.Currently_Member ? "Member" : "Not a Member"}</td>
-                                    <td>{new Date(customer.Account_Creation_Date).toLocaleDateString()}</td>
+                                    <td>{new Date(customer.Account_Creation_Date).toLocaleDateString('en-US', { timeZone: 'UTC' })}</td>
                                     <td>{customer.Good_Promotion ? "Ideal Target" : "Not Ideal Target"}</td>
                                 </tr>
                             ))}
