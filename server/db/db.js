@@ -12,7 +12,7 @@ var pool = mysql.createPool({
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
     ssl: {
-        ca: fstatSync.readFileSync(certPath)
+        ca: fs.readFileSync(certPath)
     }
 }).promise();
 
