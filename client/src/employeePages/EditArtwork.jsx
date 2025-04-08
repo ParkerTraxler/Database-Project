@@ -45,7 +45,7 @@ import EmployeeNav from './EmployeeNav'
              const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/", {
                  artID: artID,
                  artName: artwork.artName, 
-                 artist: artwork.dateMade, 
+                 artist: artwork.artist, 
                  dateMade: artwork.dateMade, 
                  artType: artwork.artType, 
                  artVal: artwork.artVal, 
