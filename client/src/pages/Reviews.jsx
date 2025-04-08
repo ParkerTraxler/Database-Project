@@ -50,7 +50,7 @@ const Reviews = () => {
                         
                             <div className="review" key={review.CustomerID}>
                                 <div>{review.Name}</div>
-                                <div>{new Date(review.ReviewDate).toLocaleDateString() || "Not provided"}</div>
+                                <div>{new Date(review.ReviewDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) || "Not provided"}</div>
                                 <p>{review.ReviewDesc}</p>
                                 <div className='starReview'>
                                 {stars.map((_, index) => {
