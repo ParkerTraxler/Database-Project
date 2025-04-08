@@ -70,7 +70,7 @@ const MakeDonation = () => {
                 <div className="donationForm">
                     <h1>Make a Donation</h1>
                     <input type="number" step="0.01" placeholder="amount" onChange={handleChange} name="donateamt"/>
-                    <input type="text" placeholder="desc" onChange={handleChange} name="donatedesc"/>
+                    <input type="text" maxLength="650" placeholder="desc" onChange={handleChange} name="donatedesc"/>
                     <button className="donationButton" onClick={handleClick} >Donate</button>
                 </div>
             </div>
