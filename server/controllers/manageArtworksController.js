@@ -47,7 +47,7 @@ const createArtwork = async (req, res) => {
     });
 
     req.on('end', async () => {
-        const { artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay, email} = JSON.parse(body);
+        var { artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay, email} = JSON.parse(body);
 
         try {
             // Ensure artName and onDisplay were provided.
