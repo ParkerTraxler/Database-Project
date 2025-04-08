@@ -15,8 +15,6 @@ const AddEmployee = () => {
     
     const [employee, setEmployee] = useState({
         email:"",
-        firstName:"",
-        lastName:"",
         position:"",
         managerEmail: null,
     })
@@ -34,8 +32,6 @@ const AddEmployee = () => {
         try{
             const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees", {
                 email: employee.email,
-                firstName: employee.firstName,
-                lastName: employee.lastName,
                 position: employee.position,
                 managerEmail: employee.managerEmail,
                 
@@ -66,8 +62,8 @@ const AddEmployee = () => {
                 <div className="add-employee-form">
                     <h1 className="add-employee-header">Add Employee</h1>
                     <input type="text" placeholder="email" onChange={handleChange} name="email"/>
-                    <input type="text" placeholder="first name" onChange={handleChange} name="firstName"/>
-                    <input type="text" placeholder="last name" onChange={handleChange} name="lastName"/>
+                    {/*<input type="text" placeholder="first name" onChange={handleChange} name="firstName"/>
+                    <input type="text" placeholder="last name" onChange={handleChange} name="lastName"/>*/}
                     <div>
 
                     <select onChange={handleChange} name="position">
