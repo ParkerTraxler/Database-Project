@@ -45,7 +45,7 @@ const Collections = () => {
                     ))}
                     <div className="collectionC">
                         <Link to={"/miscellaneous-artwork"}>
-                            <img src="default.png" alt="" />
+                            <img src="./src/assets/NoCollectionOrExhibit.jpeg" alt="" />
                         </Link>
                             
                         <h2>Miscellaneous Art</h2>
