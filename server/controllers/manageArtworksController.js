@@ -63,13 +63,13 @@ const createArtwork = async (req, res) => {
             // SQL QUERY - Check if the artwork exists. If yes, prompt. If no, add it
             // ASSUMPTION - Do not outright refuse artwork if enough "pieces" match, but perhaps prompt?
             const [rows] = await db.query(queries.get_name_specific_art, [artName]);
-            if(rows.length && rows[0].Artist == artist & rows[0].DateMade == dateMade){
+            if(rows.length > 0 && rows[0].Artist == artist && rows[0].DateMade == dateMade){
                 // this is enough information to prompt that maybe this piece already exists. Note: if the piece was deleted and is being re-added, then allow for that.
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'This art piece seems to already exist!' }));
             }
             
-            if(dateMade == ""){
+            if(!dateMade){
                 dateMade = null;
             }
 
