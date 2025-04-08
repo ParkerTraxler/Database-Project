@@ -230,9 +230,8 @@ const customer_report_info = `SELECT
             AND ah.ActionType = 'Created'
         WHERE
         li.UserRole = "Customer"
-        AND
-        ah.TimestampAction > ?
-        GROUP BY c.CustomerID`; // Groups it into a bunch of groups of size 1 that let the function work -- added dynamically at the end of the query
+        GROUP BY c.CustomerID
+        HAVING ah.TimestampAction >= ?`; // Groups it into a bunch of groups of size 1 that let the function work -- added dynamically at the end of the query
     // First question mark: account creation date > time
     // Then it groups by customers having two criterium defined earlier 
     // If I get asked to explain this query, I will take 10 minutes but I will do it :')
