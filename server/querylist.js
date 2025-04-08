@@ -36,7 +36,7 @@ const get_specific_collection = "SELECT * FROM collections WHERE Title = ? AND i
 const get_exhibit_collections = "SELECT * FROM collections WHERE (ExhibitID = ? OR ExhibitID IS NULL) AND isDeleted = false";
 const insert_new_collection = "INSERT INTO collections (Title, CollectDesc, CollectPic, ExhibitID) VALUES (?, ?, ?, ?)";
 const mark_collection_delete = "UPDATE collections SET isDeleted = true WHERE Title = ? AND isDeleted = false";
-const reset_collection_art = "UPDATE artworks SET collection = NULL WHERE collection = ?"
+const reset_collection_art = "UPDATE artworks SET Collection = NULL WHERE Collection = ?"
 const update_collection_query = "UPDATE collections SET CollectDesc = ?, CollectPic = ?, ExhibitID = ? WHERE Title = ? AND isDeleted = false";
 
 // Exhibits Management Controller (very very long)

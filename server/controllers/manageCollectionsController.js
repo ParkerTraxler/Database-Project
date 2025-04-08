@@ -105,7 +105,7 @@ const deleteCollection = async (req, res) => {
             }
 
             // SQL Query - Assign all art that belonged to previous collection to null
-            const [ results2 ] = db.query(queries.reset_collection_art, [title]);
+            const results2 = db.query(queries.reset_collection_art, [title]);
             
             if(results2.affectedRows > 0){
                 console.log(results2.affectedRows + " artworks have been set to null.");
