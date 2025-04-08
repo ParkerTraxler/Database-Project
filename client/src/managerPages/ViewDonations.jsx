@@ -46,7 +46,7 @@ const ViewDonations = () => {
                             <tr key={donation.DonationID}>
                                 <td>{donation.DonatorName}</td>
                                 <td>{donation.DonationID}</td>
-                                <td>{new Date(donation.DonateDate).toLocaleDateString()}</td>
+                                <td>{new Date(donation.DonateDate).toLocaleDateString('en-US', { timeZone: 'UTC' })}</td>
                                 <td>{donation.DonateAmt}</td>
                                 <td>{donation.DonateDesc}</td>
                             </tr>

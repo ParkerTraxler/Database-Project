@@ -101,7 +101,7 @@ const GiftShopSalesReport = () => {
                                     <td>{sale.ItemName}</td>
                                     <td>{sale.ItemQuantity}</td>
                                     <td>{sale.FinalPrice}</td>
-                                    <td>{new Date(sale.DateofSale).toLocaleDateString()}</td>
+                                    <td>{new Date(sale.DateofSale).toLocaleDateString('en-US', { timeZone: 'UTC' })}</td>
                                     <td>{sale.TransactionID}</td>
                                 </tr>
                             ))}

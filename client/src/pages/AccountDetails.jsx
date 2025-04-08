@@ -88,7 +88,7 @@ const AccountDetails = () => {
                 <div className="detailsBoxC">
                     <div className="detailC"><strong>First Name:</strong> {info.FirstName}</div>
                     <div className="detailC"><strong>Last Name:</strong> {info.LastName}</div>
-                    <div className="detailC"><strong>Date of Birth:</strong> {info.BirthDate ? new Date(info.BirthDate).toLocaleDateString() : "Not provided"}</div>
+                    <div className="detailC"><strong>Date of Birth:</strong> {info.BirthDate ? new Date(info.BirthDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</div>
                     <div className="detailC"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
                     <div className="detailC"><strong>Membership Status:</strong> {info.isMember ? "Member" : "Not a Member"}</div>
                     {info.isMember == "1" && (

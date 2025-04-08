@@ -77,7 +77,7 @@ import EmployeeNav from './EmployeeNav'
                          <div>Artist: {art.Artist}</div>
                          <div>Value: {art.ArtVal}</div>
                          
-                         <div>Date Made: {new Date(art.DateMade).toLocaleDateString()}</div>
+                         <div>Date Made: {new Date(art.DateMade).toLocaleDateString('en-US', { timeZone: 'UTC' })}</div>
                          <p>Desc: {art.ArtDesc}</p>
                          <div>
                              <button className="delete" onClick={()=>handleDelete(art.ArtID)}>Delete</button>
