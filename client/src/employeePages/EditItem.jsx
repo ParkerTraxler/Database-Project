@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../utils/AuthContext'
-import ManagerNav from '../managerPages/ManagerNav'
+import EmployeeNav from './EmployeeNav'
 import './EmployeeDashboard.css'
 
 const EditItem = () => {
@@ -78,7 +78,7 @@ const EditItem = () => {
         
         <div className="managerView">
             <div>
-                <ManagerNav/>
+                <EmployeeNav/>
             </div>
             <div>
                 <div className="form">
