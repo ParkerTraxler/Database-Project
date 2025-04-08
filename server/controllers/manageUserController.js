@@ -41,6 +41,8 @@ const updateProfile = (req, res) => {
                 return res.end(JSON.stringify({ error: 'No customer email received.'}));
             }
 
+            console.log(birthdate);
+
             const [ curr_user ] = await db.query(queries.get_user_profile, [email]);
             // Update a user's account information (excluding membership)
             if(!curr_user || curr_user.length == 0){
@@ -65,6 +67,8 @@ const updateProfile = (req, res) => {
             }
 
             const [ result ] = await db.query(queries.update_user_profile, [firstname, lastname, birthdate, gender, email]);
+
+            console.log(result[0].BirthDate)
 
             if(!result || result.affectedRows == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
