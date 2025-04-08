@@ -231,7 +231,7 @@ const customer_report_info = `SELECT
         WHERE
         li.UserRole = "Customer"
         AND
-        ah.TimestampAction > "1970-01-01"
+        ah.TimestampAction > ?
         GROUP BY c.CustomerID`; // Groups it into a bunch of groups of size 1 that let the function work -- added dynamically at the end of the query
     // First question mark: account creation date > time
     // Then it groups by customers having two criterium defined earlier 
