@@ -85,7 +85,7 @@ const ManageEmployees = () => {
                             <td>{employee.HourlyWage}</td>
                             <td>{employee.WeeklyHours}</td>
                             <td>{employee.ManagerID}</td>
-                            <td>{employee.BirthDate ? new Date(employee.BirthDate).toLocaleDateString() : "Not provided"}</td>
+                            <td>{employee.BirthDate ? new Date(employee.BirthDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</td>
                             <td>{employee.Gender}</td>
                             <td>
 
