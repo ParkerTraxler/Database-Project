@@ -52,7 +52,7 @@ const CollectionArt = () => {
                          <div>Artist: {art.Artist}</div>
                          <div>Value: {art.ArtVal}</div>
                          
-                         <div>Date Made: {art.DateMade == null ? new Date(art.DateMade).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Unknown"}</div>
+                         <div>Date Made: {art.DateMade != null ? new Date(art.DateMade).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Unknown"}</div>
                          <p>Desc: {art.ArtDesc}</p>
                          
                          

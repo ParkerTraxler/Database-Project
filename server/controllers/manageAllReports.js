@@ -194,6 +194,8 @@ const customer_info_report = async(req, res, email, account_creation_period, pro
                 break;
         }
 
+        end_of_query += " ORDER BY c.LastName asc, c.FirstName asc"
+
         // if you're reading this code, I'd like to extend a formal apology to you. 
         // this query is a mess but it worked when I tried it :(
         const [ rows ] = await db.query(queries.customer_report_info+end_of_query, [timeframe]);

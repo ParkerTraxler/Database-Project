@@ -198,16 +198,18 @@ const customer_report_info = `SELECT
             s.ItemID IN (1, 2, 3, 4)) AS Last_Visit_Date,
         CASE
 	        WHEN (SELECT MAX(s.DatePurchased)
-	        FROM sales as S
+	        FROM sales as s
             WHERE
             s.CustomerID = c.CustomerID
             AND
             s.ItemID IN (1, 2, 3, 4)) <= CURDATE() - INTERVAL 1 MONTH 
             AND
-            (SELECT COUNT(*) 
-            FROM sales AS s
+            (SELECT COUNT(DISTINCT DATE(s2.DatePurchased)) 
+            FROM sales AS s2
             WHERE 
-            s.ItemID IN (1, 2, 3, 4)) >= 2 THEN TRUE
+            s2.ItemID IN (1, 2, 3, 4)
+            AND
+            s2.CustomerID = c.CustomerID) >= 2 THEN TRUE
             ELSE FALSE
         END AS Good_Promotion
         FROM
@@ -229,7 +231,7 @@ const customer_report_info = `SELECT
         WHERE
         li.UserRole = "Customer"
         AND
-        ah.TimestampAction > ?
+        ah.TimestampAction > "1970-01-01"
         GROUP BY c.CustomerID`; // Groups it into a bunch of groups of size 1 that let the function work -- added dynamically at the end of the query
     // First question mark: account creation date > time
     // Then it groups by customers having two criterium defined earlier 
