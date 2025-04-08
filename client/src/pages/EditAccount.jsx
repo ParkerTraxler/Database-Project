@@ -54,7 +54,7 @@ const EditAccount = () => {
 
     const formatDate = (date) => {
         const d = new Date(date);
-        const year = d.getFullYear();
+        const year = d.getUTCFullYear();
         const month = String(d.getMonth() + 1).padStart(2, '0'); // Add leading zero if month is a single digit
         const day = String(d.getDate()).padStart(2, '0'); // Add leading zero if day is a single digit
         return `${year}-${month}-${day}`;
