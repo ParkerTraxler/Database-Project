@@ -68,7 +68,7 @@ const EmployeeExhibitReport = () => {
                 <input type="number" value={costRange.upperCost} onChange={(e) => setCostRange({...costRange, upperCost: e.target.value})} />
 
                 {/* use filter-select or search-bar className*/}
-                <label>Filter by time range: </label>
+                <label>Filter by exhibit type: </label>
                 <select value={exhibitTypeFilter} onChange={(e) => setExhibitTypeFilter(e.target.value)} className="filter-select">
                     <option value="all">All Exhibits</option>
                     <option value="special">Special Exhibits</option>
