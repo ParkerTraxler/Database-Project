@@ -80,11 +80,11 @@ const SignUp = () => {
                 <div className="error">{errorMessage}</div>
                 <div className="input-groupLogin">
                     First Name
-                    <input className="loginInput" type="text" onChange={handleChange} maxLength="30" placeholder="First Name" name="firstName"/>
+                    <input className="loginInput" type="text" onChange={handleChange} maxLength="28" placeholder="First Name" name="firstName"/>
                 </div>
                 <div className="input-groupLogin">
                     Last Name
-                    <input className="loginInput" type="text" onChange={handleChange} maxLength="30" placeholder="Last Name" name="lastName"/>
+                    <input className="loginInput" type="text" onChange={handleChange} maxLength="28" placeholder="Last Name" name="lastName"/>
                 </div>
                 <div className="input-groupLogin">
                     Email

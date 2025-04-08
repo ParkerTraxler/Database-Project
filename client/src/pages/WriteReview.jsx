@@ -116,7 +116,7 @@ const WriteReview = () => {
                     <label>Write a Review:</label>
                     <textarea className="writingReviewArea"
                         placeholder="What should other customers know?" 
-                        maxLength="300"
+                        maxLength="650"
                         name="review"
                         onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>
