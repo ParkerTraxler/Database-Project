@@ -82,7 +82,7 @@ const LogTransactions = () => {
         
         try{
             console.log("POST Sent")
-            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items", {
+            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/transactions/items", {
                 itemids: itemIDs, 
                 email: email.email, 
                 quantities: quantities, 
