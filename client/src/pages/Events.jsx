@@ -32,7 +32,7 @@ const Events = () => {
                         <div className="eventCu" key={event.EventID}>
                             {event.EventPic && <img src={event.EventPic} alt="" />}
                             <h2>{event.EventName}</h2>
-                            <div>{new Date(event.EventDate).toLocaleDateString() || "Not provided"}</div>
+                            <div>{new Date(event.EventDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) || "Not provided"}</div>
                             <p>{event.EventDesc}</p>
                             
                         </div>
