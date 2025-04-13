@@ -17,7 +17,6 @@ const manageReportsRoutes = require('./routes/manageReportsRoute')
 const PORT = process.env.PORT || 8080;
 
 const server = http.createServer( async (req, res) => {
-
     await corsMiddleware(req, res);
 
     if (req.url.startsWith('/auth'))

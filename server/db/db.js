@@ -1,7 +1,6 @@
 var mysql = require('mysql2');
 const fs = require('fs');
 
-const certPath = process.env.SSL_CERT_PATH
 
 // Define database pool
 var pool = mysql.createPool({
@@ -11,9 +10,7 @@ var pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
-    ssl: {
-        ca: fs.readFileSync(certPath)
-    }
+  
 }).promise();
 
 // Test database connection
