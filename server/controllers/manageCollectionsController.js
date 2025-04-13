@@ -97,7 +97,7 @@ const deleteCollection = async (req, res) => {
             }
 
             // SQL QUERY - Delete collection in the database with the same name
-            const result = db.query(queries.mark_collection_delete, [title]);
+            const result = await db.query(queries.mark_collection_delete, [title]);
 
             if(!result || result.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -105,7 +105,7 @@ const deleteCollection = async (req, res) => {
             }
 
             // SQL Query - Assign all art that belonged to previous collection to null
-            const results2 = db.query(queries.reset_collection_art, [title]);
+            const results2 = await db.query(queries.reset_collection_art, [title]);
             
             if(results2.affectedRows > 0){
                 console.log(results2.affectedRows + " artworks have been set to null.");
