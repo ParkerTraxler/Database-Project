@@ -316,18 +316,6 @@ managers.BirthDate = ?,
 managers.Gender = ? 
 WHERE logininfo.Email = ?`;
 
-// get employee account info
-const get_employee_profile = `SELECT 
-employees.FirstName, 
-employees.LastName, 
-employees.Gender, 
-employees.EPosition, 
-employees.HourlyWage, 
-employees.WeeklyHours, 
-employees.BirthDate 
-FROM logininfo, employees
-WHERE logininfo.Email = ? AND employees.Email = logininfo.Email`;
-
 // update employee profile
 const update_employee_profile = `UPDATE employees 
 INNER JOIN logininfo ON logininfo.Email = employees.Email 
