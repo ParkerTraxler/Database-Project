@@ -297,6 +297,46 @@ LEFT JOIN
 ON
 	ah.ActionType = "Created" AND ah.EffectedTable = "Exhibits" AND  ex.ExhibitID = CAST(ah.EffectedEntry AS SIGNED)`;
 
+// get manager account info:
+const get_manager_profile = `SELECT 
+managers.FirstName, 
+managers.LastName, 
+managers.Gender, 
+managers.Salary, 
+managers.BirthDate 
+FROM logininfo, managers
+WHERE logininfo.Email = ? AND managers.UserID = logininfo.userID`;
+
+// update manager profile
+const update_manager_profile = `UPDATE managers 
+INNER JOIN logininfo ON logininfo.UserID = managers.UserID 
+SET managers.FirstName = ?, 
+managers.LastName = ?, 
+managers.BirthDate = ?, 
+managers.Gender = ? 
+WHERE logininfo.Email = ?`;
+
+// get employee account info
+const get_employee_profile = `SELECT 
+employees.FirstName, 
+employees.LastName, 
+employees.Gender, 
+employees.EPosition, 
+employees.HourlyWage, 
+employees.WeeklyHours, 
+employees.BirthDate 
+FROM logininfo, employees
+WHERE logininfo.Email = ? AND employees.Email = logininfo.Email`;
+
+// update employee profile
+const update_employee_profile = `UPDATE employees 
+INNER JOIN logininfo ON logininfo.Email = employees.Email 
+SET employees.FirstName = ?, 
+employees.LastName = ?, 
+employees.BirthDate = ?, 
+employees.Gender = ? 
+WHERE logininfo.Email = ?`;
+
 // all the queries exported out
 module.exports = {
     user_exists_query,
