@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../utils/AuthContext'
-import ManagerNav from '../managerPages/ManagerNav'
+import EmployeeNav from './EmployeeNav'
 import './EmployeeDashboard.css'
 
 const EditItem = () => {
@@ -39,7 +39,7 @@ const EditItem = () => {
         console.log("ID: " + ItemID)
         try{
             console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/items/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
                 itemid: ItemID, 
                 itemname: item.itemname, 
                 itemprice: item.itemprice, 
@@ -55,7 +55,7 @@ const EditItem = () => {
             console.log(res.data)
 
             console.log("PUT Sent")
-            const res2 = await axios.put("http://localhost:3002/items/restock", {
+            const res2 = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/restock`, {
                 itemid: ItemID,
                 amounttoadd: item.amounttoadd
             },
@@ -69,7 +69,7 @@ const EditItem = () => {
             navigate("/manage-gift-shop")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
@@ -78,7 +78,7 @@ const EditItem = () => {
         
         <div className="managerView">
             <div>
-                <ManagerNav/>
+                <EmployeeNav/>
             </div>
             <div>
                 <div className="form">

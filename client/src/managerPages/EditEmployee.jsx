@@ -35,12 +35,11 @@ const EditEmployee = () => {
     }
 
     const email = location.pathname.split("/")[2]
-    console.log(email)
 
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put("http://localhost:3002/employees/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/employees/`, {
                 hourlywage: employee.hourlywage,
                 weeklyhours: employee.weeklyhours,
                 firstname: employee.firstname,
@@ -63,7 +62,7 @@ const EditEmployee = () => {
             navigate("/manage-employees")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

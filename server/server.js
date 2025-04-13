@@ -14,11 +14,11 @@ const manageSalesRoutes = require('./routes/manageSalesRoute')
 const manageProfileRoutes = require('./routes/manageUserAccRoutes')
 const manageReportsRoutes = require('./routes/manageReportsRoute')
 // Port
-const PORT = 3002;
+const PORT = process.env.PORT || 8080;
 
-const server = http.createServer((req, res) => {
+const server = http.createServer( async (req, res) => {
 
-    corsMiddleware(req, res);
+    await corsMiddleware(req, res);
 
     if (req.url.startsWith('/auth'))
         authRoutes(req, res);

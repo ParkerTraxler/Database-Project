@@ -51,7 +51,7 @@ const CreateEvent = () => {
         e.preventDefault()  //prevents page refresh on button click
         console.log(employeeList)
         try{
-            const res = await axios.post("http://localhost:3002/events", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/events`, {
                 eventname: event.eventname, 
                 eventdesc: event.eventdesc, 
                 eventdate: event.eventdate,
@@ -71,7 +71,7 @@ const CreateEvent = () => {
             navigate("/manage-events")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

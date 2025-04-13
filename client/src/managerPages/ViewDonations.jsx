@@ -12,7 +12,7 @@ const ViewDonations = () => {
     useEffect(()=>{
         const fetchAllDonations = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/donations")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/donations`)
                 console.log(res.data)
                 setDonations(res.data);
             }catch(err){
@@ -46,7 +46,7 @@ const ViewDonations = () => {
                             <tr key={donation.DonationID}>
                                 <td>{donation.DonatorName}</td>
                                 <td>{donation.DonationID}</td>
-                                <td>{new Date(donation.DonateDate).toLocaleDateString()}</td>
+                                <td>{new Date(donation.DonateDate).toLocaleDateString('en-US', { timeZone: 'UTC' })}</td>
                                 <td>{donation.DonateAmt}</td>
                                 <td>{donation.DonateDesc}</td>
                             </tr>

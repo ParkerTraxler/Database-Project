@@ -39,14 +39,14 @@ const EditEvent = () => {
         const fetchPrevEvent = async ()=>{
             try{
                 console.log("GET Sent")
-                const res = await axios.get(`http://localhost:3002/events/${EventID}`)
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/events/${EventID}`)
                 console.log("GET Completed")
                 console.log(res.data)
                 setPrevEvent(res.data)
                 console.log(event)
 
                 console.log("GET Sent")
-                const res2 = await axios.get(`http://localhost:3002/events/employees/${EventID}`, {
+                const res2 = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/events/employees/${EventID}`, {
                     headers: {
                         'authorization': `Bearer ${token}`
                     },
@@ -70,7 +70,7 @@ const EditEvent = () => {
         console.log(employeeList)
         try{
             console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/events/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/events/`, {
                 eventid: EventID, 
                 eventname: prevEvent.EventName, 
                 eventdesc: prevEvent.EventDesc, 
@@ -91,7 +91,7 @@ const EditEvent = () => {
             navigate("/manage-events")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

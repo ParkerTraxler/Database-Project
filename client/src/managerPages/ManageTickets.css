@@ -41,4 +41,9 @@
     background-color: #f5f7fa;
     transition: background-color 0.3s ease;
 }
+
+.update:hover {
+    background-color: #e3b2e4;  /* A darker green when hovered */
+    transform: scale(1.05);  /* Slightly enlarge the button */
+}
   

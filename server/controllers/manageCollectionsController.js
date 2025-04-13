@@ -97,11 +97,18 @@ const deleteCollection = async (req, res) => {
             }
 
             // SQL QUERY - Delete collection in the database with the same name
-            const result = db.query(queries.mark_collection_delete, [title]);
+            const result = await db.query(queries.mark_collection_delete, [title]);
 
             if(!result || result.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Failed to delete the entry. Is it already deleted?' }));
+            }
+
+            // SQL Query - Assign all art that belonged to previous collection to null
+            const results2 = await db.query(queries.reset_collection_art, [title]);
+            
+            if(results2.affectedRows > 0){
+                console.log(results2.affectedRows + " artworks have been set to null.");
             }
 
             await db.query(queries.new_history_log, [email, "Deleted", "Collections", title, "A collection has been removed from the museum entirely."])

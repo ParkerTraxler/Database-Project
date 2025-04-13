@@ -44,7 +44,6 @@ h1 {
     width: 400px;
     height: 290px;
     border-radius: 5px;
-    background-color: black;/*replace this with image*/
 }
 
 @media (max-width: 1050px) {

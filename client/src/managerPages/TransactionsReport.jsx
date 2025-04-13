@@ -18,7 +18,7 @@ const TransactionsReport = () => {
         const fetchTransactions = async () => {
             try {
                 console.log("GET Sent")
-                const res = await axios.get("http://localhost:3002/transactions/", {
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/transactions/`, {
                     headers: {
                         'authorization': `Bearer ${token}`,
                     },
@@ -29,7 +29,7 @@ const TransactionsReport = () => {
                 console.log(transactions)
                 
             } catch (err) {
-                console.log(err);
+                window.alert(err.response.data.error);
             }
         };
         fetchTransactions();

@@ -1,9 +1,6 @@
 .manage-employees-container {
-    background-image: url('../assets/abstract-background-image.jpg'); 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    
+    background-color: transparent;
 }
 
 .manage-employees-section {
@@ -17,10 +14,7 @@
     margin: 30px auto;
     padding: 30px;
     box-sizing: border-box;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
     border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
 .manage-employees-header {
@@ -46,7 +40,7 @@
 }
 
 .manage-employees-section thead {
-    background-color: #007bff;
+    background-color: rgb(90, 131, 118);
     color: white;
 }
 
@@ -89,7 +83,7 @@
     align-items: center;
     margin: 30px auto 0;
     padding: 12px 20px;
-    background-color: #007bff;
+    background-color: rgb(90, 131, 118);
     color: white;
     font-size: 1rem;
     font-weight: 500;
@@ -106,7 +100,7 @@
 }
 
 .add-employee-button:hover {
-    background-color: #0056b3;
+    background-color: rgb(68, 89, 82);
 }
 
 @media screen and (max-width: 768px) {

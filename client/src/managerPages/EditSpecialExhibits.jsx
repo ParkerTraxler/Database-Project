@@ -37,7 +37,7 @@ const EditSpecialExhibit = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put("http://localhost:3002/exhibits/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/exhibits/`, {
                 exhibitid: exhibitID,
                 exhibitname: specialExhibit.exhibitname, 
                 exhibitdesc: specialExhibit.exhibitdesc, 
@@ -57,7 +57,7 @@ const EditSpecialExhibit = () => {
             navigate("/manage-exhibits")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

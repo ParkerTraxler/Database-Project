@@ -19,7 +19,7 @@ const ManageEvents = () => {
         const fetchAllEvents = async ()=>{
             try{
                 console.log("GET Sent")
-                const res = await axios.get("http://localhost:3002/events")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/events`)
                 console.log("GET Completed")
                 console.log(res.data)
                 setEvents(res.data)
@@ -34,7 +34,7 @@ const ManageEvents = () => {
     const handleDelete = async (eventid)=>{
         console.log(eventid)
         try{
-            const res = await axios.delete("http://localhost:3002/events/", {
+            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/events/`, {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },
@@ -44,7 +44,7 @@ const ManageEvents = () => {
             window.location.reload() //refreshes the page
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
@@ -61,7 +61,7 @@ const ManageEvents = () => {
                         <div className="eventM" key={event.EventID}>
                             {event.EventPic && <img src={event.EventPic} alt="" />}
                             <h2>{event.EventName}</h2>
-                            <div>{new Date(event.EventDate).toLocaleDateString() || "Not provided"}</div>
+                            <div>{new Date(event.EventDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) || "Not provided"}</div>
                             <p>{event.EventDesc}</p>
                             <button className="update"><Link to={`/edit-event/${event.EventID}`}>Update</Link></button>
                             <button className="delete" onClick={()=>handleDelete(event.EventID)}>Delete</button>

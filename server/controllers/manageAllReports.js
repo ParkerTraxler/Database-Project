@@ -95,13 +95,13 @@ const exhibit_cost_report = async (req, res, email, upper_cost, lower_cost, exhi
         if(upper_cost != "all"){
             end_of_query += ` HAVING SUM(em.HourlyWage * em.WeeklyHours) <= ${parseInt(upper_cost)}`
             if(lower_cost != "all"){
-                end_of_query += ` AND SUM(em.HourlyWage * em.WeeklyHours >= ${parseInt(lower_cost)})`
+                end_of_query += ` AND SUM(em.HourlyWage * em.WeeklyHours) >= ${parseInt(lower_cost)}`
             }
         }
         // handle if there's a lower bound with no upper bound
         else{
             if(lower_cost != "all"){
-                end_of_query += ` HAVING SUM(em.HourlyWage * em.WeeklyHours >= ${parseInt(lower_cost)})`;
+                end_of_query += ` HAVING SUM(em.HourlyWage * em.WeeklyHours) >= ${parseInt(lower_cost)}`;
             }
         }
 
@@ -144,7 +144,7 @@ const change_history_report = async (req, res, email, from_date, to_date, action
         const [ rows ] = await db.query(queries.change_history_report+end_of_query);
 
         // log that a manager generated a report
-        //await db.query(queries.new_history_log, [email, "Report Generated", "Sales", 0, "Manager has generated the Giftshop Sales Report."]);
+        await db.query(queries.new_history_log, [email, "Report Generated", "Sales", 0, "Manager has generated the Giftshop Sales Report."]);
 
         // Return reviews to frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -165,10 +165,10 @@ const customer_info_report = async(req, res, email, account_creation_period, pro
         // dynamic filtering wooo!! so we'll always have a date, but- 
         switch(promotional_offer_candidate){
             case "true":
-                end_of_query += " HAVING Good_Promotion = TRUE";
+                end_of_query += " AND Good_Promotion = TRUE";
                 break;
             case "false":
-                end_of_query += " HAVING Good_Promotion = FALSE";
+                end_of_query += " AND Good_Promotion = FALSE";
                 break;
             default: // no filtering added
                 break;
@@ -181,18 +181,20 @@ const customer_info_report = async(req, res, email, account_creation_period, pro
                     end_of_query += " AND Currently_Member = TRUE";
                     break;
                 }
-                end_of_query += " HAVING Currently_Member = TRUE";
+                end_of_query += " AND Currently_Member = TRUE";
                 break;
             case "false":
                 if(promotional_offer_candidate != "all"){
                     end_of_query += " AND Currently_Member = FALSE";
                     break;
                 }
-                end_of_query += " HAVING Currently_Member = FALSE";
+                end_of_query += " AND Currently_Member = FALSE";
                 break;
             default: // no filtering added
                 break;
         }
+
+        end_of_query += " ORDER BY c.LastName asc, c.FirstName asc"
 
         // if you're reading this code, I'd like to extend a formal apology to you. 
         // this query is a mess but it worked when I tried it :(

@@ -11,14 +11,10 @@ const GiftShop = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                console.log("GET Sent")
-                const res = await axios.get("http://localhost:3002/items");
-                console.log("GET Completed")
-                console.log(res.data)
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items`);
                 setItems(res.data);  // Store the data once fetched
-                console.log(items)
             } catch (err) {
-                console.error(err);
+                window.alert(err.response.data.error);
             } finally {
                 setLoading(false);  // Stop loading after request completes
             }

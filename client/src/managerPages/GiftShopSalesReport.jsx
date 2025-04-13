@@ -23,14 +23,14 @@ const GiftShopSalesReport = () => {
         console.log("Range: " + timeRange);
         try {
             console.log("GET Sent");
-            const res = await axios.get(`http://localhost:3002/reports/giftshop-sales/${encodeURIComponent(email)}/${timeRange}`, {
+            const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reports/giftshop-sales/${encodeURIComponent(email)}/${timeRange}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },
             });
             console.log("GET Completed");
             console.log("GET Sent");
-            const res2 = await axios.get(`http://localhost:3002/reports/giftshop-aggregate/${timeRange}`, {
+            const res2 = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reports/giftshop-aggregate/${timeRange}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },
@@ -42,7 +42,7 @@ const GiftShopSalesReport = () => {
             setReportValues(res2.data);
             setReportGenerated(true);
         } catch (err) {
-            console.log(err);
+            window.alert(err.response.data.error);
         }
     };
 
@@ -101,7 +101,7 @@ const GiftShopSalesReport = () => {
                                     <td>{sale.ItemName}</td>
                                     <td>{sale.ItemQuantity}</td>
                                     <td>{sale.FinalPrice}</td>
-                                    <td>{new Date(sale.DateofSale).toLocaleDateString()}</td>
+                                    <td>{new Date(sale.DateofSale).toLocaleDateString('en-US', { timeZone: 'UTC' })}</td>
                                     <td>{sale.TransactionID}</td>
                                 </tr>
                             ))}

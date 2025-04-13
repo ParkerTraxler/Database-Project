@@ -28,7 +28,7 @@ const EditAccount = () => {
     useEffect(() => {
         const fetchAccount = async () => {
             console.log(encodeURIComponent(email));
-            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`, 
+            axios.get(`${process.env.REACT_APP_API_ENDPOINT}/profile/${encodeURIComponent(email)}`, 
             {
                 headers: {
                     'authorization': `Bearer ${token}`
@@ -54,9 +54,9 @@ const EditAccount = () => {
 
     const formatDate = (date) => {
         const d = new Date(date);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0'); // Add leading zero if month is a single digit
-        const day = String(d.getDate()).padStart(2, '0'); // Add leading zero if day is a single digit
+        const year = d.getUTCFullYear();
+        const month = String(d.getUTCMonth() + 1).padStart(2, '0'); // Add leading zero if month is a single digit
+        const day = String(d.getUTCDate()).padStart(2, '0'); // Add leading zero if day is a single digit
         return `${year}-${month}-${day}`;
     };
 
@@ -64,7 +64,7 @@ const EditAccount = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put("http://localhost:3002/profile/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/profile/`, {
                 firstname: info.FirstName, 
                 lastname: info.LastName, 
                 birthdate: formatDate(info.BirthDate), 
@@ -76,11 +76,10 @@ const EditAccount = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log(res.end)
 
             if(info.cancelMembership === "on"){
                 console.log("PUT Sent")
-                const res2 = axios.put('http://localhost:3002/profile/membership', {
+                const res2 = axios.put(`${process.env.REACT_APP_API_ENDPOINT}/profile/membership`, {
                     email: email
                 },
                 {
@@ -88,14 +87,12 @@ const EditAccount = () => {
                         'authorization': `Bearer ${token}`
                     },
                 })
-                console.log(res2)
-                console.log("PUT Completed")
             }
             
             navigate("/account-details")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

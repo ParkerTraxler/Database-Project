@@ -29,7 +29,7 @@ import EmployeeNav from './EmployeeNav'
          const fetchArtwork = async ()=>{
              console.log(collectionTitle)
              try{
-                 const res = await axios.get(`http://localhost:3002/artworks/collection/${encodeURIComponent(collectionTitle)}`);
+                 const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/artworks/collection/${encodeURIComponent(collectionTitle)}`);
                  console.log(res.data)
                  setArtwork(res.data)
                  console.log(artwork.data)
@@ -43,7 +43,7 @@ import EmployeeNav from './EmployeeNav'
      const handleDelete = async (artID)=>{
          console.log("ID: " + artID)
          try{
-             const res = await axios.delete("http://localhost:3002/artworks/", {
+             const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
                  headers: {
                      'authorization': `Bearer ${token}`
                  },
@@ -53,7 +53,7 @@ import EmployeeNav from './EmployeeNav'
              window.location.reload() //refreshes the page
          }
          catch(err){
-             console.log(err)
+            window.alert(err.response.data.error);
          }
      }
  
@@ -77,7 +77,7 @@ import EmployeeNav from './EmployeeNav'
                          <div>Artist: {art.Artist}</div>
                          <div>Value: {art.ArtVal}</div>
                          
-                         <div>Date Made: {new Date(art.DateMade).toLocaleDateString()}</div>
+                         <div>Date Made: {new Date(art.DateMade).toLocaleDateString('en-US', { timeZone: 'UTC' })}</div>
                          <p>Desc: {art.ArtDesc}</p>
                          <div>
                              <button className="delete" onClick={()=>handleDelete(art.ArtID)}>Delete</button>

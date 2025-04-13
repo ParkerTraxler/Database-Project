@@ -21,7 +21,7 @@ const LogTransactions = () => {
         const fetchItems = async () => {
             try {
                 console.log("GET Sent")
-                const res = await axios.get("http://localhost:3002/items");
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items`);
                 console.log("GET Completed")
                 console.log(res.data)
                 setItems(res.data);  // Store the data once fetched
@@ -82,7 +82,7 @@ const LogTransactions = () => {
         
         try{
             console.log("POST Sent")
-            const res = await axios.post("http://localhost:3002/transactions/items", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/transactions/items`, {
                 itemids: itemIDs, 
                 email: email.email, 
                 quantities: quantities, 
@@ -101,7 +101,7 @@ const LogTransactions = () => {
 
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

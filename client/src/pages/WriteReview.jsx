@@ -39,7 +39,7 @@ const WriteReview = () => {
         e.preventDefault()  //prevents page refresh on button click
         try{
             console.log("POST Sent")
-            const res = await axios.post("http://localhost:3002/reviews", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/reviews`, {
                 email: email,
                 starcount: review.starcount, 
                 reviewdesc: review.reviewdesc
@@ -55,7 +55,7 @@ const WriteReview = () => {
             navigate("/reviews")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     };
 
@@ -116,7 +116,7 @@ const WriteReview = () => {
                     <label>Write a Review:</label>
                     <textarea className="writingReviewArea"
                         placeholder="What should other customers know?" 
-                        maxLength="300"
+                        maxLength="650"
                         name="review"
                         onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>

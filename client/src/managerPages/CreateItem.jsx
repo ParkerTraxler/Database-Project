@@ -33,7 +33,7 @@ const CreateItem = () => {
         console.log("POST Sent")
         
         try{
-            const res = await axios.post("http://localhost:3002/items/", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
                 itemname: item.itemname, 
                 itemprice: item.itemprice, 
                 amountinstock: item.amountinstock
@@ -43,13 +43,10 @@ const CreateItem = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log(res.end)
-            console.log("POST Completed")
-            
             navigate("/manage-gift-shop")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

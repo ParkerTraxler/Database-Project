@@ -31,7 +31,7 @@ const ManagerAddCollection = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post("http://localhost:3002/collections", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/collections`, {
                 
                 title: collection.Title,
                 collectdesc: collection.CollectDesc,
@@ -49,7 +49,7 @@ const ManagerAddCollection = () => {
             navigate("/manage-collections")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

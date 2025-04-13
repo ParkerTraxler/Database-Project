@@ -50,7 +50,7 @@ const SignUp = () => {
         else{
             e.preventDefault()  //prevents page refresh on button click
             try{
-                const res = await axios.post("http://localhost:3002/auth/register", {
+                const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/auth/register`, {
                     firstname: signup.firstName,
                     lastname: signup.lastName,
                     email: signup.email,
@@ -67,7 +67,7 @@ const SignUp = () => {
                 navigate("/")
             }
             catch(err){
-                console.log(err);
+                window.alert(err.response.data.error);
             }
         }
     }
@@ -80,11 +80,11 @@ const SignUp = () => {
                 <div className="error">{errorMessage}</div>
                 <div className="input-groupLogin">
                     First Name
-                    <input className="loginInput" type="text" onChange={handleChange} maxLength="30" placeholder="First Name" name="firstName"/>
+                    <input className="loginInput" type="text" onChange={handleChange} maxLength="28" placeholder="First Name" name="firstName"/>
                 </div>
                 <div className="input-groupLogin">
                     Last Name
-                    <input className="loginInput" type="text" onChange={handleChange} maxLength="30" placeholder="Last Name" name="lastName"/>
+                    <input className="loginInput" type="text" onChange={handleChange} maxLength="28" placeholder="Last Name" name="lastName"/>
                 </div>
                 <div className="input-groupLogin">
                     Email

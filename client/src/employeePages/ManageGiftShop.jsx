@@ -19,7 +19,7 @@ const ManageGiftShop = () => {
         const fetchItems = async () => {
             try {
                 console.log("GET Sent")
-                const res = await axios.get("http://localhost:3002/items");
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items`);
                 console.log("GET Completed")
                 console.log(res.data)
                 setItems(res.data);  // Store the data once fetched
@@ -36,7 +36,7 @@ const ManageGiftShop = () => {
     const handleDelete = async (itemid)=>{
         console.log(itemid)
         try{
-            const res = await axios.delete("http://localhost:3002/items/", {
+            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },
@@ -46,7 +46,7 @@ const ManageGiftShop = () => {
             window.location.reload() //refreshes the page
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
