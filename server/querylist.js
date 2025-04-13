@@ -399,5 +399,8 @@ module.exports = {
     all_sales_aggregate,
     customer_report_info,
     change_history_report,
-    weekly_exhibit_cost
+    weekly_exhibit_cost,
+    get_manager_profile,
+    update_manager_profile,
+    update_employee_profile
 };
