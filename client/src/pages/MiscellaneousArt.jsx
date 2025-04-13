@@ -12,7 +12,7 @@ const MiscellaneousArt = () => {
      useEffect(()=>{
          const fetchArtwork = async ()=>{
              try{
-                 const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/collection/${null}`);
+                 const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/artworks/collection/${null}`);
                  setArtwork(res.data)
              }catch(err){
                 window.alert(err.response.data.error);

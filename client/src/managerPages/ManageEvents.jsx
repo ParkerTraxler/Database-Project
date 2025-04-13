@@ -19,7 +19,7 @@ const ManageEvents = () => {
         const fetchAllEvents = async ()=>{
             try{
                 console.log("GET Sent")
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/events`)
                 console.log("GET Completed")
                 console.log(res.data)
                 setEvents(res.data)
@@ -34,7 +34,7 @@ const ManageEvents = () => {
     const handleDelete = async (eventid)=>{
         console.log(eventid)
         try{
-            const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events/", {
+            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/events/`, {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },

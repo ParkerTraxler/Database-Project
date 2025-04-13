@@ -39,7 +39,7 @@ const EditEmployee = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/employees/`, {
                 hourlywage: employee.hourlywage,
                 weeklyhours: employee.weeklyhours,
                 firstname: employee.firstname,

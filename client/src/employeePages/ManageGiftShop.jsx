@@ -19,7 +19,7 @@ const ManageGiftShop = () => {
         const fetchItems = async () => {
             try {
                 console.log("GET Sent")
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items");
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items`);
                 console.log("GET Completed")
                 console.log(res.data)
                 setItems(res.data);  // Store the data once fetched
@@ -36,7 +36,7 @@ const ManageGiftShop = () => {
     const handleDelete = async (itemid)=>{
         console.log(itemid)
         try{
-            const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/", {
+            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },

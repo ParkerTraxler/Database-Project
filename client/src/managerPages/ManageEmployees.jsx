@@ -17,7 +17,7 @@ const ManageEmployees = () => {
     useEffect(()=>{
         const fetchAllEmployees = async ()=>{
             try{
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees", {
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/employees`, {
                     headers: {
                         'authorization': `Bearer ${token}`
                     },
@@ -34,7 +34,7 @@ const ManageEmployees = () => {
     const handleDelete = async (email)=>{
         console.log(email)
         try{
-            const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/", {
+            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/employees/`, {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },

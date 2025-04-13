@@ -33,7 +33,7 @@ const CreateItem = () => {
         console.log("POST Sent")
         
         try{
-            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
                 itemname: item.itemname, 
                 itemprice: item.itemprice, 
                 amountinstock: item.amountinstock,

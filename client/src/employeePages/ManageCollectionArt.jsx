@@ -29,7 +29,7 @@ import EmployeeNav from './EmployeeNav'
          const fetchArtwork = async ()=>{
              console.log(collectionTitle)
              try{
-                 const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/collection/${encodeURIComponent(collectionTitle)}`);
+                 const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/artworks/collection/${encodeURIComponent(collectionTitle)}`);
                  console.log(res.data)
                  setArtwork(res.data)
                  console.log(artwork.data)
@@ -43,7 +43,7 @@ import EmployeeNav from './EmployeeNav'
      const handleDelete = async (artID)=>{
          console.log("ID: " + artID)
          try{
-             const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/", {
+             const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
                  headers: {
                      'authorization': `Bearer ${token}`
                  },
