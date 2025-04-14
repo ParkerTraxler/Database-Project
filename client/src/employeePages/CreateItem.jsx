@@ -1,5 +1,5 @@
 import React from 'react'
-import ManagerNav from '../managerPages/ManagerNav'
+import EmployeeNav from './EmployeeNav'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
