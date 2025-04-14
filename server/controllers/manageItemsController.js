@@ -178,7 +178,7 @@ const updateItemQuantity = (req, res) => {
             res.writeHead(204, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Item quantity successfully updated.' }));
         } catch (err) {
-            console.error('Error updating item quantity.');
+            console.error('Error updating item quantity: ', err);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
         }

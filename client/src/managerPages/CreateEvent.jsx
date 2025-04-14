@@ -13,6 +13,7 @@ const CreateEvent = () => {
         eventdesc: "", 
         eventdate: "",
         memberonly: false, 
+        eventpic: "",
     });
     const [employeeEmail, setEmployeeEmail] = useState("");
     const [employeeList, setEmployeeList] = useState([]);
@@ -50,13 +51,14 @@ const CreateEvent = () => {
         e.preventDefault()  //prevents page refresh on button click
         console.log(employeeList)
         try{
-            const res = await axios.post("http://localhost:3002/events", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/events`, {
                 eventname: event.eventname, 
                 eventdesc: event.eventdesc, 
                 eventdate: event.eventdate,
                 memberonly: event.memberonly, 
                 employeelist: employeeList,
-                email: managerEmail
+                email: managerEmail,
+                eventpic: event.eventpic
                 
             },
             {
@@ -69,7 +71,7 @@ const CreateEvent = () => {
             navigate("/manage-events")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
@@ -84,6 +86,7 @@ const CreateEvent = () => {
                     <h1>Create Event</h1>
                     <input type="text" placeholder="Event Name" onChange={handleChange} name="eventname" />
                     <input type="text" placeholder="Event Description" onChange={handleChange} name="eventdesc" />
+                    <input type="text" placeholder="Image URL" onChange={handleChange} name="eventpic" />
                     <input type="date" onChange={handleChange} name="eventdate" />
                     <div>
                         <label>

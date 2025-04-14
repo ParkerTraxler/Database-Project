@@ -44,9 +44,6 @@ const ManagerDashboard = () => {
                         {showReports && (
                             <ul className='dropdown'>
                                 <li>
-                                    <a href='/transactions-report'>Transactions Report</a>
-                                </li>
-                                <li>
                                     <a href='/customers-report'>Customer Report</a>
                                 </li>
                                 <li>

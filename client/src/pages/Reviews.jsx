@@ -17,12 +17,12 @@ const Reviews = () => {
     useEffect(()=>{
         const fetchAllReviews = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/reviews")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reviews`)
                 console.log(res.data)
                 setReviews(res.data)
                 console.log(reviews)
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             } finally {
                 setLoading(false);  // Stop loading after request completes
             }
@@ -50,7 +50,7 @@ const Reviews = () => {
                         
                             <div className="review" key={review.CustomerID}>
                                 <div>{review.Name}</div>
-                                <div>{new Date(review.ReviewDate).toLocaleDateString() || "Not provided"}</div>
+                                <div>{new Date(review.ReviewDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) || "Not provided"}</div>
                                 <p>{review.ReviewDesc}</p>
                                 <div className='starReview'>
                                 {stars.map((_, index) => {

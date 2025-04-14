@@ -26,7 +26,7 @@ const Tickets = () => {
     useEffect(() => {
         const fetchAccount = async () => {
             console.log(encodeURIComponent(email));
-            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`, 
+            axios.get(`${process.env.REACT_APP_API_ENDPOINT}/profile/${encodeURIComponent(email)}`, 
             {
                 headers: {
                     'authorization': `Bearer ${token}`
@@ -57,7 +57,7 @@ const Tickets = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const res = await axios.get("http://localhost:3002/items/tickets");
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items/tickets`);
                 console.log(res.data)
                 setTickets(res.data);  // Store the data once fetched
                 
@@ -87,7 +87,7 @@ const Tickets = () => {
         
         try{
             console.log("POST Sent")
-            const res = await axios.post("http://localhost:3002/transactions/tickets", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/transactions/tickets`, {
                 ticketArray: ticketArray, 
                 email: email, 
                 datepurchased: formattedDate
@@ -111,7 +111,10 @@ const Tickets = () => {
 
     const hideReciept = () => {
         setShowReceipt(false);
+        window.location.reload();
     };
+    
+
     
 
     return (
@@ -122,6 +125,11 @@ const Tickets = () => {
             <div>
                 <h1>Tickets</h1>
                 <h3 className="ticketsCuPageh3">Members get a 10% discount on all tickets!</h3>
+                {tickets[0].isPurchasable == '0' && (
+                        <div>
+                            Tickets are sold out. Check back tomorrow!
+                        </div>
+                    )}
                 <div className="ticketsBody">
                     {loading ? (
                         <p>Loading tickets...</p>  // Show a loading message while waiting for data
@@ -144,7 +152,7 @@ const Tickets = () => {
                                         {"$" + (ticket.ItemPrice*0.9).toFixed(2)}
                                     </div>
                                 )}
-                                {role == 'Customer' && (
+                                {role == 'Customer' && ticket.isPurchasable == '1' && (
                                     <div>
                                         Quantity:
                                         <input type="number" min="0" placeholder="amount to buy" onChange={handleChange} name={"quantity" + ticket.ItemID}/>
@@ -157,7 +165,8 @@ const Tickets = () => {
                     ))}
                 </div>
                 <div>
-                    {role == 'Customer' && (
+                    
+                    {role == 'Customer' && tickets[0].isPurchasable == '1' && (
                         <div className="purchaseTicketsButtonContainer">
                             <button className="puchaseTicketsButton" onClick={handleClick}>Purchase Tickets</button>
                         </div>

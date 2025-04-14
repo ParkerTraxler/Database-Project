@@ -16,7 +16,6 @@ const EditReview = () => {
     const token = user.token;
     const decoded = jwtDecode(token);
     const email = decoded.email;
-    console.log(email)
     
 
     const [hover, setHover] = useState(0);
@@ -37,10 +36,8 @@ const EditReview = () => {
 
     const handleSubmit = async e => {
         e.preventDefault()  //prevents page refresh on button click
-        console.log(review)
         try{
-            console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/reviews/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/reviews/`, {
                 email: email,
                 starcount: review.starcount, 
                 reviewdesc: review.reviewdesc
@@ -50,13 +47,10 @@ const EditReview = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log("PUT Completed")
-            console.log(res.end)
-            
             navigate("/reviews")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     };
 
@@ -118,7 +112,7 @@ const EditReview = () => {
                     <label>Write a Review:</label>
                     <textarea className="writingReviewArea"
                         placeholder="What should other customers know?" 
-                        maxLength="300"
+                        maxLength="650"
                         name="review"
                         onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>

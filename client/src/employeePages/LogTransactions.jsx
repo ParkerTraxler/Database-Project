@@ -4,6 +4,7 @@ import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import EmployeeNav from './EmployeeNav'
 import './EmployeeDashboard.css'
+import './LogTransactions.css'
 
 const LogTransactions = () => {
     console.log("LogTransactions")
@@ -20,7 +21,7 @@ const LogTransactions = () => {
         const fetchItems = async () => {
             try {
                 console.log("GET Sent")
-                const res = await axios.get("http://localhost:3002/items");
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items`);
                 console.log("GET Completed")
                 console.log(res.data)
                 setItems(res.data);  // Store the data once fetched
@@ -78,9 +79,10 @@ const LogTransactions = () => {
         
         console.log(itemIDs)
         console.log(quantities)
+        
         try{
             console.log("POST Sent")
-            const res = await axios.post("http://localhost:3002/transactions/items", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/transactions/items`, {
                 itemids: itemIDs, 
                 email: email.email, 
                 quantities: quantities, 
@@ -99,7 +101,7 @@ const LogTransactions = () => {
 
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
@@ -110,21 +112,27 @@ const LogTransactions = () => {
             <div>
                 <EmployeeNav/>
             </div>
-            <div>
+            <div className="transactionContainerEm">
                 <h1>Log Transactions</h1>
-                <div className="giftshopBody">
+                <div className="transactionLogEm">
                     {loading ? (
                         <p>Loading items...</p>  // Show a loading message while waiting for data
                     ) : (
                         items.length > 0 ? (
                         items.map(item=>(
-                            <div className="item" key={item.ItemID}>
+                            <div className="itemlogEm" key={item.ItemID}>
                                 <div>{item.ItemName}</div>
                                 <div>{"$" + item.ItemPrice}</div>
                                 <div>Stock: {item.AmountInStock}</div>
-                                <div>
-                                    <button disabled={isInCart(item.ItemID)} onClick={() => addItemToCart(item)}>{isInCart(item.ItemID) ? "In Cart" : "Add to Cart"}</button>
-                                </div>
+                                {item.isPurchasable == '1' && (
+                                    <div>
+                                        <button disabled={isInCart(item.ItemID)} onClick={() => addItemToCart(item)}>{isInCart(item.ItemID) ? "In Cart" : "Add to Cart"}</button>
+                                    </div>
+                                )}
+                                {item.isPurchasable == '0' && (
+                                    <div>Out of Stock.</div>
+                                )}
+                                
                             </div>
                         ))
                     ) : (
@@ -142,6 +150,7 @@ const LogTransactions = () => {
                                     Quantity:
                                     <input type="number" min="0" placeholder="amount to buy" onChange={(e) => handleChange(e, cartItem.ItemID)} name={"quantity"}/>
                                 </div>
+                                
                                 <div>
                                     <button onClick={() => removeFromCart(cartItem.ItemID)}>Remove from Cart</button>
                                 </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import imageSrc from '../assets/NoCollectionOrExhibit.jpeg';
 import "./Collections.css"
 
 const Collections = () => {
@@ -12,11 +13,11 @@ const Collections = () => {
     useEffect(()=>{
         const fetchAllCollections = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/collections")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/collections`)
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             }
         }
         fetchAllCollections()
@@ -45,7 +46,7 @@ const Collections = () => {
                     ))}
                     <div className="collectionC">
                         <Link to={"/miscellaneous-artwork"}>
-                            <img src="default.png" alt="" />
+                            <img src={imageSrc} alt="" />
                         </Link>
                             
                         <h2>Miscellaneous Art</h2>

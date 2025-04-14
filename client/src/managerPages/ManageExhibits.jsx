@@ -19,7 +19,7 @@ const ManageExhibits = () => {
     useEffect(()=>{
         const fetchAllExhibits = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/exhibits")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/exhibits`)
                 console.log(res.data)
                 const regularExhibits = res.data.filter(exhibit => exhibit.IsSpecial !== 1);
                 const specialExhibits = res.data.filter(exhibit => exhibit.IsSpecial === 1);
@@ -27,7 +27,7 @@ const ManageExhibits = () => {
                 setExhibits(regularExhibits);
                 setSpecialExhibits(specialExhibits);
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             }
         }
         fetchAllExhibits()
@@ -48,6 +48,7 @@ const ManageExhibits = () => {
                         {exhibit.ExhibitPic && <img src={exhibit.ExhibitPic} alt="" />}
                         <h2>{exhibit.ExhibitName}</h2>
                         <p>{exhibit.ExhibitDesc}</p>
+                        <p>ID: {exhibit.ExhibitID}</p>
                         <button className="update"><Link to={`/edit-exhibit/${exhibit.ExhibitID}`}>Update</Link></button>
                     </div>
                 ))}

@@ -12,12 +12,12 @@ const MiscellaneousCollections = () => {
         const fetchCollections = async ()=>{
             
             try{
-                const res = await axios.get(`http://localhost:3002/collections/exhibit/${null}`);
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/collections/exhibit/${null}`);
                 console.log(res.data)
                 setCollections(res.data)
                 console.log(collections.data)
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             }
         }
         fetchCollections()

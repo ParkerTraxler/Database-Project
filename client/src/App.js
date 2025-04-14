@@ -11,7 +11,6 @@ import Events from './pages/Events'
 import Exhibits from './pages/Exhibits'
 import Collections from './pages/Collections'
 import AccountDetails from './pages/AccountDetails'
-import ReportProblem from './pages/ReportProblem'
 import EditAccount from './pages/EditAccount.jsx'
 import MakeDonation from './pages/MakeDonation.jsx';
 import ManagerDashboard from './managerPages/ManagerDashboard.jsx';
@@ -89,7 +88,6 @@ function App() {
           <Route path="/exhibits" element={<Exhibits/>}/>
           <Route path="/collections" element={<Collections/>}/>
           
-          <Route path="/report-problem" element={<ReportProblem/>}/>
           <Route path="/collection-art/:Title" element={<CollectionArt/>}/>
           <Route path="/exhibit-collections/:ExhibitID" element={<ExhibitCollections/>}/>
           <Route path="/miscellaneous-artwork" element={<MiscellaneousArt/>}/>

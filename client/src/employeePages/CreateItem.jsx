@@ -1,5 +1,5 @@
 import React from 'react'
-import ManagerNav from '../managerPages/ManagerNav'
+import EmployeeNav from './EmployeeNav'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
@@ -15,6 +15,7 @@ const CreateItem = () => {
     const [item, setItem] = useState({
         itemname:"", 
         itemprice:"", 
+        itemimage:"",
         amountinstock:""
     })
 
@@ -32,10 +33,11 @@ const CreateItem = () => {
         console.log("POST Sent")
         
         try{
-            const res = await axios.post("http://localhost:3002/items/", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
                 itemname: item.itemname, 
                 itemprice: item.itemprice, 
-                amountinstock: item.amountinstock
+                amountinstock: item.amountinstock,
+                itemimage: item.itemimage
             },
             {
                 headers: {
@@ -48,7 +50,7 @@ const CreateItem = () => {
             navigate("/manage-gift-shop")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
@@ -58,12 +60,13 @@ const CreateItem = () => {
         
         <div className="managerView">
             <div>
-                <ManagerNav/>
+                <EmployeeNav/>
             </div>
             <div>
                 <div className="form">
                     <h1>Add Item</h1>
                     <input type="text" placeholder="name" onChange={handleChange} name="itemname"/>
+                    <input type="text" placeholder="image url" onChange={handleChange} name="itemimage"/>
                     <input type="number" step="0.01" min="0" placeholder="price" onChange={handleChange} name="itemprice"/>
                     <input type="number" min="0" placeholder="amount in stock" onChange={handleChange} name="amountinstock"/>
                     <button className="formButton" onClick={handleClick} >Add</button>

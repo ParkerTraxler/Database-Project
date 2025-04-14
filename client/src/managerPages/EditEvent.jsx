@@ -22,7 +22,8 @@ const EditEvent = () => {
         eventdate:"", 
         memberonly:"", 
         addedemployees:"", 
-        removedemployees:""
+        removedemployees:"",
+        eventpic: ""
     });
     const { user } = useAuth()
     const token = user.token
@@ -38,14 +39,14 @@ const EditEvent = () => {
         const fetchPrevEvent = async ()=>{
             try{
                 console.log("GET Sent")
-                const res = await axios.get(`http://localhost:3002/events/${EventID}`)
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/events/${EventID}`)
                 console.log("GET Completed")
                 console.log(res.data)
                 setPrevEvent(res.data)
                 console.log(event)
 
                 console.log("GET Sent")
-                const res2 = await axios.get(`http://localhost:3002/events/employees/${EventID}`, {
+                const res2 = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/events/employees/${EventID}`, {
                     headers: {
                         'authorization': `Bearer ${token}`
                     },
@@ -69,7 +70,7 @@ const EditEvent = () => {
         console.log(employeeList)
         try{
             console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/events/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/events/`, {
                 eventid: EventID, 
                 eventname: prevEvent.EventName, 
                 eventdesc: prevEvent.EventDesc, 
@@ -77,7 +78,8 @@ const EditEvent = () => {
                 memberonly: prevEvent.MemberOnly, 
                 addedemployees: employeeList, 
                 removedemployees: removedemployees,
-                email: email
+                email: email,
+                eventpic: prevEvent.eventpic
             },
             {
                 headers: {
@@ -89,7 +91,7 @@ const EditEvent = () => {
             navigate("/manage-events")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
@@ -146,6 +148,7 @@ const EditEvent = () => {
                     <h1>Edit Event</h1>
                     <input type="text" value={prevEvent?.EventName || ""} placeholder="Event Name" onChange={handleChange} name="EventName" />
                     <input type="text" value={prevEvent?.EventDesc || ""} placeholder="Event Description" onChange={handleChange} name="EventDesc" />
+                    <input type="text" value={prevEvent?.EventPic || ""} placeholder="Image URL" onChange={handleChange} name="eventpic" />
                     <input type="date" value={prevEvent?.EventDate ? new Date(prevEvent.EventDate).toISOString().split("T")[0] : ""} onChange={handleChange} name="EventDate" />
                     <div>
                         <label>

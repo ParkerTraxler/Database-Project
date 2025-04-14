@@ -33,7 +33,7 @@ const CreateSpecialExhibit = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post("http://localhost:3002/exhibits", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/exhibits`, {
                 exhibitname: specialExhibit.exhibitname, 
                 exhibitdesc: specialExhibit.exhibitdesc, 
                 exhibitpic: specialExhibit.exhibitpic,
@@ -47,12 +47,10 @@ const CreateSpecialExhibit = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log(res.end)
-            
             navigate("/manage-exhibits")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

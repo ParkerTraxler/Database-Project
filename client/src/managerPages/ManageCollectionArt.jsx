@@ -28,12 +28,12 @@ import React from 'react'
          const fetchArtwork = async ()=>{
              console.log(collectionTitle)
              try{
-                 const res = await axios.get(`http://localhost:3002/artworks/collection/${encodeURIComponent(collectionTitle)}`);
+                 const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/artworks/collection/${encodeURIComponent(collectionTitle)}`);
                  console.log(res.data)
                  setArtwork(res.data)
                  console.log(artwork.data)
              }catch(err){
-                 console.log(err)
+                window.alert(err.response.data.error);
              }
          }
          fetchArtwork()
@@ -42,7 +42,7 @@ import React from 'react'
      const handleDelete = async (artID)=>{
          console.log("ID: " + artID)
          try{
-             const res = await axios.delete("http://localhost:3002/artworks/", {
+             const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
                  headers: {
                      'authorization': `Bearer ${token}`
                  },
@@ -52,7 +52,7 @@ import React from 'react'
              window.location.reload() //refreshes the page
          }
          catch(err){
-             console.log(err)
+            window.alert(err.response.data.error);
          }
      }
  

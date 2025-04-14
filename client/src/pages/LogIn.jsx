@@ -21,7 +21,6 @@ const LogIn = () => {
 
     const handleChange = (e) =>{ // given target to given value
         setLogin(prev=>({...prev, [e.target.name]: e.target.value}))
-        console.log(userData)
     }
 
     const navigate = useNavigate()
@@ -40,20 +39,20 @@ const LogIn = () => {
             e.preventDefault()  //prevents page refresh on button click
             
             try{
-                const res = await axios.post("http://localhost:3002/auth/login", userData)
+                const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/auth/login`, userData, {
+                    headers:{
+                        'Content-Type' : 'application/json'
+                    }
+                }); 
                 const { message, token, error } = res.data
-                console.log(res.data)
-                console.log(message)
                 const decoded = jwtDecode(token)
                 const role = decoded.role
-                console.log("Role: " + role)
-                console.log(error)
                 
                 login(userData.email, role, token)
                 navigate('/')
             }
             catch(err){
-                console.log(err);
+                window.alert(err.response.data.error);
             }
         }
     }

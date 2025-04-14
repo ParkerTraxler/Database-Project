@@ -36,7 +36,7 @@ const EditTicket = () => {
         console.log(ticket.price)
         try{
             console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/items/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
                 itemid: ticketID,
                 itemprice: ticket.price,
                 email: email
@@ -49,7 +49,7 @@ const EditTicket = () => {
             console.log("PUT Completed")
             console.log(res.data)
             console.log("PUT Sent")
-            const res2 = await axios.put("http://localhost:3002/items/restock", {
+            const res2 = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/restock`, {
                 itemid: ticketID,
                 amounttoadd: ticket.amounttoadd,
                 email: email
@@ -64,7 +64,7 @@ const EditTicket = () => {
             navigate("/manage-tickets")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

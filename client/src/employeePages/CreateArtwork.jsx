@@ -43,9 +43,9 @@ import EmployeeNav from './EmployeeNav'
          console.log(collectionTitle)
          console.log(artwork)
          try{
-             const res = await axios.post("http://localhost:3002/artworks/", {
+             const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
                  artName: artwork.artName, 
-                 artist: artwork.dateMade, 
+                 artist: artwork.artist, 
                  dateMade: artwork.dateMade, 
                  artType: artwork.artType, 
                  artVal: artwork.artVal, 
@@ -64,7 +64,7 @@ import EmployeeNav from './EmployeeNav'
              navigate(`/manage-collection-art/${collectionTitle}`)
          }
          catch(err){
-             console.log(err)
+            window.alert(err.response.data.error);
          }
      }
      

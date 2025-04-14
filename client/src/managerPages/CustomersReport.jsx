@@ -29,7 +29,7 @@ const CustomersReport = () => {
         console.log("Member: " + memberFilter);
         try {
             console.log("GET Sent");
-            const res = await axios.get(`http://localhost:3002/reports/customer-report/${encodeURIComponent(email)}/${timeRange}/${promoFilter}/${memberFilter}`, {
+            const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reports/customer-report/${encodeURIComponent(email)}/${timeRange}/${promoFilter}/${memberFilter}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },
@@ -97,7 +97,7 @@ const CustomersReport = () => {
                                     <td>{customer.Customer_Name}</td>
                                     <td>{customer.Customer_Email}</td>
                                     <td>{"$" + customer.Total_Amount_Spent}</td>
-                                    <td>{new Date(customer.Last_Visit_Date).toLocaleDateString()}</td>
+                                    <td>{customer.Last_Visit_Date ? new Date(customer.Last_Visit_Date).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not Yet Visited"}</td>
                                     <td>{customer.Currently_Member ? "Member" : "Not a Member"}</td>
                                     <td>{new Date(customer.Account_Creation_Date).toLocaleDateString()}</td>
                                     <td>{customer.Good_Promotion ? "Ideal Target" : "Not Ideal Target"}</td>

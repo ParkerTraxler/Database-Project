@@ -1,5 +1,5 @@
 import React from 'react'
- import ManagerNav from '../managerPages/ManagerNav'
+import EmployeeNav from './EmployeeNav'
  import { useState } from 'react'
  import { useLocation } from 'react-router-dom'
  import { useNavigate } from 'react-router-dom'
@@ -42,10 +42,10 @@ import React from 'react'
          console.log("ID: " + artID)
          console.log(artwork)
          try{
-             const res = await axios.put("http://localhost:3002/artworks/", {
+             const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
                  artID: artID,
                  artName: artwork.artName, 
-                 artist: artwork.dateMade, 
+                 artist: artwork.artist, 
                  dateMade: artwork.dateMade, 
                  artType: artwork.artType, 
                  artVal: artwork.artVal, 
@@ -64,7 +64,7 @@ import React from 'react'
              navigate("/manage-collections")
          }
          catch(err){
-             console.log(err)
+            window.alert(err.response.data.error);
          }
      }
  
@@ -73,7 +73,7 @@ import React from 'react'
          
          <div className="managerView">
              <div>
-                 <ManagerNav/>
+                 <EmployeeNav/>
              </div>
              <div>
                  

@@ -22,12 +22,12 @@ const CollectionArt = () => {
          const fetchArtwork = async ()=>{
              console.log(collectionTitle)
              try{
-                 const res = await axios.get(`http://localhost:3002/artworks/collection/${encodeURIComponent(collectionTitle)}`);
+                 const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/artworks/collection/${encodeURIComponent(collectionTitle)}`);
                  console.log(res.data)
                  setArtwork(res.data)
                  console.log(artwork.data)
              }catch(err){
-                 console.log(err)
+                window.alert(err.response.data.error);
              }
          }
          fetchArtwork()
@@ -52,7 +52,7 @@ const CollectionArt = () => {
                          <div>Artist: {art.Artist}</div>
                          <div>Value: {art.ArtVal}</div>
                          
-                         <div>Date Made: {new Date(art.DateMade).toLocaleDateString()}</div>
+                         <div>Date Made: {art.DateMade != null ? new Date(art.DateMade).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Unknown"}</div>
                          <p>Desc: {art.ArtDesc}</p>
                          
                          
