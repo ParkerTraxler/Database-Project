@@ -60,7 +60,7 @@ const CreateItem = () => {
         
         <div className="managerView">
             <div>
-                <ManagerNav/>
+                <EmployeeNav/>
             </div>
             <div>
                 <div className="form">
