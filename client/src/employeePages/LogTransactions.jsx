@@ -107,12 +107,12 @@ const LogTransactions = () => {
 
     return(
         
-        
+        <div className="log-transactions-container">
         <div className="managerView">
             <div>
                 <EmployeeNav/>
             </div>
-            <div className="transactionContainerEm">
+            <div className="transactionContainer-section">
                 <h1>Log Transactions</h1>
                 <div className="transactionLogEm">
                     {loading ? (
@@ -148,7 +148,7 @@ const LogTransactions = () => {
                                 <div>{"$" + cartItem.ItemPrice}</div>
                                 <div>
                                     Quantity:
-                                    <input type="number" min="0" placeholder="amount to buy" onChange={(e) => handleChange(e, cartItem.ItemID)} name={"quantity"}/>
+                                    <input className="log-transactions-input" type="number" min="0" placeholder="amount to buy" onChange={(e) => handleChange(e, cartItem.ItemID)} name={"quantity"}/>
                                 </div>
                                 
                                 <div>
@@ -160,14 +160,14 @@ const LogTransactions = () => {
                         <p className="no-items-message">No items in cart.</p> 
                     )}
                     <div>
-                        <input type="email" placeholder="enter customer's email" onChange={handleEmail} name="email"/>
+                        <input className="log-transactions-input" type="email" placeholder="enter customer's email" onChange={handleEmail} name="email"/>
                     </div>
                     <div>
-                        <button onClick={handleClick}>Log Transaction</button>
+                        <button className="log-transactions-submit-button" onClick={handleClick}>Log Transaction</button>
                     </div>
                 </div>
             </div>
-            
+        </div>    
         </div>
     )
 }
