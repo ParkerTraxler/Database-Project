@@ -60,7 +60,7 @@ import EmployeeNav from './EmployeeNav'
      return(
          
  
-         
+        <div className="manage-collections-art-container">
          <div className="managerView">
              <div>
                 <EmployeeNav/>
@@ -89,11 +89,11 @@ import EmployeeNav from './EmployeeNav'
                      </div>
                  ))}
                  </div>
-                 <button>
+                 <button className="manage-collections-art-add-button">
                      <Link to={`/add-artwork/${collectionTitle}`}>Add Artwork</Link>
                  </button>
              </div>
-             
+             </div> 
          </div>
      )
  }
