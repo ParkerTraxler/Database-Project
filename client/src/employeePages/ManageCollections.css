@@ -14,7 +14,7 @@ h1 {
 
 
 .manageCollectionSectionButton{
-    background-color: #bdbdbd;
+    background-color: rgb(203, 207, 206);
     color: #ffffff;
     font-size: 1rem;
     font-weight: 600;
@@ -28,7 +28,7 @@ h1 {
 }
 
 .manageCollectionSectionButton:hover {
-    background-color: #a1a1a1;
+    background-color: rgb(147, 147, 147);
 }
 
 .manageCollectionSectionEm {

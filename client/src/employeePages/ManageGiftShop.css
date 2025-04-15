@@ -41,7 +41,7 @@
 }
 
 .manage-gift-shop-button{
-    background-color: #c6c6c6;
+    background-color: rgb(203, 207, 206);
     color: #ffffff;
     font-size: 1rem;
     font-weight: 600;
@@ -55,7 +55,7 @@
 }
 
 .manage-gift-shop-button:hover{
-    background-color: #ababab;
+    background-color: rgb(147, 147, 147);
 }
 @media (max-width: 1000px) {
     .giftshopEm {
