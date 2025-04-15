@@ -64,3 +64,19 @@
     transition: background-color 0.2s ease;
     margin-left: 15px;
 }
+
+.remove-employee-button-add-events{
+    background-color: #ef4444;
+    color: #ffffff;
+    padding: 0.5rem .7rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.remove-employee-button-add-events:hover {
+    background-color: #dc2626;
+}

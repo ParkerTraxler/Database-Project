@@ -164,7 +164,7 @@ const EditEvent = () => {
                         <ul>
                         {employeeList.map((email, index) => (
                             <li key={index}>
-                                {email} <button onClick={() => removeEmployee(index)}>Remove</button>
+                                {email} <button className="remove-employee-button-edit-events" onClick={() => removeEmployee(index)}>Remove</button>
                             </li>
                         ))}
                         </ul>
@@ -174,7 +174,7 @@ const EditEvent = () => {
                         <ul>
                         {removedemployees.map((email, index) => (
                             <li key={index}>
-                                {email} <button onClick={() => restoreEmployee(index)}>Re-add</button>
+                                {email} <button className="re-add-employee-button-edit-events" onClick={() => restoreEmployee(index)}>Re-add</button>
                             </li>
                         ))}
                         </ul>

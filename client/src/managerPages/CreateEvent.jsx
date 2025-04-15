@@ -109,7 +109,7 @@ const CreateEvent = () => {
                         <ul>
                             {employeeList.map((email, index) => (
                                 <li key={index}>
-                                    {email} <button onClick={() => removeEmployee(index)}>Remove</button>
+                                    {email} <button  className="remove-employee-button-add-events" onClick={() => removeEmployee(index)}>Remove</button>
                                 </li>
                             ))}
                         </ul>
