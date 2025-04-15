@@ -6,6 +6,7 @@ import EmployeeNav from './EmployeeNav'
  import axios from 'axios'
  import { useAuth } from '../utils/AuthContext'
  import './EmployeeDashboard.css'
+ import './EditArtwork.css'
  
  const EditArtwork = () => {
      console.log("EditArtwork")
@@ -70,35 +71,35 @@ import EmployeeNav from './EmployeeNav'
  
      return(
          
-         
+        <div className="edit-artwork-container"> 
          <div className="managerView">
              <div>
                  <EmployeeNav/>
              </div>
              <div>
                  
-                 <div className="form">
+                 <div className="edit-artwork-form">
                      <h1>Edit Artwork</h1>
-                     <input type="text" placeholder="name" onChange={handleChange} name="artName"/>
-                     <input type="text" placeholder="artist" onChange={handleChange} name="artist"/>
-                     <input type="text" placeholder="type" onChange={handleChange} name="type"/>
-                     <input type="number" step="0.01" placeholder="value" onChange={handleChange} name="artVal"/>
-                     <input type="text" placeholder="desc" onChange={handleChange} name="artDesc"/>
-                     <input type="text" placeholder="collection" onChange={handleChange} name="collection"/>
-                     <input type="text" placeholder="image" onChange={handleChange} name="artPic"/>
-                     <input type="date" onChange={handleChange} name="dateMade"/>
+                     <input className="edit-artwork-input" type="text" placeholder="name" onChange={handleChange} name="artName"/>
+                     <input className="edit-artwork-input" type="text" placeholder="artist" onChange={handleChange} name="artist"/>
+                     <input className="edit-artwork-input" type="text" placeholder="type" onChange={handleChange} name="type"/>
+                     <input className="edit-artwork-input" type="number" step="0.01" placeholder="value" onChange={handleChange} name="artVal"/>
+                     <input className="edit-artwork-input" type="text" placeholder="desc" onChange={handleChange} name="artDesc"/>
+                     <input className="edit-artwork-input" type="text" placeholder="collection" onChange={handleChange} name="collection"/>
+                     <input className="edit-artwork-input" type="text" placeholder="image" onChange={handleChange} name="artPic"/>
+                     <input className="edit-artwork-input" type="date" onChange={handleChange} name="dateMade"/>
                      <div>
                      On Display:
-                     <select onChange={handleChange} name="onDisplay">
+                     <select  className="edit-artwork-input"  onChange={handleChange} name="onDisplay">
                          <option value="">---Choose an option---</option>
                          <option value="1">True</option>
                          <option value="0">False</option>
                      </select>
                      </div>
-                     <button className="formButton" onClick={handleClick} >Save Changes</button>
+                     <button className="edit-artwork-formButton" onClick={handleClick} >Save Changes</button>
                  </div>
              </div>
-             
+        </div>     
          </div>
      )
  }
