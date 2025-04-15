@@ -55,7 +55,7 @@ const AccountDetailsEmployee = () => {
                 <div className="detail"><strong>Date of Birth:</strong> {details.BirthDate ? new Date(details.BirthDate).toLocaleDateString() : "Not provided"}</div>
                 <div className="detail"><strong>Gender:</strong> {details.Gender || "Not provided"}</div>
                 <div className="detail"><strong>Weekly Hours:</strong> {details.WeeklyHours || "Not assigned"}</div>
-                <div className="detail"><strong>Hourly Wage:</strong> {"$" + details.HourlyWage || "Not assigned"}</div>
+                <div className="detail"><strong>Hourly Wage:</strong> {details.HourlyWage != null ? "$" + details.HourlyWage : "Not assigned"}</div>
                 <div className="detail"><strong>Email:</strong> {details.Email}</div>
             </div>
             </div>

@@ -56,7 +56,7 @@ const EditAccountEmployee = () => {
             const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/employees/editacc`, {
                 firstname: details.FirstName, 
                 lastname: details.LastName, 
-                birthdate: details.BirthDate.split("T")[0], 
+                birthdate: details.BirthDate ? details.BirthDate.split("T")[0] : null, 
                 gender: details.Gender, 
                 email: details.Email
             },
@@ -70,7 +70,12 @@ const EditAccountEmployee = () => {
             navigate("/employee-account-details")
         }
         catch(err){
-           window.alert(err.response.data.error);
+            console.error(err); // Always good to log
+            if (err.response && err.response.data && err.response.data.error) {
+                window.alert(err.response.data.error);
+            } else {
+                window.alert("An unexpected error occurred.");
+            }
         }
     }
 
