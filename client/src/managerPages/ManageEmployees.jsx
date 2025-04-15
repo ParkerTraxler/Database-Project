@@ -17,7 +17,7 @@ const ManageEmployees = () => {
     useEffect(()=>{
         const fetchAllEmployees = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/employees", {
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/employees`, {
                     headers: {
                         'authorization': `Bearer ${token}`
                     },
@@ -34,7 +34,7 @@ const ManageEmployees = () => {
     const handleDelete = async (email)=>{
         console.log(email)
         try{
-            const res = await axios.delete("http://localhost:3002/employees/", {
+            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/employees/`, {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },
@@ -44,7 +44,7 @@ const ManageEmployees = () => {
             window.location.reload() //refreshes the page
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
@@ -85,7 +85,7 @@ const ManageEmployees = () => {
                             <td>{employee.HourlyWage}</td>
                             <td>{employee.WeeklyHours}</td>
                             <td>{employee.ManagerID}</td>
-                            <td>{new Date(employee.BirthDate).toLocaleDateString()}</td>
+                            <td>{employee.BirthDate ? new Date(employee.BirthDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</td>
                             <td>{employee.Gender}</td>
                             <td>
 

@@ -25,7 +25,6 @@ const MakeDonation = () => {
 
     const handleChange = (e) =>{ // given target to given value
         setDonation(prev=>({...prev, [e.target.name]: e.target.value}))
-        console.log(donation)
     }
 
     const now = new Date();
@@ -42,7 +41,7 @@ const MakeDonation = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post("http://localhost:3002/donations", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/donations`, {
                 donatedate: formattedDate, 
                 donateamt: donation.donateamt, 
                 donatedesc: donation.donatedesc,
@@ -53,12 +52,11 @@ const MakeDonation = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log(res.end)
             
             navigate("/")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
@@ -72,7 +70,7 @@ const MakeDonation = () => {
                 <div className="donationForm">
                     <h1>Make a Donation</h1>
                     <input type="number" step="0.01" placeholder="amount" onChange={handleChange} name="donateamt"/>
-                    <input type="text" placeholder="desc" onChange={handleChange} name="donatedesc"/>
+                    <input type="text" maxLength="650" placeholder="desc" onChange={handleChange} name="donatedesc"/>
                     <button className="donationButton" onClick={handleClick} >Donate</button>
                 </div>
             </div>

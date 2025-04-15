@@ -33,7 +33,7 @@ const EditHistoryReport = () => {
         console.log("Action: " + actionType);
         try {
             console.log("GET Sent");
-            const res = await axios.get(`http://localhost:3002/reports/change-history/${encodeURIComponent(email)}/${timeRange.startDate}/${timeRange.endDate}/${actionType}/${effectedTable}`, {
+            const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reports/change-history/${encodeURIComponent(email)}/${timeRange.startDate}/${timeRange.endDate}/${actionType}/${effectedTable}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },
@@ -44,7 +44,7 @@ const EditHistoryReport = () => {
             
             setReportGenerated(true);
         } catch (err) {
-            console.log(err);
+            window.alert(err.response.data.error);
         }
     };
     

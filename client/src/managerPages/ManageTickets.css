@@ -4,9 +4,9 @@
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-  }
+}
 
-  .manage-tickets-section {
+.manage-tickets-section {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,17 +21,17 @@
     border: 1px solid #ddd;
     border-radius: 16px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  }
+}
   
-  .manage-tickets-header {
+.manage-tickets-header {
     font-size: 2rem;
     margin-bottom: 1.5rem;
     color: #333;
     border-bottom: 2px solid #e0e0e0;
     padding-bottom: 0.5rem;
-  }
+}
   
-  .ticket {
+.ticket {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -40,5 +40,10 @@
     border-radius: 0.75rem;
     background-color: #f5f7fa;
     transition: background-color 0.3s ease;
-  }
+}
+
+.update:hover {
+    background-color: #e3b2e4;  /* A darker green when hovered */
+    transform: scale(1.05);  /* Slightly enlarge the button */
+}
   

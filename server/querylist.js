@@ -36,6 +36,7 @@ const get_specific_collection = "SELECT * FROM collections WHERE Title = ? AND i
 const get_exhibit_collections = "SELECT * FROM collections WHERE (ExhibitID = ? OR ExhibitID IS NULL) AND isDeleted = false";
 const insert_new_collection = "INSERT INTO collections (Title, CollectDesc, CollectPic, ExhibitID) VALUES (?, ?, ?, ?)";
 const mark_collection_delete = "UPDATE collections SET isDeleted = true WHERE Title = ? AND isDeleted = false";
+const reset_collection_art = "UPDATE artworks SET Collection = NULL WHERE Collection = ?"
 const update_collection_query = "UPDATE collections SET CollectDesc = ?, CollectPic = ?, ExhibitID = ? WHERE Title = ? AND isDeleted = false";
 
 // Exhibits Management Controller (very very long)
@@ -198,16 +199,18 @@ const customer_report_info = `SELECT
             s.ItemID IN (1, 2, 3, 4)) AS Last_Visit_Date,
         CASE
 	        WHEN (SELECT MAX(s.DatePurchased)
-	        FROM sales as S
+	        FROM sales as s
             WHERE
             s.CustomerID = c.CustomerID
             AND
             s.ItemID IN (1, 2, 3, 4)) <= CURDATE() - INTERVAL 1 MONTH 
             AND
-            (SELECT COUNT(*) 
-            FROM sales AS s
+            (SELECT COUNT(DISTINCT DATE(s2.DatePurchased)) 
+            FROM sales AS s2
             WHERE 
-            s.ItemID IN (1, 2, 3, 4)) >= 2 THEN TRUE
+            s2.ItemID IN (1, 2, 3, 4)
+            AND
+            s2.CustomerID = c.CustomerID) >= 2 THEN TRUE
             ELSE FALSE
         END AS Good_Promotion
         FROM
@@ -228,9 +231,8 @@ const customer_report_info = `SELECT
             AND ah.ActionType = 'Created'
         WHERE
         li.UserRole = "Customer"
-        AND
-        ah.TimestampAction > ?
-        GROUP BY c.CustomerID`; // Groups it into a bunch of groups of size 1 that let the function work -- added dynamically at the end of the query
+        GROUP BY c.CustomerID, ah.TimestampAction
+        HAVING ah.TimestampAction >= ?`; // Groups it into a bunch of groups of size 1 that let the function work -- added dynamically at the end of the query
     // First question mark: account creation date > time
     // Then it groups by customers having two criterium defined earlier 
     // If I get asked to explain this query, I will take 10 minutes but I will do it :')
@@ -295,6 +297,34 @@ LEFT JOIN
 ON
 	ah.ActionType = "Created" AND ah.EffectedTable = "Exhibits" AND  ex.ExhibitID = CAST(ah.EffectedEntry AS SIGNED)`;
 
+// get manager account info:
+const get_manager_profile = `SELECT 
+managers.FirstName, 
+managers.LastName, 
+managers.Gender, 
+managers.Salary, 
+managers.BirthDate 
+FROM logininfo, managers
+WHERE logininfo.Email = ? AND managers.UserID = logininfo.userID`;
+
+// update manager profile
+const update_manager_profile = `UPDATE managers 
+INNER JOIN logininfo ON logininfo.UserID = managers.UserID 
+SET managers.FirstName = ?, 
+managers.LastName = ?, 
+managers.BirthDate = ?, 
+managers.Gender = ? 
+WHERE logininfo.Email = ?`;
+
+// update employee profile
+const update_employee_profile = `UPDATE employees 
+INNER JOIN logininfo ON logininfo.Email = employees.Email 
+SET employees.FirstName = ?, 
+employees.LastName = ?, 
+employees.BirthDate = ?, 
+employees.Gender = ? 
+WHERE logininfo.Email = ?`;
+
 // all the queries exported out
 module.exports = {
     user_exists_query,
@@ -324,6 +354,7 @@ module.exports = {
     get_exhibit_collections,
     insert_new_collection,
     mark_collection_delete,
+    reset_collection_art,
     update_collection_query,
     get_all_exhibits,
     get_specific_exhibit,
@@ -368,5 +399,8 @@ module.exports = {
     all_sales_aggregate,
     customer_report_info,
     change_history_report,
-    weekly_exhibit_cost
+    weekly_exhibit_cost,
+    get_manager_profile,
+    update_manager_profile,
+    update_employee_profile
 };

@@ -34,7 +34,7 @@ const CreateExhibit = () => {
         console.log("Exhibit object being sent:", exhibit);  // Debug the exhibit state before sending
         
         try{
-            const res = await axios.post("http://localhost:3002/exhibits/", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/exhibits/`, {
                 exhibitname: exhibit.exhibitname, 
                 exhibitdesc: exhibit.exhibitdesc, 
                 exhibitpic: exhibit.exhibitpic,
@@ -45,12 +45,10 @@ const CreateExhibit = () => {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log(res.end)
-            
             navigate("/manage-exhibits")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 

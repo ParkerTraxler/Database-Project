@@ -25,7 +25,7 @@ const AccountDetails = () => {
     useEffect(() => {
         const fetchAccount = async () => {
             console.log(encodeURIComponent(email));
-            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`, 
+            axios.get(`${process.env.REACT_APP_API_ENDPOINT}/profile/${encodeURIComponent(email)}`, 
             {
                 headers: {
                     'authorization': `Bearer ${token}`
@@ -37,7 +37,7 @@ const AccountDetails = () => {
                     setIsLoading(false); // Set loading to false when done
                 })
                 .catch((err) => {
-                    console.log(err);
+                    window.alert(err.response.data.error);
                     setIsLoading(false); // Even on error, stop loading
                 });
         };
@@ -50,14 +50,14 @@ const AccountDetails = () => {
         try {
             navigate("/account-details/edit");
         } catch (err) {
-            console.log(err);
+            window.alert(err.response.data.error);
         }
     };
     const subscribeNow = async e => {
         e.preventDefault()  //prevents page refresh on button click
         try{
             console.log("PUT Sent")
-            const res2 = axios.put('http://localhost:3002/profile/membership', {
+            const res2 = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/profile/membership`, {
                 email: email
             },
             {
@@ -69,7 +69,7 @@ const AccountDetails = () => {
             console.log("PUT Completed")
             window.location.reload()
         } catch (err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
         
     }
@@ -88,7 +88,7 @@ const AccountDetails = () => {
                 <div className="detailsBoxC">
                     <div className="detailC"><strong>First Name:</strong> {info.FirstName}</div>
                     <div className="detailC"><strong>Last Name:</strong> {info.LastName}</div>
-                    <div className="detailC"><strong>Date of Birth:</strong> {new Date(info.BirthDate).toLocaleDateString() || "Not provided"}</div>
+                    <div className="detailC"><strong>Date of Birth:</strong> {info.BirthDate ? new Date(info.BirthDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</div>
                     <div className="detailC"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
                     <div className="detailC"><strong>Membership Status:</strong> {info.isMember ? "Member" : "Not a Member"}</div>
                     {info.isMember == "1" && (
@@ -106,16 +106,18 @@ const AccountDetails = () => {
                 <div>
                     <button className="saveButtonC" onClick={handleClick}>Edit Account</button>
                 </div>
+                
+                <div className='accountMembershipDetailsContainer'>
+                    {info.isMember == "0" &&(
+                        <div className='accountMembershipDetailsArea'>
+                            <p>Not a Member?</p>
+                            <button className="membershipSubscribeButton" onClick={subscribeNow}>Subscribe Now</button>
+                        </div>
+                    )}
+                </div>
+
             </div>
-            <div>
-                {info.isMember == "0" &&(
-                    <div>
-                        Not a Member?
-                        Want discounts on tickets and access to member exclusive events?
-                        <button onClick={subscribeNow}>Subscribe Now</button>
-                    </div>
-                )}
-            </div>
+            
         </div>
     );
 };

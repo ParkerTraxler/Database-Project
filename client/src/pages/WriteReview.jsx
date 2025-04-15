@@ -39,7 +39,7 @@ const WriteReview = () => {
         e.preventDefault()  //prevents page refresh on button click
         try{
             console.log("POST Sent")
-            const res = await axios.post("http://localhost:3002/reviews", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/reviews`, {
                 email: email,
                 starcount: review.starcount, 
                 reviewdesc: review.reviewdesc
@@ -55,15 +55,15 @@ const WriteReview = () => {
             navigate("/reviews")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     };
 
     return (
-        <div className="reviewPage">
-            <div className="Review-box">
+        <div className="writeReviewPage">
+            <div className="writeReview-box">
                 <h1 className="Header">Write a Review</h1>
-                <div className="input-group">
+                <div className="input-groupWriteReview">
 
                     {/* Star Rating Section */}
                     <div className="starReview" onMouseLeave={handleMouseLeave}>
@@ -114,14 +114,14 @@ const WriteReview = () => {
 
                     {/* Review Input */}
                     <label>Write a Review:</label>
-                    <textarea className="Review"
+                    <textarea className="writingReviewArea"
                         placeholder="What should other customers know?" 
-                        maxLength="300"
+                        maxLength="650"
                         name="review"
                         onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>
                 </div>
-                <button className="submitReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
+                <button className="submitWriteReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
 
                 <a href = "/edit-review">Edit a Review</a>
             </div>

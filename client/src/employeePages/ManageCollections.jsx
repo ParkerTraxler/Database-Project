@@ -19,7 +19,7 @@ const ManageCollections = () => {
     useEffect(()=>{
         const fetchAllCollections = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/collections")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/collections`)
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){
@@ -32,7 +32,7 @@ const ManageCollections = () => {
     const handleDelete = async (title)=>{
         console.log(title)
         try{
-            const res = await axios.delete("http://localhost:3002/collections/", {
+            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/collections/`, {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },
@@ -42,18 +42,18 @@ const ManageCollections = () => {
             window.location.reload() //refreshes the page
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
 
     return(
+        <div className= "manage-collections-container">
         <div className="managerView">
             <div>
                 <EmployeeNav/>
             </div>
-            <div>
-                Manage Collections
+            <div className="manageCollectionSectionEm">
                 <h1>Collections</h1>
                 <div className="collectionsM">
                 {collections.map(collection=>(
@@ -74,7 +74,7 @@ const ManageCollections = () => {
                     <Link to="/add-collection">Create Collection</Link>
                 </button>
             </div>
-            
+        </div>    
         </div>
     )
 }

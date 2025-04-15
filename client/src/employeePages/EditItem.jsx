@@ -4,8 +4,9 @@ import { useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../utils/AuthContext'
-import ManagerNav from '../managerPages/ManagerNav'
+import EmployeeNav from './EmployeeNav'
 import './EmployeeDashboard.css'
+import './EditItem.css'
 
 const EditItem = () => {
     console.log("EditItem")
@@ -39,7 +40,7 @@ const EditItem = () => {
         console.log("ID: " + ItemID)
         try{
             console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/items/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
                 itemid: ItemID, 
                 itemname: item.itemname, 
                 itemprice: item.itemprice, 
@@ -55,7 +56,7 @@ const EditItem = () => {
             console.log(res.data)
 
             console.log("PUT Sent")
-            const res2 = await axios.put("http://localhost:3002/items/restock", {
+            const res2 = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/restock`, {
                 itemid: ItemID,
                 amounttoadd: item.amounttoadd
             },
@@ -69,31 +70,31 @@ const EditItem = () => {
             navigate("/manage-gift-shop")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
     return(
         
-        
+        <div className="edit-item-container">
         <div className="managerView">
             <div>
-                <ManagerNav/>
+                <EmployeeNav/>
             </div>
             <div>
-                <div className="form">
-                    <h1>Edit Item</h1>
-                    <input type="text" placeholder="name" onChange={handleChange} name="itemname"/>
-                    <input type="text" placeholder="image url" onChange={handleChange} name="itemimage"/>
-                    <input type="text" min="0" placeholder="price" onChange={handleChange} name="itemprice"/>
-                    <input type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
+                <div className="edit-item-form">
+                    <h1 className="edit-item-header">Edit Item</h1>
+                    <input className="edit-item-input" type="text" placeholder="name" onChange={handleChange} name="itemname"/>
+                    <input className="edit-item-input" type="text" placeholder="image url" onChange={handleChange} name="itemimage"/>
+                    <input className="edit-item-input" type="text" min="0" placeholder="price" onChange={handleChange} name="itemprice"/>
+                    <input className="edit-item-input" type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
                     <div>
-                        <button className="formButton" onClick={handleClick} >Save Changes</button>
+                        <button className="edit-item-formButton" onClick={handleClick} >Save Changes</button>
                     </div>
                     
                 </div>
             </div>
-            
+        </div>    
         </div>
     )
 }

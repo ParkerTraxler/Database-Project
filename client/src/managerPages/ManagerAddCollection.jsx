@@ -31,7 +31,7 @@ const ManagerAddCollection = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post("http://localhost:3002/collections", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/collections`, {
                 
                 title: collection.Title,
                 collectdesc: collection.CollectDesc,
@@ -49,7 +49,7 @@ const ManagerAddCollection = () => {
             navigate("/manage-collections")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     }
 
@@ -62,10 +62,10 @@ const ManagerAddCollection = () => {
             <div className="add-collections-section">
                 <div>
                     <h1 className="add-collection-header">Create New Collection</h1>
-                    <input type="text" placeholder="title" onChange={handleChange} name="Title"/>
-                    <input type="text" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
-                    <input type="text" placeholder="image" onChange={handleChange} name="CollectPic"/>
-                    <input type="number" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
+                    <input className="add-collections-input" type="text" placeholder="title" onChange={handleChange} name="Title"/>
+                    <input className="add-collections-input" type="text" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
+                    <input className="add-collections-input" type="text" placeholder="image" onChange={handleChange} name="CollectPic"/>
+                    <input className="add-collections-input" type="number" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
                     <button className="formButton-add-collection" onClick={handleClick} >Create</button>
                 </div>
             </div>

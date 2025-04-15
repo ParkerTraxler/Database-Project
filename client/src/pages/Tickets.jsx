@@ -26,7 +26,7 @@ const Tickets = () => {
     useEffect(() => {
         const fetchAccount = async () => {
             console.log(encodeURIComponent(email));
-            axios.get(`http://localhost:3002/profile/${encodeURIComponent(email)}`, 
+            axios.get(`${process.env.REACT_APP_API_ENDPOINT}/profile/${encodeURIComponent(email)}`, 
             {
                 headers: {
                     'authorization': `Bearer ${token}`
@@ -57,7 +57,7 @@ const Tickets = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const res = await axios.get("http://localhost:3002/items/tickets");
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items/tickets`);
                 console.log(res.data)
                 setTickets(res.data);  // Store the data once fetched
                 
@@ -87,7 +87,7 @@ const Tickets = () => {
         
         try{
             console.log("POST Sent")
-            const res = await axios.post("http://localhost:3002/transactions/tickets", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/transactions/tickets`, {
                 ticketArray: ticketArray, 
                 email: email, 
                 datepurchased: formattedDate
@@ -124,7 +124,7 @@ const Tickets = () => {
             </div>
             <div>
                 <h1>Tickets</h1>
-                <div>Members get a 10% discount on all tickets!</div>
+                <h3 className="ticketsCuPageh3">Members get a 10% discount on all tickets!</h3>
                 {tickets[0].isPurchasable == '0' && (
                         <div>
                             Tickets are sold out. Check back tomorrow!
@@ -138,7 +138,7 @@ const Tickets = () => {
                         
                         tickets.map(ticket=>(
                             
-                            <div className="ticket" key={ticket.ItemID}>
+                            <div className="ticketCu" key={ticket.ItemID}>
                                 <div>{ticket.ItemName}</div>
                                 {!info && (
                                     <div>{"$" + ticket.ItemPrice}</div>
@@ -148,7 +148,7 @@ const Tickets = () => {
                                 )}
                                 {info?.isMember == '1' && (
                                     <div>
-                                        <div className="oldPrice">{"$" + ticket.ItemPrice}</div>
+                                        <div className="regularPriceTickets">{"$" + ticket.ItemPrice}</div>
                                         {"$" + (ticket.ItemPrice*0.9).toFixed(2)}
                                     </div>
                                 )}
@@ -167,15 +167,15 @@ const Tickets = () => {
                 <div>
                     
                     {role == 'Customer' && tickets[0].isPurchasable == '1' && (
-                        <div>
-                            <button className="formButton" onClick={handleClick}>Purchase Tickets</button>
+                        <div className="purchaseTicketsButtonContainer">
+                            <button className="puchaseTicketsButton" onClick={handleClick}>Purchase Tickets</button>
                         </div>
                         )}
                 </div>
                 {showReceipt && (
-                    <div className="popup-overlay">
-                    <div className="popup-content">
-                        <span className="close-button" onClick={hideReciept}>
+                    <div className="receiptPopUpBox">
+                    <div className="receiptPopUpBoxInfo">
+                        <span className="receiptCloseButton" onClick={hideReciept}>
                             &times;
                         </span>
                         <h2>Receipt</h2>

@@ -6,6 +6,7 @@ import EmployeeNav from './EmployeeNav'
  import { useLocation } from 'react-router-dom'
  import axios from 'axios'
  import './EmployeeDashboard'
+ import './CreateArtwork.css'
  
  const CreateArtwork = () => {
      console.log("CreateArtwork")
@@ -43,9 +44,9 @@ import EmployeeNav from './EmployeeNav'
          console.log(collectionTitle)
          console.log(artwork)
          try{
-             const res = await axios.post("http://localhost:3002/artworks/", {
+             const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
                  artName: artwork.artName, 
-                 artist: artwork.dateMade, 
+                 artist: artwork.artist, 
                  dateMade: artwork.dateMade, 
                  artType: artwork.artType, 
                  artVal: artwork.artVal, 
@@ -64,37 +65,39 @@ import EmployeeNav from './EmployeeNav'
              navigate(`/manage-collection-art/${collectionTitle}`)
          }
          catch(err){
-             console.log(err)
+            window.alert(err.response.data.error);
          }
      }
      
      return(
+        <div className="create-artwork-container">
          <div className="managerView">
              <div>
                 <EmployeeNav/>
              </div>
              <div>
-                 <div className="form">
+                 <div className="create-artwork-form">
                      <h1>Add Artwork</h1>
-                     <input type="text" placeholder="name" onChange={handleChange} name="artName"/>
-                     <input type="text" placeholder="artist" onChange={handleChange} name="artist"/>
-                     <input type="text" placeholder="type" onChange={handleChange} name="type"/>
-                     <input type="number" step="0.01" placeholder="value" onChange={handleChange} name="artVal"/>
-                     <input type="text" placeholder="desc" onChange={handleChange} name="artDesc"/>
-                     <input type="text" placeholder="image" onChange={handleChange} name="artPic"/>
-                     <input type="date" onChange={handleChange} name="dateMade"/>
+                     <input className="create-artwork-input" type="text" placeholder="name" onChange={handleChange} name="artName"/>
+                     <input className="create-artwork-input" type="text" placeholder="artist" onChange={handleChange} name="artist"/>
+                     <input className="create-artwork-input" type="text" placeholder="type" onChange={handleChange} name="type"/>
+                     <input className="create-artwork-input" type="number" step="0.01" placeholder="value" onChange={handleChange} name="artVal"/>
+                     <input className="create-artwork-input" type="text" placeholder="desc" onChange={handleChange} name="artDesc"/>
+                     <input className="create-artwork-input" type="text" placeholder="image" onChange={handleChange} name="artPic"/>
+                     <input className="create-artwork-input" type="date" onChange={handleChange} name="dateMade"/>
                      <div>
                      On Display:
-                     <select onChange={handleChange} name="onDisplay">
+                     <select className="create-artwork-input" onChange={handleChange} name="onDisplay">
                          <option value="">---Choose an option---</option>
                          <option value="1">True</option>
                          <option value="0">False</option>
                      </select>
                      </div>
-                     <button className="formButton" onClick={handleClick} >Add</button>
+                     <button className="create-artwork-formButton" onClick={handleClick} >Add</button>
                  </div>
              </div>
              
+        </div>
          </div>
      )
  }

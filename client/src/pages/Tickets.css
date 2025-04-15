@@ -19,40 +19,72 @@
 }
 
 .ticketsBody {
-    height: 100vh;
+    height: 45vh;
 }
 
-.oldPrice {
+.regularPriceTickets {
     text-decoration: line-through;
-    color: #888; /* Optional: makes it look more subtle */
-    margin-right: 8px;
+    color: rgb(135, 135, 135);
 }
 
-.popup-overlay {
+.receiptPopUpBox {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Ensure it's on top of other content */
-  }
+    z-index: 1000;
+}
   
-  .popup-content {
+.receiptPopUpBoxInfo {
     background-color: white;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     position: relative;
-  }
+}
   
-  .close-button {
+.receiptCloseButton {
     position: absolute;
     top: 10px;
     right: 10px;
     font-size: 20px;
     cursor: pointer;
-  }
+}
+
+.purchaseTicketsButtonContainer {
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.puchaseTicketsButton{
+    width: 280px;
+    padding: 20px 36px;
+    background-color: rgb(90, 131, 118);
+    color: white;
+    font-size: 22px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ticketCu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.75rem;
+    background-color: #f5f7fa;
+    transition: background-color 0.3s ease;
+}
+
+.ticketsCuPageh3 {
+    text-align: center;
+}

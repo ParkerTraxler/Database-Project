@@ -18,7 +18,7 @@ const EmployeeNav = () => {
                     </li>
                     <li>
                         <a href='/edit-employee-account'>Edit Employee Account</a>
-                    </li> 
+                    </li>
                     {position == 'Curator' && (
                         <li>
                             <a href='/manage-collections'>Manage Collections</a>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../utils/AuthContext";
@@ -16,35 +16,12 @@ const EditReview = () => {
     const token = user.token;
     const decoded = jwtDecode(token);
     const email = decoded.email;
-    console.log(email)
-
-    useEffect(() => {
-        const fetchReview = async () => {
-            console.log(encodeURIComponent(email));
-            axios.get(`http://localhost:3002/reviews/${encodeURIComponent(email)}`, 
-            {
-                headers: {
-                    'authorization': `Bearer ${token}`
-                },
-            })
-                .then((res) => {
-                    console.log(res.data);
-                    setReview(res.data);
-                    
-                })
-                .catch((err) => {
-                    console.log(err);
-                    
-                });
-            };
-        fetchReview();
-    }, [email]);
     
 
     const [hover, setHover] = useState(0);
 
     const handleClick = (index, isHalf) => {
-        setReview({ ...review, StarCount: isHalf ? index + 0.5 : index + 1 });
+        setReview({ ...review, starcount: isHalf ? index + 0.5 : index + 1 });
     };
 
     const handleHover = (index, isHalf) => {
@@ -59,41 +36,36 @@ const EditReview = () => {
 
     const handleSubmit = async e => {
         e.preventDefault()  //prevents page refresh on button click
-        console.log(review)
         try{
-            console.log("PUT Sent")
-            const res = await axios.put("http://localhost:3002/reviews/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/reviews/`, {
                 email: email,
-                starcount: review.StarCount, 
-                reviewdesc: review.ReviewDesc
+                starcount: review.starcount, 
+                reviewdesc: review.reviewdesc
             },
             {
                 headers: {
                     'authorization': `Bearer ${token}`
                 },
             })
-            console.log("PUT Completed")
-            console.log(res.end)
-            
             navigate("/reviews")
         }
         catch(err){
-            console.log(err)
+            window.alert(err.response.data.error);
         }
     };
 
 
     return (
-        <div className="reviewPage">
-            <div className="Review-box">
+        <div className="editReviewPage">
+            <div className="editReview-box">
                 <h1 className="Header">Edit your Review</h1>
-                <div className="input-group">
+                <div className="input-groupWriteReview">
 
                     {/* Star Rating Section */}
                     <div className="starReview" onMouseLeave={handleMouseLeave}>
                         {[...Array(5)].map((_, index) => {
-                            const fullStar = (hover || review.StarCount) > index + 0.5;
-                            const halfStar = (hover || review.StarCount) > index && (hover || review.StarCount) < index + 1;
+                            const fullStar = (hover || review.starcount) > index + 0.5;
+                            const halfStar = (hover || review.starcount) > index && (hover || review.starcount) < index + 1;
 
                             return (
                                 <span key={index} style={{ cursor: "pointer", position: "relative" }}>
@@ -138,15 +110,14 @@ const EditReview = () => {
 
                     {/* Review Input */}
                     <label>Write a Review:</label>
-                    <textarea className="Review"
+                    <textarea className="writingReviewArea"
                         placeholder="What should other customers know?" 
-                        maxLength="300"
+                        maxLength="650"
                         name="review"
-                        value={review.ReviewDesc}
-                        onChange={(e) => setReview({ ...review, ReviewDesc: e.target.value })}
+                        onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
                     ></textarea>
                 </div>
-                <button className="submitReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
+                <button className="submitWriteReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
             </div>
         </div>
     );

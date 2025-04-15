@@ -21,7 +21,6 @@ const LogIn = () => {
 
     const handleChange = (e) =>{ // given target to given value
         setLogin(prev=>({...prev, [e.target.name]: e.target.value}))
-        console.log(userData)
     }
 
     const navigate = useNavigate()
@@ -40,43 +39,43 @@ const LogIn = () => {
             e.preventDefault()  //prevents page refresh on button click
             
             try{
-                const res = await axios.post("http://localhost:3002/auth/login", userData)
+                const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/auth/login`, userData, {
+                    headers:{
+                        'Content-Type' : 'application/json'
+                    }
+                }); 
                 const { message, token, error } = res.data
-                console.log(res.data)
-                console.log(message)
                 const decoded = jwtDecode(token)
                 const role = decoded.role
-                console.log("Role: " + role)
-                console.log(error)
                 
                 login(userData.email, role, token)
                 navigate('/')
             }
             catch(err){
-                console.log(err);
+                window.alert(err.response.data.error);
             }
         }
     }
 
     return(
-        <div className="container">
+        <div className="loginContainer">
             <div className="login-box">
                 
                 <h1>Log In</h1>
                 <div className="error">{errorMessage}</div>
-                <div className="input-group">
+                <div className="input-groupLogin">
                     Email
-                    <input type="email" placeholder="Enter your email"  maxLength="30" onChange={handleChange} name="email"/>
+                    <input className="loginInput" type="email" placeholder="Enter your email"  maxLength="30" onChange={handleChange} name="email"/>
                 </div>
 
-                <div className="input-group">
+                <div className="input-groupLogin">
                     Password
-                    <input type="password" placeholder="Enter your password" maxLength="16" onChange={handleChange} name="password"/>
+                    <input className="loginInput" type="password" placeholder="Enter your password" maxLength="16" onChange={handleChange} name="password"/>
                 </div>
                 <div className="no-account">
                   <a href="/sign-up" style={{textDecoration: "none", color: "inherit"}}>Don't have an account? Sign Up</a>
                 </div>
-                <button onClick={handleClick} className="submit-button">Log In</button> 
+                <button onClick={handleClick} className="submit-buttonLogin">Log In</button> 
             </div>
         </div>
         

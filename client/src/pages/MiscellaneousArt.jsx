@@ -12,12 +12,10 @@ const MiscellaneousArt = () => {
      useEffect(()=>{
          const fetchArtwork = async ()=>{
              try{
-                 const res = await axios.get(`http://localhost:3002/artworks/collection/${null}`);
-                 console.log(res.data)
+                 const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/artworks/collection/${null}`);
                  setArtwork(res.data)
-                 console.log(artwork.data)
              }catch(err){
-                 console.log(err)
+                window.alert(err.response.data.error);
              }
          }
          fetchArtwork()

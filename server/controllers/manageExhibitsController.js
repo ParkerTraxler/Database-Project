@@ -5,14 +5,7 @@ const db = require('../db/db');
 const getExhibits = async (req, res) => {
     try {
         // SQL QUERY  - Get all exhibits, yippee!
-        var [ rows ] = await db.query(queries.get_all_exhibits);
-
-        // Convert BLOB -> Base64 (for each collection)      
-        // let imageBase64;
-        // for (let i = 0; i < rows.length; i++) {
-        //     imageBase64 = Buffer.from(rows[i].ExhibitPic).toString('base64');
-        //     rows[i].ExhibitPic = `data:image/jpeg;base64,${imageBase64}`;
-        // }
+        const [ rows ] = await db.query(queries.get_all_exhibits);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify(rows));
@@ -30,17 +23,13 @@ const getExhibit = async (req, res, exhibitid) => {
             res.writeHead(400, {'Content-Type': 'application/json'});
             return res.end(JSON.stringify({ error: 'No Exhibit ID provided to search for.'}));
         }
-
         // SQL Query - Get the exhibit (if it is exists)
-        var [ row ] = await db.query(queries.get_specific_exhibit, exhibitid);
+        const [ row ] = await db.query(queries.get_specific_exhibit, exhibitid);
 
-        if(!row.length) {
+        if(!row.length){
             res.writeHead(400, {'Content-Type': 'application/json'});
             return res.end(JSON.stringify({ error: 'Specified exhibit does not exist! Was it created successfully?'}));
         }
-        // Convert BLOB -> Base64 (for each collection)
-        // let imageBase64 = Buffer.from(row[0].ExhibitPic).toString('base64');
-        // row[0].ExhibitPic = `data:image/jpeg;base64,${imageBase64}`;
 
         // Return the exhibit
         res.writeHead(200, { 'Content-Type': 'application/json' });

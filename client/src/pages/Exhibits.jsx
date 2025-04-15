@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import imageSrc from '../assets/NoCollectionOrExhibit.jpeg';
 import "./Exhibits.css"
 
 const Exhibits = () => {
@@ -14,7 +15,7 @@ const Exhibits = () => {
     useEffect(()=>{
         const fetchAllExhibits = async ()=>{
             try{
-                const res = await axios.get("http://localhost:3002/exhibits")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/exhibits`)
                 console.log(res.data)
                 const regularExhibits = res.data.filter(exhibit => exhibit.IsSpecial !== 1);
                 const specialExhibits = res.data.filter(exhibit => exhibit.IsSpecial === 1);
@@ -22,7 +23,7 @@ const Exhibits = () => {
                 setExhibits(regularExhibits);
                 setSpecialExhibits(specialExhibits);
             }catch(err){
-                console.log(err)
+                window.alert(err.response.data.error);
             }
         }
         fetchAllExhibits()
@@ -68,7 +69,7 @@ const Exhibits = () => {
                 </div>
                 <div className="exhibitC">
                     <Link to={"/miscellaneous-collections"}>
-                        <img src="default.png" alt="" />
+                        <img src={imageSrc} alt="" />
                     </Link>
                                             
                     <h2>Miscellaneous Collections</h2>

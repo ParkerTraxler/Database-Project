@@ -33,7 +33,7 @@ const EmployeeExhibitReport = () => {
         
         try {
             console.log("GET Sent");
-            const res = await axios.get(`http://localhost:3002/reports/exhibit-cost/${encodeURIComponent(email)}/${upper}/${lower}/${exhibitTypeFilter}`, {
+            const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reports/exhibit-cost/${encodeURIComponent(email)}/${upper}/${lower}/${exhibitTypeFilter}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },
@@ -44,7 +44,7 @@ const EmployeeExhibitReport = () => {
             setReport(res.data);
             setReportGenerated(true);
         } catch (err) {
-            console.log(err);
+            window.alert(err.response.data.error);
         }
     };
 
@@ -68,7 +68,7 @@ const EmployeeExhibitReport = () => {
                 <input type="number" value={costRange.upperCost} onChange={(e) => setCostRange({...costRange, upperCost: e.target.value})} />
 
                 {/* use filter-select or search-bar className*/}
-                <label>Filter by time range: </label>
+                <label>Filter by exhibit type: </label>
                 <select value={exhibitTypeFilter} onChange={(e) => setExhibitTypeFilter(e.target.value)} className="filter-select">
                     <option value="all">All Exhibits</option>
                     <option value="special">Special Exhibits</option>
@@ -99,8 +99,8 @@ const EmployeeExhibitReport = () => {
                                 <td>{info.Is_Special_Exhibit ? "Special Exhibit" : "Main Exhibit"}</td>
                                     <td>{info.Running_Status}</td>
                                     <td>{info.Total_Employees}</td>
-                                    <td>{info.Weekly_Exhibit_Cost}</td>
-                                    <td>{info.Weeks_Active}</td>
+                                    <td>${info.Weekly_Exhibit_Cost ? info.Weekly_Exhibit_Cost : 0}</td>
+                                    <td>${info.Weeks_Active}</td>
                                     <td>{info.Exhibit_ID}</td>
                                 </tr>
                             ))}

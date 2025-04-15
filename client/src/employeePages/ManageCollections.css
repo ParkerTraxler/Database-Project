@@ -1,6 +1,13 @@
+
+
 h1 {
     text-align: center;
     margin-bottom: 20px;
+}
+
+.manageCollectionSectionEm {
+    display: flex;
+    flex-direction: column;
 }
 
 .collectionsM {
@@ -16,6 +23,7 @@ h1 {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    width: 420px;
 }
 
 .collectionM img {

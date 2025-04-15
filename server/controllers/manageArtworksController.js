@@ -5,15 +5,8 @@ const db = require('../db/db');
 const getAllArtworks = async (req, res) => {
     try {
         // SQL Query - Retrieve artworks from database
-        var [rows] = await db.query(queries.get_artwork_query);
+        const [rows] = await db.query(queries.get_artwork_query);
         
-        // Convert BLOB -> Base64 (for each collection)
-        let imageBase64;
-        for (let i = 0; i < rows.length; i++) {
-            imageBase64 = Buffer.from(rows[i].ArtPic).toString('base64');
-            rows[i].ArtPic = `data:image/jpeg;base64,${imageBase64}`;
-        }
-
         // Return artworks to the frontend
         // ASSUMPTION - Return all information on the artworks - can be changed later
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -34,13 +27,7 @@ const getCollectionArtwork = async (req, res, title) => {
 
         // SQL Query - Return ALL artwork part of a collection
         // ASSUMPTION: We return ALL of the artwork information - frontend can decide what to show
-        var [rows] = await db.query(queries.get_collection_art, [title]);
-
-        let imageBase64;
-        for (let i = 0; i < rows.length; i++) {
-            imageBase64 = Buffer.from(rows[i].ArtPic).toString('base64');
-            rows[i].ArtPic = `data:image/jpeg;base64,${imageBase64}`;
-        }
+        const [rows] = await db.query(queries.get_collection_art, [title]);
 
         // can return 0 artwork, just as a worry
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -60,7 +47,7 @@ const createArtwork = async (req, res) => {
     });
 
     req.on('end', async () => {
-        const { artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay, email} = JSON.parse(body);
+        var { artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay, email} = JSON.parse(body);
 
         try {
             // Ensure artName and onDisplay were provided.
@@ -76,11 +63,16 @@ const createArtwork = async (req, res) => {
             // SQL QUERY - Check if the artwork exists. If yes, prompt. If no, add it
             // ASSUMPTION - Do not outright refuse artwork if enough "pieces" match, but perhaps prompt?
             const [rows] = await db.query(queries.get_name_specific_art, [artName]);
-            if(rows.length && rows[0].Artist == artist & rows[0].DateMade == dateMade){
+            if(rows.length > 0 && rows[0].Artist == artist && rows[0].DateMade == dateMade){
                 // this is enough information to prompt that maybe this piece already exists. Note: if the piece was deleted and is being re-added, then allow for that.
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'This art piece seems to already exist!' }));
             }
+            
+            if(!dateMade){
+                dateMade = null;
+            }
+
             // SQL Query - Insert new artwork into database
             const [ result ] = await db.query(queries.insert_art_piece, [artName, artist, dateMade, artType, artVal, collection, artDesc, artPic, onDisplay]);
 

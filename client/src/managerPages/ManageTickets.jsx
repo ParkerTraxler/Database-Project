@@ -16,7 +16,7 @@ const ManageTickets = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const res = await axios.get("http://localhost:3002/items/tickets");
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items/tickets`);
                 console.log(res.data)
                 setTickets(res.data);  // Store the data once fetched
             } catch (err) {
@@ -44,11 +44,11 @@ const ManageTickets = () => {
                     tickets.length > 0 ? (
                     tickets.map(ticket=>(
                     <div className="ticket" key={ticket.ItemID}>
-                        <div>{ticket.ItemName}</div>
-                        <div>{"$" + ticket.ItemPrice}</div>
-                        <div>Quantity: {ticket.AmountInStock}</div>
+                        <div style={{marginRight: 0.50 + 'rem'}}>{ticket.ItemName}</div>
+                        <div style={{marginRight: 0.50 + 'rem'}}>{"$" + ticket.ItemPrice}</div>
                         <button className="update"><Link to={`/edit-ticket/${ticket.ItemID}`}>Update</Link></button>
                     </div>
+
                 ))
             ) : (
                 <p>No tickets found.</p>  

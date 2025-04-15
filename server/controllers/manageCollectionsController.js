@@ -1,19 +1,11 @@
 const http = require('http');
-const multer = require('multer')
 const queries = require('../querylist.js')
 const db = require('../db/db');
 
 const getAllCollections = async (req, res) => {
     try {
         // SQL QUERY - Retrieve collections from database
-        var [rows] = await db.query(queries.get_collections_query);
-
-        // Convert BLOB -> Base64 (for each collection)
-        // let imageBase64;
-        // for (let i = 0; i < rows.length; i++) {
-        //     imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
-        //     rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
-        // }
+        const [rows] = await db.query(queries.get_collections_query);
 
         // Return collections to the frontend
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -32,14 +24,7 @@ const getExhibitCollections = async (req, res, exhibitID) => {
             return res.end(JSON.stringify({ error: 'No exhibit ID supplied to search for'}));
         }
         // SQL QUERY - Retrieve collection from database
-        var [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
-
-        // Convert BLOB -> Base64 (for each collection)
-        // let imageBase64;
-        // for (let i = 0; i < rows.length; i++) {
-        //     imageBase64 = Buffer.from(rows[i].CollectPic).toString('base64');
-        //     rows[i].CollectPic = `data:image/jpeg;base64,${imageBase64}`;
-        // }
+        const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
 
         // may return empty if exhibit hsa no collections in it
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -112,11 +97,18 @@ const deleteCollection = async (req, res) => {
             }
 
             // SQL QUERY - Delete collection in the database with the same name
-            const result = db.query(queries.mark_collection_delete, [title]);
+            const result = await db.query(queries.mark_collection_delete, [title]);
 
             if(!result || result.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Failed to delete the entry. Is it already deleted?' }));
+            }
+
+            // SQL Query - Assign all art that belonged to previous collection to null
+            const results2 = await db.query(queries.reset_collection_art, [title]);
+            
+            if(results2.affectedRows > 0){
+                console.log(results2.affectedRows + " artworks have been set to null.");
             }
 
             await db.query(queries.new_history_log, [email, "Deleted", "Collections", title, "A collection has been removed from the museum entirely."])
