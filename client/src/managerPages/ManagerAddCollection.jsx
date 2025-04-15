@@ -62,10 +62,10 @@ const ManagerAddCollection = () => {
             <div className="add-collections-section">
                 <div>
                     <h1 className="add-collection-header">Create New Collection</h1>
-                    <input type="text" placeholder="title" onChange={handleChange} name="Title"/>
-                    <input type="text" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
-                    <input type="text" placeholder="image" onChange={handleChange} name="CollectPic"/>
-                    <input type="number" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
+                    <input className="add-collections-input" type="text" placeholder="title" onChange={handleChange} name="Title"/>
+                    <input className="add-collections-input" type="text" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
+                    <input className="add-collections-input" type="text" placeholder="image" onChange={handleChange} name="CollectPic"/>
+                    <input className="add-collections-input" type="number" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
                     <button className="formButton-add-collection" onClick={handleClick} >Create</button>
                 </div>
             </div>

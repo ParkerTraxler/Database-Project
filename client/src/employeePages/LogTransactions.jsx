@@ -114,7 +114,7 @@ const LogTransactions = () => {
             </div>
             <div className="transactionContainer-section">
                 <h1>Log Transactions</h1>
-                <div className="transactionLogEm">
+                <div>
                     {loading ? (
                         <p>Loading items...</p>  // Show a loading message while waiting for data
                     ) : (
@@ -148,7 +148,7 @@ const LogTransactions = () => {
                                 <div>{"$" + cartItem.ItemPrice}</div>
                                 <div>
                                     Quantity:
-                                    <input className="log-transactions-input" type="number" min="0" placeholder="amount to buy" onChange={(e) => handleChange(e, cartItem.ItemID)} name={"quantity"}/>
+                                    <input className="log-transactions-input-cart" type="number" min="0" placeholder="amount to buy" onChange={(e) => handleChange(e, cartItem.ItemID)} name={"quantity"}/>
                                 </div>
                                 
                                 <div>
