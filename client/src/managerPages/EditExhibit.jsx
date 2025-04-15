@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import './ManagerDashboard.css'
-import './EditExhibit'
+import './EditExhibit.css'
 
 const EditExhibit = () => {
     console.log("EditExhibit")
@@ -60,12 +60,12 @@ const EditExhibit = () => {
                 <ManagerNav/>
             </div>
             <div>
-            <div className="form">
+            <div className="edit-exhibit-form">
                 <h1>Edit Exhibit</h1>
-                <input type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
-                <input type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
-                <input type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/> 
-                <button className="formButton" onClick={handleClick} >Update</button>
+                <input className="edit-exhibit-input" type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
+                <input className="edit-exhibit-input" type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
+                <input className="edit-exhibit-input" type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/> 
+                <button className="edit-exhibit-formButton" onClick={handleClick} >Update</button>
                     
             </div>
             </div>

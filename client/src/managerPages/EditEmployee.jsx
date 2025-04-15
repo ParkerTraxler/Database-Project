@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
+import './EditEmployee.css'
 
 const EditEmployee = () => {
     console.log("EditEmployee")
@@ -69,23 +70,24 @@ const EditEmployee = () => {
 
 
     return(
+        <div className="edit-employee-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
             </div>
             <div>
-            <div className="form">
+            <div className="edit-employee-form">
                     <h1>Edit Employee</h1>
-                    <input type="text" placeholder="first name" onChange={handleChange} name="firstname"/>
-                    <input type="text" placeholder="last name" onChange={handleChange} name="lastname"/>
-                    <input type="number" min="0" step="0.01" placeholder="hourly wage" onChange={handleChange} name="hourlywage"/>
-                    <input type="number" min="0" placeholder="weekly hours" onChange={handleChange} name="weeklyhours"/>
-                    <input type="date" onChange={handleChange} name="birthdate"/>
-                    <input type="number" placeholder="exhibit id" onChange={handleChange} name="exhibitID"/>
-                    <input type="number" placeholder="manager id" onChange={handleChange} name="managerID"/>
+                    <input className="edit-employee-input" type="text" placeholder="first name" onChange={handleChange} name="firstname"/>
+                    <input className="edit-employee-input" type="text" placeholder="last name" onChange={handleChange} name="lastname"/>
+                    <input className="edit-employee-input" type="number" min="0" step="0.01" placeholder="hourly wage" onChange={handleChange} name="hourlywage"/>
+                    <input className="edit-employee-input" type="number" min="0" placeholder="weekly hours" onChange={handleChange} name="weeklyhours"/>
+                    <input className="edit-employee-input" type="date" onChange={handleChange} name="birthdate"/>
+                    <input className="edit-employee-input" type="number" placeholder="exhibit id" onChange={handleChange} name="exhibitID"/>
+                    <input className="edit-employee-input" type="number" placeholder="manager id" onChange={handleChange} name="managerID"/>
                     <div>
                     Position:
-                    <select onChange={handleChange} name="ePosition">
+                    <select className="edit-employee-input" onChange={handleChange} name="ePosition">
                         <option value="">---Choose an option---</option>
                         <option value="Curator">Curator</option>
                         <option value="GiftShopTeam">GiftShopTeam</option>
@@ -94,7 +96,7 @@ const EditEmployee = () => {
                     </div>
                     <div>
                     Gender:
-                    <select onChange={handleChange} name="gender">
+                    <select className="edit-employee-input" onChange={handleChange} name="gender">
                         <option value="">---Choose an option---</option>
                         <option value="Female">Female</option>
                         <option value="Male">Male</option>
@@ -103,11 +105,11 @@ const EditEmployee = () => {
                     </div>
                     
                     
-                    <button className="formButton"  onClick={handleClick}>Update</button>
+                    <button className="edit-employee-formButton"  onClick={handleClick}>Update</button>
                     
                 </div>
             </div>
-            
+        </div>        
         </div>
     )
 }

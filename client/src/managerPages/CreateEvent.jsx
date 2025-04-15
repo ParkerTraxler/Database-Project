@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ManagerDashboard from './ManagerNav';
 import './ManagerDashboard.css';
+import './CreateEvent.css';
 
 const CreateEvent = () => {
     console.log("CreateEvent");
@@ -77,25 +78,26 @@ const CreateEvent = () => {
 
 
     return (
+        <div className="create-event-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard />
             </div>
             <div>
-                <div className="form">
+                <div className="create-event-form">
                     <h1>Create Event</h1>
-                    <input type="text" placeholder="Event Name" onChange={handleChange} name="eventname" />
-                    <input type="text" placeholder="Event Description" onChange={handleChange} name="eventdesc" />
-                    <input type="text" placeholder="Image URL" onChange={handleChange} name="eventpic" />
-                    <input type="date" onChange={handleChange} name="eventdate" />
+                    <input className="create-event-input" type="text" placeholder="Event Name" onChange={handleChange} name="eventname" />
+                    <input className="create-event-input" type="text" placeholder="Event Description" onChange={handleChange} name="eventdesc" />
+                    <input className="create-event-input" type="text" placeholder="Image URL" onChange={handleChange} name="eventpic" />
+                    <input className="create-event-input" type="date" onChange={handleChange} name="eventdate" />
                     <div>
                         <label>
                             Member Only
-                            <input type="checkbox" onChange={handleChange} name="memberonly" checked={event.memberonly} />
+                            <input className="create-event-checkbox"  type="checkbox" onChange={handleChange} name="memberonly" checked={event.memberonly} />
                         </label>
                     </div>
 
-                    <div className="employeeSection">
+                    <div className="create-event-employeeSection">
                         <h3>Assign Employees (Max 3)</h3>
                         <input 
                             type="email" 
@@ -103,7 +105,7 @@ const CreateEvent = () => {
                             value={employeeEmail} 
                             onChange={handleEmployeeChange} 
                         />
-                        <button onClick={addEmployee} disabled={employeeList.length >= 3}>Add Employee</button>
+                        <button className = "add-employee-button-events" onClick={addEmployee} disabled={employeeList.length >= 3}>Add Employee</button>
                         <ul>
                             {employeeList.map((email, index) => (
                                 <li key={index}>
@@ -113,9 +115,10 @@ const CreateEvent = () => {
                         </ul>
                     </div>
 
-                    <button onClick={handleClick} className="formButton">Add Event</button>
+                    <button onClick={handleClick} className="create-event-formButton">Add Event</button>
                 </div>
             </div>
+        </div>
         </div>
     );
 };
