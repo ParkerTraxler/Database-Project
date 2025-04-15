@@ -59,7 +59,7 @@ const GiftShopSalesReport = () => {
             <div className="gift-shop-report-section">
                 <h1 className="gift-shop-report-header" >Gift Shop Sales Report</h1>
                 <label>Filter by time range: </label>
-                <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
+                <select className="gift-shop-report-input" value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
                     <option value="all-time">All Time</option>
                     <option value="last-day">Last Day</option>
                     <option value="last-week">Last Week</option>
@@ -69,7 +69,7 @@ const GiftShopSalesReport = () => {
                 </select>
                 <div>
                         <label>Filter by Customer Name: </label>
-                        <input type="text" value={customerFilter} onChange={(e) => setCustomerFilter(e.target.value)}placeholder="Enter customer name"/>
+                        <input type="text" className="gift-shop-report-input" value={customerFilter} onChange={(e) => setCustomerFilter(e.target.value)}placeholder="Enter customer name"/>
                 </div>
                 <div>
                     <button className="generate-gift-shop-report-button" onClick={fetchSales}>Generate Report</button>

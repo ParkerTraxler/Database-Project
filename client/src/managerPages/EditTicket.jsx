@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
+import './EditTicket.css'
 
 const EditTicket = () => {
     console.log("EditTicket")
@@ -70,21 +71,21 @@ const EditTicket = () => {
 
     return(
         
-        
+        <div className="edit-ticket-container">
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
             <div>
-            <div className="form">
+            <div className="edit-ticket-form">
                 <h1>Edit Ticket</h1>
-                <input type="number" step="0.01" min="0" placeholder="price" onChange={handleChange} name="price"/>
-                <input type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
-                <button className="formButton" onClick={handleClick} >Update</button>
+                <input className="edit-ticket-input" type="number" step="0.01" min="0" placeholder="price" onChange={handleChange} name="price"/>
+                <input className="edit-ticket-input" type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
+                <button className="edit-ticket-formButton" onClick={handleClick} >Update</button>
                     
             </div>
             </div>
-            
+        </div>    
         </div>
     )
 }

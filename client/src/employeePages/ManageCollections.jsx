@@ -48,6 +48,7 @@ const ManageCollections = () => {
 
 
     return(
+        <div className= "manage-collections-container">
         <div className="managerView">
             <div>
                 <EmployeeNav/>
@@ -73,7 +74,7 @@ const ManageCollections = () => {
                     <Link to="/add-collection">Create Collection</Link>
                 </button>
             </div>
-            
+        </div>    
         </div>
     )
 }

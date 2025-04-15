@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useAuth } from '../utils/AuthContext'
 import EmployeeNav from './EmployeeNav'
 import './EmployeeDashboard.css'
+import './EditItem.css'
 
 const EditItem = () => {
     console.log("EditItem")
@@ -75,25 +76,25 @@ const EditItem = () => {
 
     return(
         
-        
+        <div className="edit-item-container">
         <div className="managerView">
             <div>
                 <EmployeeNav/>
             </div>
             <div>
-                <div className="form">
-                    <h1>Edit Item</h1>
-                    <input type="text" placeholder="name" onChange={handleChange} name="itemname"/>
-                    <input type="text" placeholder="image url" onChange={handleChange} name="itemimage"/>
-                    <input type="text" min="0" placeholder="price" onChange={handleChange} name="itemprice"/>
-                    <input type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
+                <div className="edit-item-form">
+                    <h1 className="edit-item-header">Edit Item</h1>
+                    <input className="edit-item-input" type="text" placeholder="name" onChange={handleChange} name="itemname"/>
+                    <input className="edit-item-input" type="text" placeholder="image url" onChange={handleChange} name="itemimage"/>
+                    <input className="edit-item-input" type="text" min="0" placeholder="price" onChange={handleChange} name="itemprice"/>
+                    <input className="edit-item-input" type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
                     <div>
-                        <button className="formButton" onClick={handleClick} >Save Changes</button>
+                        <button className="edit-item-formButton" onClick={handleClick} >Save Changes</button>
                     </div>
                     
                 </div>
             </div>
-            
+        </div>    
         </div>
     )
 }

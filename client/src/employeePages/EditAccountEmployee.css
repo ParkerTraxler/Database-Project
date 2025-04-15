@@ -1,10 +1,79 @@
-.editAccount {
+.edit-account-employee-container {
+    background-image: url('../assets/abstract-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  
+.editAccount-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 2rem auto;
+    background-color: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-    margin-left: 250px;
 }
-.saveButton {
-    margin-top: 10px;
-}
+
+  .editAccount h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+    color: #111827;
+  }
+  
+  .edit-account-details-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .detail {
+    background-color: #f9fafb;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #374151;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+  }
+  .detail input,
+  .detail select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #111827;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  
+  .detail input:focus,
+  .detail select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  }
+  
+  .saveButton {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    background-color: #2563eb;
+    color: #ffffff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .saveButton:hover {
+    background-color: #1e40af;
+  }
+  
