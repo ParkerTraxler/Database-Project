@@ -7,13 +7,14 @@ const EditAccountEmployee = () => {
     console.log("EditAccountEmployee")
 
     return(
+        <div className="edit-account-employee-container">
         <div className="employeeView">
             <div className="navBar">
                 <EmployeeNav/>
             </div>
-            <div className="editAccount">
+            <div className="editAccount-section">
             <h1>Edit Account</h1>
-            <div className="detailsBox">
+            <div className="edit-account-details-box">
                 <div className="detail">
                     <strong>First Name:</strong>
                     <input type="text" maxLength="28" name="firstName"></input>
@@ -44,6 +45,7 @@ const EditAccountEmployee = () => {
                 <button className="saveButton">Save Changes</button>
                 </div>
             </div>
+        </div>
         </div>
     )
 }

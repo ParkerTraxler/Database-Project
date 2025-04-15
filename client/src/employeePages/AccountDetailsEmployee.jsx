@@ -28,15 +28,16 @@ const AccountDetailsEmployee = () => {
     
     
     return(
+        <div className="account-details-employee-container">
         <div className="employeeView">
             <div className="navBar">
                 <EmployeeNav/>
             </div>
             <div className="AccountDetails">
             
-            <h1>Account Details</h1>
+            <h1 className = "employee-account-details-header">Account Details</h1>
 
-            <div className="detailsBox">
+            <div className="employeeaccount-details-Box">
                 <div className="detail"><strong>First Name:</strong> {details.firstName}</div>
                 <div className="detail"><strong>Last Name:</strong> {details.lastName}</div>
                 <div className="detail"><strong>Position:</strong> {details.Eposition}</div>
@@ -47,7 +48,7 @@ const AccountDetailsEmployee = () => {
                 <div className="detail"><strong>Password:</strong> ********</div>
             </div>
             </div>
-            
+        </div>    
         </div>
     )
 }

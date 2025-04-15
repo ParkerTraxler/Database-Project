@@ -48,15 +48,16 @@ const ManageCollections = () => {
 
 
     return(
+        <div className="manage-collections-container">
         <div className="managerView">
             <div>
                 <EmployeeNav/>
             </div>
-            <div className="manageCollectionSectionEm">
-                <h1>Collections</h1>
-                <div className="collectionsM">
+            <div className="manage-collections-section">
+                <h1 className="manage-collections-header">Collections</h1>
+                <div className="collections">
                 {collections.map(collection=>(
-                    <div className="collectionM" key={collection.Title}>
+                    <div className="collections" key={collection.Title}>
                         {collection.CollectPic && 
                             <Link to={`/manage-collection-art/${collection.Title}`}>
                                 <img src={collection.CollectPic} alt="" />
@@ -73,7 +74,7 @@ const ManageCollections = () => {
                     <Link to="/add-collection">Create Collection</Link>
                 </button>
             </div>
-            
+        </div>        
         </div>
     )
 }

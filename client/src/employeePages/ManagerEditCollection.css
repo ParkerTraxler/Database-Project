@@ -1,5 +1,5 @@
 .manager-edit-collection-container {
-    background-image: url('../assets/screensaver-abstract.jpg');
+    background-image: url('../assets/abstract-background-image.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -32,7 +32,7 @@
   .manager-edit-collection-input:focus {
     outline: none;
     border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235);
   }
   
   .manager-edit-collection-formButton {
