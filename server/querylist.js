@@ -29,6 +29,7 @@ const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = 
 // remove their customer profile on creation - I'm using delete here since the information is the same, it just moves tables entirely.
 const remove_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET isDeleted = TRUE WHERE logininfo.email = ?";
 const reinstate_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET FirstName = ?, LastName = ?, BirthDate = ?, Gender = ?, isDeleted = FALSE WHERE logininfo.email = ?";
+const employee_acc_update = "UPDATE employees SET FirstName = ?, LastName = ?, BirthDate = ?, Gender = ? WHERE Email = ? AND isDeleted = FALSE";
 
 // Collections Management Controller
 const get_collections_query = "SELECT * FROM collections WHERE isDeleted = false";
@@ -349,6 +350,7 @@ module.exports = {
     reinstate_employee_info,
     remove_customer_profile,
     reinstate_customer_profile,
+	employee_acc_update,
     get_collections_query,
     get_specific_collection,
     get_exhibit_collections,
