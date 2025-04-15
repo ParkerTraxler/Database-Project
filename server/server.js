@@ -31,6 +31,7 @@ const server = http.createServer( async (req, res) => {
         manageExhibitsRoutes(req, res);
     else if (req.url.startsWith('/artworks'))
         manageArtworksRoutes(req, res);
+    
     else if (req.url.startsWith('/items'))
         manageItemsRoutes(req, res);
     else if (req.url.startsWith('/donations'))
