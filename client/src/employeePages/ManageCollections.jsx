@@ -70,7 +70,7 @@ const ManageCollections = () => {
                     </div>
                 ))}
                 </div>
-                <button>
+                <button className="manageCollectionSectionButton">
                     <Link to="/add-collection">Create Collection</Link>
                 </button>
             </div>

@@ -52,7 +52,7 @@ const ManageGiftShop = () => {
 
     return(
         
-        
+        <div className="manage-gift-shop-container">    
         <div className="managerView">
             <div>
                 <EmployeeNav/>
@@ -80,11 +80,11 @@ const ManageGiftShop = () => {
                     <p>No items found.</p>  // Handle case when tickets array is empty
                 ))}
                 </div>
-                <button>
+                <button className="manage-gift-shop-button">
                     <Link to="/add-item">Add Item</Link>
                 </button>
             </div>
-            
+            </div>    
         </div>
     )
 }
