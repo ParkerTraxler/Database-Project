@@ -148,7 +148,7 @@ const EditEvent = () => {
                     <h1>Edit Event</h1>
                     <input className="edit-event-input" type="text" value={prevEvent?.EventName || ""} placeholder="Event Name" onChange={handleChange} name="EventName" />
                     <input className="edit-event-input" type="text" value={prevEvent?.EventDesc || ""} placeholder="Event Description" onChange={handleChange} name="EventDesc" />
-                    <input className="edit-event-input" type="text" value={prevEvent?.EventPic || ""} placeholder="Image URL" onChange={handleChange} name="eventpic" />
+                    <input className="edit-event-input" type="text" placeholder="Image URL" onChange={handleChange} name="eventpic" />
                     <input className="edit-event-input" type="date" value={prevEvent?.EventDate ? new Date(prevEvent.EventDate).toISOString().split("T")[0] : ""} onChange={handleChange} name="EventDate" />
                     <div>
                         <label>
