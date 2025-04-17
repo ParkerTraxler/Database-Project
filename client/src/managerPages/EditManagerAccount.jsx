@@ -10,7 +10,7 @@ import './EditManagerAccount.css'
 
 const EditManagerAccount = () => {
     console.log("EditManagerAccount")
-    const { user } = useAuth()
+     const { user } = useAuth()
     const token = user.token
     console.log(token)
     const decoded = jwtDecode(token)
