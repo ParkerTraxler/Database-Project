@@ -42,19 +42,24 @@ import EmployeeNav from './EmployeeNav'
  
      const handleDelete = async (artID)=>{
          console.log("ID: " + artID)
-         try{
-             const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
-                 headers: {
-                     'authorization': `Bearer ${token}`
-                 },
-                 data: {artID: artID}
-             })
-             console.log(res.data)
-             window.location.reload() //refreshes the page
-         }
-         catch(err){
-            window.alert(err.response.data.error);
-         }
+         const confirmed = window.confirm("Are you sure you want to delete this artwork?");
+        if (!confirmed) return;
+        else{
+            try{
+                const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
+                    headers: {
+                        'authorization': `Bearer ${token}`
+                    },
+                    data: {artID: artID}
+                })
+                console.log(res.data)
+                window.location.reload() //refreshes the page
+            }
+            catch(err){
+               window.alert(err.response.data.error);
+            }
+        }
+         
      }
  
      return(
