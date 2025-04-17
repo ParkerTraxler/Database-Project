@@ -49,6 +49,7 @@ const ManageEvents = () => {
     }
 
     return(
+        <div className="manage-events-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
@@ -69,12 +70,12 @@ const ManageEvents = () => {
                     ))}
                     </div>
                     <div>
-                    <button>
+                    <button className="manage-events-create-button">
                         <Link to="/add-event">Create Event</Link>
                     </button>
                     </div>
-                    
-                </div>
+                </div>         
+            </div>
             </div>
             
         </div>
