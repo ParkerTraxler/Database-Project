@@ -12,8 +12,10 @@ const MiscellaneousArt = () => {
      useEffect(()=>{
          const fetchArtwork = async ()=>{
              try{
+                console.log("GET Sent")
                  const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/artworks/collection/${null}`);
                  setArtwork(res.data)
+                 console.log("GET Completed")
              }catch(err){
                 window.alert(err.response.data.error);
              }
@@ -30,9 +32,9 @@ const MiscellaneousArt = () => {
              
              <div>
                  <h1>Miscellaneous Art</h1>
-                 <div className="artwork">
+                 <div className="artworksCu">
                  {artwork.map(art=>(
-                     <div className="art" key={art.ArtID}>
+                     <div className="artCu" key={art.ArtID}>
                          {art.ArtPic && 
                              <img src={art.ArtPic} alt="" />                     
                          }
