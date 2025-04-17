@@ -51,10 +51,11 @@ const EditManagerAccount = () => {
         console.log(details)
     }
 
-    const handleClick = async e =>{ //do async for api requests
+    const handleClick = async e =>{ 
         
-        e.preventDefault()  //prevents page refresh on button click
+        e.preventDefault()  //prevents page refresh
         try{
+            console.log("email:",details.Email);
             const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/manager`, {
                 firstname: details.FirstName, 
                 lastname: details.LastName, 
@@ -72,7 +73,7 @@ const EditManagerAccount = () => {
             navigate("/manager-account-details")
         }
         catch(err){
-            console.error(err); // Always good to log
+            console.error(err); 
             if (err.response && err.response.data && err.response.data.error) {
                 window.alert(err.response.data.error);
             } else {
