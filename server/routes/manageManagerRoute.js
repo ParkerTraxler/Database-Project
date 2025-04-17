@@ -1,5 +1,5 @@
 const http = require('http');
-const {getManagerProfile, getManagerProfile} = require('../controllers/manageManagerController');
+const {getManagerProfile, updateManagerProfile} = require('../controllers/manageManagerController');
 const verifyToken = require('../middleware/authMiddleware');
 
 const manageManagerRoute = (req, res) => {

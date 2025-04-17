@@ -1,5 +1,4 @@
 const http = require('http');
-const http = require('http');
 const corsMiddleware = require('./middleware/corsMiddleware');
 // Routers
 const authRoutes = require('./routes/authRoutes');
@@ -14,7 +13,7 @@ const manageReviewsRoutes = require('./routes/manageReviewsRoute');
 const manageSalesRoutes = require('./routes/manageSalesRoute')
 const manageProfileRoutes = require('./routes/manageUserAccRoutes')
 const manageReportsRoutes = require('./routes/manageReportsRoute')
-const manageManagerRoute = requier('./routes/manageManagerRoute')
+const manageManagerRoute = require('./routes/manageManagerRoute')
 // Port
 const PORT = process.env.PORT || 8080;
 
