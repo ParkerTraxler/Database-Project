@@ -4,7 +4,7 @@ const verifyToken = require('../middleware/authMiddleware');
 
 const manageManagerRoute = (req, res) => {
     // process transaction
-    if (req.url.startsWith('/manager') && req.method === 'POST') {
+    if (req.url.startsWith('/manager') && req.method === 'PUT') {
         verifyToken('Manager', null) (req, res, () => {
             updateManagerProfile(req, res);
         });
