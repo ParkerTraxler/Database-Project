@@ -31,19 +31,24 @@ const ManageCollections = () => {
 
     const handleDelete = async (title)=>{
         console.log(title)
-        try{
-            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/collections/`, {
-                headers: {
-                    'authorization': `Bearer ${token}`
-                },
-                data: {title: title}
-            })
-            console.log(res.data)
-            window.location.reload() //refreshes the page
+        const confirmed = window.confirm("Are you sure you want to delete this collection?");
+        if (!confirmed) return;
+        else{
+            try{
+                const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/collections/`, {
+                    headers: {
+                        'authorization': `Bearer ${token}`
+                    },
+                    data: {title: title}
+                })
+                console.log(res.data)
+                window.location.reload() //refreshes the page
+            }
+            catch(err){
+                window.alert(err.response.data.error);
+            }
         }
-        catch(err){
-            window.alert(err.response.data.error);
-        }
+        
     }
 
 

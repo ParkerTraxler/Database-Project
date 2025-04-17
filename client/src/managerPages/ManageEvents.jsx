@@ -33,19 +33,24 @@ const ManageEvents = () => {
 
     const handleDelete = async (eventid)=>{
         console.log(eventid)
-        try{
-            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/events/`, {
-                headers: {
-                    'authorization': `Bearer ${token}`
-                },
-                data: {eventid: eventid}
-            })
-            console.log(res.data)
-            window.location.reload() //refreshes the page
+        const confirmed = window.confirm("Are you sure you want to delete this event?");
+        if (!confirmed) return;
+        else{
+            try{
+                const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/events/`, {
+                    headers: {
+                        'authorization': `Bearer ${token}`
+                    },
+                    data: {eventid: eventid}
+                })
+                console.log(res.data)
+                window.location.reload() //refreshes the page
+            }
+            catch(err){
+                window.alert(err.response.data.error);
+            }
         }
-        catch(err){
-            window.alert(err.response.data.error);
-        }
+        
     }
 
     return(

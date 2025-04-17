@@ -35,19 +35,24 @@ const ManageGiftShop = () => {
 
     const handleDelete = async (itemid)=>{
         console.log(itemid)
-        try{
-            const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
-                headers: {
-                    'authorization': `Bearer ${token}`
-                },
-                data: {itemid: itemid}
-            })
-            console.log(res.data)
-            window.location.reload() //refreshes the page
+        const confirmed = window.confirm("Are you sure you want to delete this item?");
+        if (!confirmed) return;
+        else{
+            try{
+                const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
+                    headers: {
+                        'authorization': `Bearer ${token}`
+                    },
+                    data: {itemid: itemid}
+                })
+                console.log(res.data)
+                window.location.reload() //refreshes the page
+            }
+            catch(err){
+                window.alert(err.response.data.error);
+            }
         }
-        catch(err){
-            window.alert(err.response.data.error);
-        }
+        
     }
 
     return(
