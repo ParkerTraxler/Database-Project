@@ -50,7 +50,7 @@ const ManagerDashboard = () => {
                                     <a href='/gift-shop-sales-report'>Gift Shop Sales Report</a>
                                 </li>
                                 <li>
-                                    <a href='/employee-exhibit-report'>Employee Exhibit Report</a>
+                                    <a href='/employee-exhibit-report'>Exhibit Spending Report</a>
                                 </li>
                                 <li>
                                     <a href='/edit-history-report'>Edit History Report</a>

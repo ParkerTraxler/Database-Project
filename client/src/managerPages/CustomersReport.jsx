@@ -54,6 +54,7 @@ const CustomersReport = () => {
             </div>
             <div className="customer-report-form">
                 <h1 className="customer-report-header">Customer Report</h1>
+                
                 <label>Filter by time range: </label>
                 <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
                     <option value="all-time">All Time</option>
@@ -78,6 +79,7 @@ const CustomersReport = () => {
                 <div>
                     <button className="generate-report-button" onClick={fetchCustomers}>Generate Report</button>
                 </div>
+                <div className="disclaimer">Hover your mouse over column headers with * for more information.</div>
                 {reportGenerated && (
                     <table className="customer-report-table">
                         <thead>
@@ -88,7 +90,7 @@ const CustomersReport = () => {
                                 <th>Date of Last Visit</th>
                                 <th>Membership Status</th>
                                 <th>Date of Account Creation</th>
-                                <th>Ideal Promotional Target</th>
+                                <th className="tooltip" title="Members who have attended 2+ times & have not attended within the last 30 days">*Ideal Promotional Target</th>
                             </tr>
                         </thead>
                         <tbody>

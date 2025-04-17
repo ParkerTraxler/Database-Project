@@ -74,6 +74,7 @@ const GiftShopSalesReport = () => {
                 <div>
                     <button className="generate-gift-shop-report-button" onClick={fetchSales}>Generate Report</button>
                 </div>
+                <div className="disclaimer">Hover your mouse over column headers with * for more information.</div>
                 {/* render report values */}
                 {reportGenerated && reportValues && (
                     <div>
@@ -89,7 +90,7 @@ const GiftShopSalesReport = () => {
                                 <th>Customer Name</th>
                                 <th>Item Name</th>
                                 <th>Quantity</th>
-                                <th>Final Price</th>
+                                <th className="tooltip" title="Quantity x Item Price">*Final Price</th>
                                 <th>Date of Sale</th>
                                 <th>Sale ID</th>
                             </tr>
