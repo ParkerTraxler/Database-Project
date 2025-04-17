@@ -10,24 +10,24 @@ import './EditManagerAccount.css'
 
 const EditManagerAccount = () => {
     console.log("EditManagerAccount")
-     const { user } = useAuth()
+    const { user } = useAuth() // token - > email
     const token = user.token
     console.log(token)
     const decoded = jwtDecode(token)
     const email = decoded.email
+    console.log(email)
 
     const [details, setDetails] = useState({
         FirstName:"",
         LastName:"", 
         BirthDate:"", 
         Gender:"", 
-        Email:""
     })
 
     useEffect(()=>{
         const fetchAccount = async ()=>{
             try{
-                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/manager/${encodeURIComponent(email)}`,
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/manager/${encodeURIComponent(email)}`, // call api endpoint thingy
                     {
                         headers: {
                             'authorization': `Bearer ${token}`
@@ -35,7 +35,7 @@ const EditManagerAccount = () => {
                     }
                 )
                 console.log(res.data)
-                setDetails(res.data);
+                setDetails(res.data); // add info to details
             }catch(err){
                 console.log(err)
             }
@@ -46,22 +46,21 @@ const EditManagerAccount = () => {
     
     const navigate = useNavigate()
 
-    const handleChange = (e) =>{ // given target to given value
+    const handleChange = (e) =>{
         setDetails(prev=>({...prev, [e.target.name]: e.target.value}))
         console.log(details)
     }
 
     const handleClick = async e =>{ 
         
-        e.preventDefault()  //prevents page refresh
+        e.preventDefault()  //prevents refresh
         try{
-            console.log("email:",details.Email);
             const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/manager`, {
                 firstname: details.FirstName, 
                 lastname: details.LastName, 
                 birthdate: details.BirthDate ? details.BirthDate.split("T")[0] : null, 
                 gender: details.Gender, 
-                email: details.Email
+                email: email
             },
             {
                 headers: {
