@@ -1,0 +1,53 @@
+.account-details-manager-container{
+    background-image: url('../assets/abstract-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.AccountDetails-manager-section{
+    width: 100%;
+    max-width: 900px;
+    margin: 2rem auto;
+    background-color: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+}
+
+
+.AccountDetails-manager-section h1 {
+    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+}
+
+.manageraccount-details-Box{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 700px;
+    margin: 2rem auto;
+    background-color: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.manageraccount-details-detail{
+    background-color: #f3f4f6;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.manageraccount-details-detail strong{
+    color: #1f2937;
+}
