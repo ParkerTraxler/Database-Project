@@ -71,7 +71,7 @@ const updateManagerProfile = (req, res) => {
                 return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
             }
 
-            await db.query(queries.new_history_log, [email, "Updated", "Manager", curr_user[0].ManagerID, "Manager by the name of " + firstname + " " + lastname + " has updated their account."])
+
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({ message: 'Manager\'s profile successfully updated.' }));

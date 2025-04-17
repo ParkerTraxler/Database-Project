@@ -13,10 +13,12 @@ const manageReviewsRoutes = require('./routes/manageReviewsRoute');
 const manageSalesRoutes = require('./routes/manageSalesRoute')
 const manageProfileRoutes = require('./routes/manageUserAccRoutes')
 const manageReportsRoutes = require('./routes/manageReportsRoute')
+const manageManagerRoute = require('./routes/manageManagerRoute')
 // Port
 const PORT = process.env.PORT || 8080;
 
 const server = http.createServer( async (req, res) => {
+
     await corsMiddleware(req, res);
 
     if (req.url.startsWith('/auth'))
@@ -43,6 +45,8 @@ const server = http.createServer( async (req, res) => {
         manageProfileRoutes(req, res);
     else if (req.url.startsWith('/reports'))
         manageReportsRoutes(req, res);
+    else if (req.url.startsWith('/manager'))
+        manageManagerRoute(req, res);
     else {
         res.writeHead(404, {'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'Route not found' }));
