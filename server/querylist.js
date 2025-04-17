@@ -34,7 +34,7 @@ const employee_acc_update = "UPDATE employees SET FirstName = ?, LastName = ?, B
 // Collections Management Controller
 const get_collections_query = "SELECT * FROM collections WHERE isDeleted = false";
 const get_specific_collection = "SELECT * FROM collections WHERE Title = ? AND isDeleted = false";
-const get_exhibit_collections = "SELECT * FROM collections WHERE (ExhibitID = ? OR ExhibitID IS NULL) AND isDeleted = false";
+const get_exhibit_collections = "SELECT * FROM collections WHERE ((? IS NULL AND ExhibitID IS NULL) OR (? IS NOT NULL AND ExhibitID = ?)) AND isDeleted = false";
 const insert_new_collection = "INSERT INTO collections (Title, CollectDesc, CollectPic, ExhibitID) VALUES (?, ?, ?, ?)";
 const mark_collection_delete = "UPDATE collections SET isDeleted = true WHERE Title = ? AND isDeleted = false";
 const reset_collection_art = "UPDATE artworks SET Collection = NULL WHERE Collection = ?"

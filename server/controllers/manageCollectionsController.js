@@ -23,8 +23,11 @@ const getExhibitCollections = async (req, res, exhibitID) => {
             res.writeHead(400, {'Content-Type': 'application/json'});
             return res.end(JSON.stringify({ error: 'No exhibit ID supplied to search for'}));
         }
+        if(exhibitID == "null"){
+            exhibitID = null
+        }
         // SQL QUERY - Retrieve collection from database
-        const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
+        const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID, exhibitID, exhibitID]);
 
         // may return empty if exhibit hsa no collections in it
         res.writeHead(200, { 'Content-Type': 'application/json' });
