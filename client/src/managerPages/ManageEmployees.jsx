@@ -17,7 +17,7 @@ const ManageEmployees = () => {
     useEffect(()=>{
         const fetchAllEmployees = async ()=>{
             try{
-                const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees`, {
+                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees`, {
                     headers: {
                         'authorization': `Bearer ${token}`
                     },
@@ -37,7 +37,7 @@ const ManageEmployees = () => {
         if (!confirmed) return;
         else{
             try{
-                const res = await axios.delete(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/`, {
+                const res = await axios.delete(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/`, {
                     headers: {
                         'authorization': `Bearer ${token}`
                     },

@@ -27,7 +27,7 @@ const EditAccountEmployee = () => {
     useEffect(()=>{
         const fetchAccount = async ()=>{
             try{
-                const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/ownacc/${encodeURIComponent(email)}`,
+                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/ownacc/${encodeURIComponent(email)}`,
                     {
                         headers: {
                             'authorization': `Bearer ${token}`
@@ -53,7 +53,7 @@ const EditAccountEmployee = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/editacc`, {
+            const res = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/editacc`, {
                 firstname: details.FirstName, 
                 lastname: details.LastName, 
                 birthdate: details.BirthDate ? details.BirthDate.split("T")[0] : null, 

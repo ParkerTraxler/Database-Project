@@ -52,7 +52,7 @@ const CreateEvent = () => {
         e.preventDefault()  //prevents page refresh on button click
         console.log(employeeList)
         try{
-            const res = await axios.post(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events`, {
+            const res = await axios.post(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events`, {
                 eventname: event.eventname, 
                 eventdesc: event.eventdesc, 
                 eventdate: event.eventdate,

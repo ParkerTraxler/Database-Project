@@ -20,7 +20,7 @@ const ManagerAccountDetails = () => {
     useEffect(()=>{
         const fetchAccount = async ()=>{
             try{
-                const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/manager/${encodeURIComponent(email)}`,
+                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/manager/${encodeURIComponent(email)}`,
                     {
                         headers: {
                             'authorization': `Bearer ${token}`

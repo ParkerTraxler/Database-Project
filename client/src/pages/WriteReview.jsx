@@ -39,7 +39,7 @@ const WriteReview = () => {
         e.preventDefault()  //prevents page refresh on button click
         try{
             console.log("POST Sent")
-            const res = await axios.post(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reviews`, {
+            const res = await axios.post(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reviews`, {
                 email: email,
                 starcount: review.starcount, 
                 reviewdesc: review.reviewdesc

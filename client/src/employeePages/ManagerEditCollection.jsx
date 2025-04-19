@@ -34,7 +34,7 @@ const ManagerEditCollection = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/`, {
+            const res = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/`, {
                 title: collectionTitle,
                 collectdesc: collection.CollectDesc,
                 collectpic: collection.CollectPic,

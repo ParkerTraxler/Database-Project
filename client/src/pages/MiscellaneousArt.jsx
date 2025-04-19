@@ -13,7 +13,7 @@ const MiscellaneousArt = () => {
          const fetchArtwork = async ()=>{
              try{
                 console.log("GET Sent")
-                 const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/collection/${null}`);
+                 const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/collection/${null}`);
                  setArtwork(res.data)
                  console.log("GET Completed")
              }catch(err){

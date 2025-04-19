@@ -12,7 +12,7 @@ const ViewDonations = () => {
     useEffect(()=>{
         const fetchAllDonations = async ()=>{
             try{
-                const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/donations`)
+                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/donations`)
                 console.log(res.data)
                 setDonations(res.data);
             }catch(err){
