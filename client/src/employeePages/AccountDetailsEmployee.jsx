@@ -1,53 +1,65 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios' //api calls
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../utils/AuthContext'
 import EmployeeNav from './EmployeeNav'
 import './EmployeeNav.css'
 import './AccountDetailsEmployee.css'
+import { jwtDecode } from 'jwt-decode'
 
 const AccountDetailsEmployee = () => {
     console.log("AccountDetailsEmployee")
-    const [loginInfo, setLoginInfo] = useState({
-        email: "",
-        password: "",
-    })
+    const { user } = useAuth()
+    const token = user.token
+    console.log(token)
+    const decoded = jwtDecode(token)
+    const email = decoded.email
 
-    const [details, setDetails] = useState({
-        membership: false,
-        firstName: "",
-        lastName: "",
-        birthDate: null,
-        gender: null,
-        address: null,
-        Eposition: null, 
-    })
+    const [details, setDetails] = useState([])
 
-    const navigate = useNavigate()
+    useEffect(()=>{
+        const fetchAccount = async ()=>{
+            try{
+                const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/ownacc/${encodeURIComponent(email)}`,
+                    {
+                        headers: {
+                            'authorization': `Bearer ${token}`
+                        },
+                    }
+                )
+                console.log(res.data)
+                setDetails(res.data);
+            }catch(err){
+                console.log(err)
+            }
+        }
+        fetchAccount()
+    },[])
+
     
     
     return(
+        <div className="account-details-employee-container">
         <div className="employeeView">
             <div className="navBar">
                 <EmployeeNav/>
             </div>
             <div className="AccountDetails">
             
-            <h1>Account Details</h1>
+            <h1 className = "employee-account-details-header">Account Details</h1>
 
-            <div className="detailsBox">
-                <div className="detail"><strong>First Name:</strong> {details.firstName}</div>
-                <div className="detail"><strong>Last Name:</strong> {details.lastName}</div>
-                <div className="detail"><strong>Position:</strong> {details.Eposition}</div>
-                <div className="detail"><strong>Address:</strong> {details.address}</div>
-                <div className="detail"><strong>Date of Birth:</strong> {details.birthDate ? new Date(details.birthDate).toLocaleDateString() : "Not provided"}</div>
-                <div className="detail"><strong>Gender:</strong> {details.gender}</div>
-                <div className="detail"><strong>Email:</strong> {details.email}</div>
-                <div className="detail"><strong>Password:</strong> ********</div>
+            <div className="employeeaccount-details-Box">
+                <div className="detail"><strong>First Name:</strong> {details.FirstName}</div>
+                <div className="detail"><strong>Last Name:</strong> {details.LastName}</div>
+                <div className="detail"><strong>Position:</strong> {details.EPosition || "Not assigned"}</div>
+                <div className="detail"><strong>Date of Birth:</strong> {details.BirthDate ? new Date(details.BirthDate).toLocaleDateString() : "Not provided"}</div>
+                <div className="detail"><strong>Gender:</strong> {details.Gender || "Not provided"}</div>
+                <div className="detail"><strong>Weekly Hours:</strong> {details.WeeklyHours || "Not assigned"}</div>
+                <div className="detail"><strong>Hourly Wage:</strong> {details.HourlyWage != null ? "$" + details.HourlyWage : "Not assigned"}</div>
+                <div className="detail"><strong>Email:</strong> {details.Email}</div>
             </div>
             </div>
-            
+        </div>    
         </div>
     )
 }

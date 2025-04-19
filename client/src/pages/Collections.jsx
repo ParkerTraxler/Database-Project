@@ -13,7 +13,7 @@ const Collections = () => {
     useEffect(()=>{
         const fetchAllCollections = async ()=>{
             try{
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections")
+                const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections`)
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){

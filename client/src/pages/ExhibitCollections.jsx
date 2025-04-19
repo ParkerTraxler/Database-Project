@@ -16,7 +16,7 @@ const ExhibitCollections = () => {
         const fetchCollections = async ()=>{
             console.log("ID: " + ExhibitID)
             try{
-                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/exhibit/${ExhibitID}`);
+                const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/exhibit/${ExhibitID}`);
                 console.log(res.data)
                 setCollections(res.data)
                 console.log(collections.data)

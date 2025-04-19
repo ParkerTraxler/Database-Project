@@ -23,14 +23,14 @@ const GiftShopSalesReport = () => {
         console.log("Range: " + timeRange);
         try {
             console.log("GET Sent");
-            const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/giftshop-sales/${encodeURIComponent(email)}/${timeRange}`, {
+            const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/giftshop-sales/${encodeURIComponent(email)}/${timeRange}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },
             });
             console.log("GET Completed");
             console.log("GET Sent");
-            const res2 = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/giftshop-aggregate/${timeRange}`, {
+            const res2 = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/giftshop-aggregate/${timeRange}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },
@@ -59,7 +59,7 @@ const GiftShopSalesReport = () => {
             <div className="gift-shop-report-section">
                 <h1 className="gift-shop-report-header" >Gift Shop Sales Report</h1>
                 <label>Filter by time range: </label>
-                <select value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
+                <select className="gift-shop-report-input" value={timeRange} onChange={(e) => setTimeRange(e.target.value)}>
                     <option value="all-time">All Time</option>
                     <option value="last-day">Last Day</option>
                     <option value="last-week">Last Week</option>
@@ -69,11 +69,12 @@ const GiftShopSalesReport = () => {
                 </select>
                 <div>
                         <label>Filter by Customer Name: </label>
-                        <input type="text" value={customerFilter} onChange={(e) => setCustomerFilter(e.target.value)}placeholder="Enter customer name"/>
+                        <input type="text" className="gift-shop-report-input" value={customerFilter} onChange={(e) => setCustomerFilter(e.target.value)}placeholder="Enter customer name"/>
                 </div>
                 <div>
                     <button className="generate-gift-shop-report-button" onClick={fetchSales}>Generate Report</button>
                 </div>
+                <div className="disclaimer">Hover your mouse over column headers with * for more information.</div>
                 {/* render report values */}
                 {reportGenerated && reportValues && (
                     <div>
@@ -89,7 +90,7 @@ const GiftShopSalesReport = () => {
                                 <th>Customer Name</th>
                                 <th>Item Name</th>
                                 <th>Quantity</th>
-                                <th>Final Price</th>
+                                <th className="tooltip" title="Quantity x Item Price">*Final Price</th>
                                 <th>Date of Sale</th>
                                 <th>Sale ID</th>
                             </tr>

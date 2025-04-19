@@ -19,7 +19,7 @@ const ManageExhibits = () => {
     useEffect(()=>{
         const fetchAllExhibits = async ()=>{
             try{
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits")
+                const res = await axios.get(`http://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits`)
                 console.log(res.data)
                 const regularExhibits = res.data.filter(exhibit => exhibit.IsSpecial !== 1);
                 const specialExhibits = res.data.filter(exhibit => exhibit.IsSpecial === 1);

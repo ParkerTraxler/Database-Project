@@ -1,6 +1,6 @@
 const corsMiddleware = (req, res) => {
 
-    const allowedOrigin = 'https://green-ground-0dc4ce31e.6.azurestaticapps.net';
+    const allowedOrigin = process.env.FRONTEND_URL; 
 
     // Check that the request's origin matches the allowed origin
     const origin = req.headers.origin;
