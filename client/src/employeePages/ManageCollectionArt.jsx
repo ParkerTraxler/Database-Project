@@ -29,7 +29,7 @@ import EmployeeNav from './EmployeeNav'
          const fetchArtwork = async ()=>{
              console.log(collectionTitle)
              try{
-                 const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/collection/${encodeURIComponent(collectionTitle)}`);
+                 const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/artworks/collection/${encodeURIComponent(collectionTitle)}`);
                  console.log(res.data)
                  setArtwork(res.data)
                  console.log(artwork.data)
@@ -42,25 +42,30 @@ import EmployeeNav from './EmployeeNav'
  
      const handleDelete = async (artID)=>{
          console.log("ID: " + artID)
-         try{
-             const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/", {
-                 headers: {
-                     'authorization': `Bearer ${token}`
-                 },
-                 data: {artID: artID}
-             })
-             console.log(res.data)
-             window.location.reload() //refreshes the page
-         }
-         catch(err){
-            window.alert(err.response.data.error);
-         }
+         const confirmed = window.confirm("Are you sure you want to delete this artwork?");
+        if (!confirmed) return;
+        else{
+            try{
+                const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
+                    headers: {
+                        'authorization': `Bearer ${token}`
+                    },
+                    data: {artID: artID}
+                })
+                console.log(res.data)
+                window.location.reload() //refreshes the page
+            }
+            catch(err){
+               window.alert(err.response.data.error);
+            }
+        }
+         
      }
  
      return(
          
  
-         
+        <div className="manage-collections-art-container">
          <div className="managerView">
              <div>
                 <EmployeeNav/>
@@ -89,11 +94,11 @@ import EmployeeNav from './EmployeeNav'
                      </div>
                  ))}
                  </div>
-                 <button>
+                 <button className="manage-collections-art-add-button">
                      <Link to={`/add-artwork/${collectionTitle}`}>Add Artwork</Link>
                  </button>
              </div>
-             
+             </div> 
          </div>
      )
  }

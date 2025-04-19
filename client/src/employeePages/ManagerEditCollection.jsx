@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import './EmployeeDashboard.css'
+import './ManagerEditCollection.css'
 
 const ManagerEditCollection = () => {
     console.log("ManagerEditCollection")
@@ -33,7 +34,7 @@ const ManagerEditCollection = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/", {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/collections/`, {
                 title: collectionTitle,
                 collectdesc: collection.CollectDesc,
                 collectpic: collection.CollectPic,
@@ -55,21 +56,21 @@ const ManagerEditCollection = () => {
 
     return(
         
-        
+        <div className="manager-edit-collection-container">
         <div className="managerView">
             <div>
                 <EmployeeNav/>
             </div>
             <div>
-                <div className="form">
+                <div className="manager-edit-collection-form">
                     <h1>Edit Collection</h1>
-                    <input type="text" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
-                    <input type="text" placeholder="image" onChange={handleChange} name="CollectPic"/>
-                    <input type="number" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
-                    <button className="formButton" onClick={handleClick} >Update</button>
+                    <input type="text" className="manager-edit-collection-input" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
+                    <input type="text"  className="manager-edit-collection-input" placeholder="image" onChange={handleChange} name="CollectPic"/>
+                    <input type="number"  className="manager-edit-collection-input" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
+                    <button className="manager-edit-collection-formButton" onClick={handleClick} >Update</button>
                 </div>
             </div>
-            
+        </div>    
         </div>
     )
 }

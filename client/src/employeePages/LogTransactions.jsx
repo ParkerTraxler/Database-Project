@@ -21,7 +21,7 @@ const LogTransactions = () => {
         const fetchItems = async () => {
             try {
                 console.log("GET Sent")
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items");
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items`);
                 console.log("GET Completed")
                 console.log(res.data)
                 setItems(res.data);  // Store the data once fetched
@@ -82,7 +82,7 @@ const LogTransactions = () => {
         
         try{
             console.log("POST Sent")
-            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/transactions/items", {
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/transactions/items`, {
                 itemids: itemIDs, 
                 email: email.email, 
                 quantities: quantities, 
@@ -107,14 +107,14 @@ const LogTransactions = () => {
 
     return(
         
-        
+        <div className="log-transactions-container">
         <div className="managerView">
             <div>
                 <EmployeeNav/>
             </div>
-            <div className="transactionContainerEm">
+            <div className="transactionContainer-section">
                 <h1>Log Transactions</h1>
-                <div className="transactionLogEm">
+                <div>
                     {loading ? (
                         <p>Loading items...</p>  // Show a loading message while waiting for data
                     ) : (
@@ -148,7 +148,7 @@ const LogTransactions = () => {
                                 <div>{"$" + cartItem.ItemPrice}</div>
                                 <div>
                                     Quantity:
-                                    <input type="number" min="0" placeholder="amount to buy" onChange={(e) => handleChange(e, cartItem.ItemID)} name={"quantity"}/>
+                                    <input className="log-transactions-input-cart" type="number" min="0" placeholder="amount to buy" onChange={(e) => handleChange(e, cartItem.ItemID)} name={"quantity"}/>
                                 </div>
                                 
                                 <div>
@@ -160,14 +160,14 @@ const LogTransactions = () => {
                         <p className="no-items-message">No items in cart.</p> 
                     )}
                     <div>
-                        <input type="email" placeholder="enter customer's email" onChange={handleEmail} name="email"/>
+                        <input className="log-transactions-input" type="email" placeholder="enter customer's email" onChange={handleEmail} name="email"/>
                     </div>
                     <div>
-                        <button onClick={handleClick}>Log Transaction</button>
+                        <button className="log-transactions-submit-button" onClick={handleClick}>Log Transaction</button>
                     </div>
                 </div>
             </div>
-            
+        </div>    
         </div>
     )
 }

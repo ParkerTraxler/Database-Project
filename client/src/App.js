@@ -43,7 +43,7 @@ import EditTicket from './managerPages/EditTicket.jsx';
 import ManageGiftShop from './employeePages/ManageGiftShop.jsx';
 import EditItem from './employeePages/EditItem.jsx';
 import CreateItem from './employeePages/CreateItem.jsx';
-import TransactionsReport from './managerPages/TransactionsReport.jsx';
+
 import LogTransactions from './employeePages/LogTransactions.jsx';
 import GiftShopSalesReport from './managerPages/GiftShopSalesReport.jsx';
 import CustomersReport from './managerPages/CustomersReport.jsx';
@@ -137,7 +137,7 @@ function App() {
             <Route path="/employee-exhibit-report" element={<EmployeeExhibitReport/>}/>
             <Route path="/manage-tickets" element={<ManageTickets/>}/>
             <Route path="/edit-ticket/:ItemID" element={<EditTicket/>}/>
-            <Route path="/transactions-report" element={<TransactionsReport/>}/>
+            
             <Route path="/gift-shop-sales-report" element={<GiftShopSalesReport/>}/>
             <Route path="/customers-report" element={<CustomersReport/>}/>
             <Route path="/edit-history-report" element={<EditHistoryReport/>}/>

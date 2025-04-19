@@ -23,8 +23,11 @@ const getExhibitCollections = async (req, res, exhibitID) => {
             res.writeHead(400, {'Content-Type': 'application/json'});
             return res.end(JSON.stringify({ error: 'No exhibit ID supplied to search for'}));
         }
+        if(exhibitID == "null"){
+            exhibitID = null
+        }
         // SQL QUERY - Retrieve collection from database
-        const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID]);
+        const [rows] = await db.query(queries.get_exhibit_collections, [exhibitID, exhibitID, exhibitID]);
 
         // may return empty if exhibit hsa no collections in it
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -97,7 +100,7 @@ const deleteCollection = async (req, res) => {
             }
 
             // SQL QUERY - Delete collection in the database with the same name
-            const result = db.query(queries.mark_collection_delete, [title]);
+            const result = await db.query(queries.mark_collection_delete, [title]);
 
             if(!result || result.rowCount == 0){
                 res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -105,7 +108,7 @@ const deleteCollection = async (req, res) => {
             }
 
             // SQL Query - Assign all art that belonged to previous collection to null
-            const results2 = db.query(queries.reset_collection_art, [title]);
+            const results2 = await db.query(queries.reset_collection_art, [title]);
             
             if(results2.affectedRows > 0){
                 console.log(results2.affectedRows + " artworks have been set to null.");

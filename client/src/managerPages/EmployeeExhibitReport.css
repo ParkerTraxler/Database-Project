@@ -110,3 +110,7 @@
     color: white;
     font-weight: 600;
 }
+
+.tooltip {
+    cursor: help;
+}

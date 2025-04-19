@@ -17,7 +17,7 @@ const ManageEmployees = () => {
     useEffect(()=>{
         const fetchAllEmployees = async ()=>{
             try{
-                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees", {
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/employees`, {
                     headers: {
                         'authorization': `Bearer ${token}`
                     },
@@ -33,19 +33,24 @@ const ManageEmployees = () => {
 
     const handleDelete = async (email)=>{
         console.log(email)
-        try{
-            const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees/", {
-                headers: {
-                    'authorization': `Bearer ${token}`
-                },
-                data: {empEmail: email}
-            })
-            console.log(res.data)
-            window.location.reload() //refreshes the page
+        const confirmed = window.confirm("Are you sure you want to delete this employee account?");
+        if (!confirmed) return;
+        else{
+            try{
+                const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/employees/`, {
+                    headers: {
+                        'authorization': `Bearer ${token}`
+                    },
+                    data: {empEmail: email}
+                })
+                console.log(res.data)
+                window.location.reload() //refreshes the page
+            }
+            catch(err){
+                window.alert(err.response.data.error);
+            }
         }
-        catch(err){
-            window.alert(err.response.data.error);
-        }
+        
     }
 
 
