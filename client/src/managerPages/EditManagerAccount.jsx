@@ -27,7 +27,7 @@ const EditManagerAccount = () => {
     useEffect(()=>{
         const fetchAccount = async ()=>{
             try{
-                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/manager/${encodeURIComponent(email)}`, // call api endpoint thingy
+                const res = await axios.get(`${process.env.REACT_APP_API}/manager/${encodeURIComponent(email)}`, // call api endpoint thingy
                     {
                         headers: {
                             'authorization': `Bearer ${token}`
@@ -55,7 +55,7 @@ const EditManagerAccount = () => {
         
         e.preventDefault()  //prevents refresh
         try{
-            const res = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/manager`, {
+            const res = await axios.put(`${process.env.REACT_APP_API}/manager`, {
                 firstname: details.FirstName, 
                 lastname: details.LastName, 
                 birthdate: details.BirthDate ? details.BirthDate.split("T")[0] : null, 

@@ -17,7 +17,7 @@ const Reviews = () => {
     useEffect(()=>{
         const fetchAllReviews = async ()=>{
             try{
-                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reviews`)
+                const res = await axios.get(`${process.env.REACT_APP_API}/reviews`)
                 console.log(res.data)
                 setReviews(res.data)
                 console.log(reviews)

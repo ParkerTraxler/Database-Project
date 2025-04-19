@@ -23,14 +23,14 @@ const GiftShopSalesReport = () => {
         console.log("Range: " + timeRange);
         try {
             console.log("GET Sent");
-            const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/giftshop-sales/${encodeURIComponent(email)}/${timeRange}`, {
+            const res = await axios.get(`${process.env.REACT_APP_API}/reports/giftshop-sales/${encodeURIComponent(email)}/${timeRange}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },
             });
             console.log("GET Completed");
             console.log("GET Sent");
-            const res2 = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/giftshop-aggregate/${timeRange}`, {
+            const res2 = await axios.get(`${process.env.REACT_APP_API}/reports/giftshop-aggregate/${timeRange}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },

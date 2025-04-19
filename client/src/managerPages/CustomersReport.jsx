@@ -29,7 +29,7 @@ const CustomersReport = () => {
         console.log("Member: " + memberFilter);
         try {
             console.log("GET Sent");
-            const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/customer-report/${encodeURIComponent(email)}/${timeRange}/${promoFilter}/${memberFilter}`, {
+            const res = await axios.get(`${process.env.REACT_APP_API}/reports/customer-report/${encodeURIComponent(email)}/${timeRange}/${promoFilter}/${memberFilter}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },

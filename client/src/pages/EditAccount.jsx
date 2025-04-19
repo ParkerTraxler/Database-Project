@@ -28,7 +28,7 @@ const EditAccount = () => {
     useEffect(() => {
         const fetchAccount = async () => {
             console.log(encodeURIComponent(email));
-            axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/profile/${encodeURIComponent(email)}`, 
+            axios.get(`${process.env.REACT_APP_API}/profile/${encodeURIComponent(email)}`, 
             {
                 headers: {
                     'authorization': `Bearer ${token}`
@@ -64,7 +64,7 @@ const EditAccount = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/profile/`, {
+            const res = await axios.put(`${process.env.REACT_APP_API}/profile/`, {
                 firstname: info.FirstName, 
                 lastname: info.LastName, 
                 birthdate: formatDate(info.BirthDate), 
@@ -79,7 +79,7 @@ const EditAccount = () => {
 
             if(info.cancelMembership === "on"){
                 console.log("PUT Sent")
-                const res2 = axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/profile/membership`, {
+                const res2 = axios.put(`${process.env.REACT_APP_API}/profile/membership`, {
                     email: email
                 },
                 {

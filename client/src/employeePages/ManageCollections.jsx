@@ -19,7 +19,7 @@ const ManageCollections = () => {
     useEffect(()=>{
         const fetchAllCollections = async ()=>{
             try{
-                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections`)
+                const res = await axios.get(`${process.env.REACT_APP_API}/collections`)
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){
@@ -35,7 +35,7 @@ const ManageCollections = () => {
         if (!confirmed) return;
         else{
             try{
-                const res = await axios.delete(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/`, {
+                const res = await axios.delete(`${process.env.REACT_APP_API}/collections/`, {
                     headers: {
                         'authorization': `Bearer ${token}`
                     },

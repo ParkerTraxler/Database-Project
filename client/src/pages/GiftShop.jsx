@@ -11,7 +11,7 @@ const GiftShop = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items`);
+                const res = await axios.get(`${process.env.REACT_APP_API}/items`);
                 setItems(res.data);  // Store the data once fetched
             } catch (err) {
                 window.alert(err.response.data.error);

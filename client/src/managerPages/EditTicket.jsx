@@ -37,7 +37,7 @@ const EditTicket = () => {
         console.log(ticket.price)
         try{
             console.log("PUT Sent")
-            const res = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/tickets`, {
+            const res = await axios.put(`${process.env.REACT_APP_API}/items/tickets`, {
                 itemid: ticketID,
                 itemprice: ticket.price,
                 email: email
@@ -50,7 +50,7 @@ const EditTicket = () => {
             console.log("PUT Completed")
             console.log(res.data)
             console.log("PUT Sent")
-            const res2 = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/tickets/restock`, {
+            const res2 = await axios.put(`${process.env.REACT_APP_API}/items/tickets/restock`, {
                 itemid: ticketID,
                 amounttoadd: ticket.amounttoadd,
                 email: email

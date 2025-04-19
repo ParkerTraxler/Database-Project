@@ -32,7 +32,7 @@ const EditExhibit = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits/`, {
+            const res = await axios.put(`${process.env.REACT_APP_API}/exhibits/`, {
                 exhibitid: exhibitID,
                 exhibitname: exhibit.exhibitname, 
                 exhibitdesc: exhibit.exhibitdesc, 

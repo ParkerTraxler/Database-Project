@@ -21,7 +21,7 @@ const LogTransactions = () => {
         const fetchItems = async () => {
             try {
                 console.log("GET Sent")
-                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items`);
+                const res = await axios.get(`${process.env.REACT_APP_API}/items`);
                 console.log("GET Completed")
                 console.log(res.data)
                 setItems(res.data);  // Store the data once fetched
@@ -82,7 +82,7 @@ const LogTransactions = () => {
         
         try{
             console.log("POST Sent")
-            const res = await axios.post(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/transactions/items`, {
+            const res = await axios.post(`${process.env.REACT_APP_API}/transactions/items`, {
                 itemids: itemIDs, 
                 email: email.email, 
                 quantities: quantities, 

@@ -33,7 +33,7 @@ const EmployeeExhibitReport = () => {
         
         try {
             console.log("GET Sent");
-            const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/exhibit-cost/${encodeURIComponent(email)}/${upper}/${lower}/${exhibitTypeFilter}`, {
+            const res = await axios.get(`${process.env.REACT_APP_API}/reports/exhibit-cost/${encodeURIComponent(email)}/${upper}/${lower}/${exhibitTypeFilter}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },

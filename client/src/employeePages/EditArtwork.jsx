@@ -43,7 +43,7 @@ import EmployeeNav from './EmployeeNav'
          console.log("ID: " + artID)
          console.log(artwork)
          try{
-             const res = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/`, {
+             const res = await axios.put(`${process.env.REACT_APP_API}/artworks/`, {
                  artID: artID,
                  artName: artwork.artName, 
                  artist: artwork.artist, 
