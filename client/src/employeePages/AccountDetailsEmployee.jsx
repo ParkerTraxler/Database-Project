@@ -52,7 +52,7 @@ const AccountDetailsEmployee = () => {
                 <div className="detail"><strong>First Name:</strong> {details.FirstName}</div>
                 <div className="detail"><strong>Last Name:</strong> {details.LastName}</div>
                 <div className="detail"><strong>Position:</strong> {details.EPosition || "Not assigned"}</div>
-                <div className="detail"><strong>Date of Birth:</strong> {details.BirthDate ? new Date(details.BirthDate).toLocaleDateString() : "Not provided"}</div>
+                <div className="detail"><strong>Date of Birth:</strong> {details.BirthDate ? new Date(details.BirthDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</div>
                 <div className="detail"><strong>Gender:</strong> {details.Gender || "Not provided"}</div>
                 <div className="detail"><strong>Weekly Hours:</strong> {details.WeeklyHours || "Not assigned"}</div>
                 <div className="detail"><strong>Hourly Wage:</strong> {details.HourlyWage != null ? "$" + details.HourlyWage : "Not assigned"}</div>
