@@ -10,7 +10,7 @@ const downgrade_employee = "UPDATE logininfo SET UserRole = 'Customer' WHERE Ema
 // Artwork Management Controller - artwork oriented queries
 const get_artwork_query = "SELECT * FROM artworks WHERE isDeleted = false";
 const get_specific_art = "SELECT * FROM artworks WHERE ArtID = ? AND isDeleted = false";
-const get_collection_art =  "SELECT * FROM artworks WHERE((? IS NULL AND Collection IS NULL) OR (? IS NOT NULL AND Collection = ?)) AND isDeleted = false AND OnDisplay = true"
+const get_collection_art = "SELECT * FROM artworks WHERE (Collection = ? OR Collection IS NULL) AND isDeleted = false AND OnDisplay = true";
 const get_name_specific_art = "SELECT * FROM artworks WHERE ArtName = ? AND isDeleted = false";
 const insert_art_piece = "INSERT INTO artworks (ArtName, Artist, DateMade, ArtType, ArtVal, Collection, ArtDesc, ArtPic, OnDisplay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 const mark_art_for_deletion = "UPDATE artworks SET isDeleted = true WHERE ArtID = ? AND isDeleted = false";
@@ -29,12 +29,11 @@ const reinstate_employee_info = "UPDATE employees SET FirstName = ?, LastName = 
 // remove their customer profile on creation - I'm using delete here since the information is the same, it just moves tables entirely.
 const remove_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET isDeleted = TRUE WHERE logininfo.email = ?";
 const reinstate_customer_profile = "UPDATE customers JOIN logininfo ON customers.UserID = logininfo.UserID SET FirstName = ?, LastName = ?, BirthDate = ?, Gender = ?, isDeleted = FALSE WHERE logininfo.email = ?";
-const employee_acc_update = "UPDATE employees SET FirstName = ?, LastName = ?, BirthDate = ?, Gender = ? WHERE Email = ? AND isDeleted = FALSE";
 
 // Collections Management Controller
 const get_collections_query = "SELECT * FROM collections WHERE isDeleted = false";
 const get_specific_collection = "SELECT * FROM collections WHERE Title = ? AND isDeleted = false";
-const get_exhibit_collections = "SELECT * FROM collections WHERE ((? IS NULL AND ExhibitID IS NULL) OR (? IS NOT NULL AND ExhibitID = ?)) AND isDeleted = false";
+const get_exhibit_collections = "SELECT * FROM collections WHERE (ExhibitID = ? OR ExhibitID IS NULL) AND isDeleted = false";
 const insert_new_collection = "INSERT INTO collections (Title, CollectDesc, CollectPic, ExhibitID) VALUES (?, ?, ?, ?)";
 const mark_collection_delete = "UPDATE collections SET isDeleted = true WHERE Title = ? AND isDeleted = false";
 const reset_collection_art = "UPDATE artworks SET Collection = NULL WHERE Collection = ?"
@@ -298,34 +297,6 @@ LEFT JOIN
 ON
 	ah.ActionType = "Created" AND ah.EffectedTable = "Exhibits" AND  ex.ExhibitID = CAST(ah.EffectedEntry AS SIGNED)`;
 
-// get manager account info:
-const get_manager_profile = `SELECT 
-managers.FirstName, 
-managers.LastName, 
-managers.Gender, 
-managers.Salary, 
-managers.BirthDate 
-FROM logininfo, managers
-WHERE logininfo.Email = ? AND managers.UserID = logininfo.userID`;
-
-// update manager profile
-const update_manager_profile = `UPDATE managers 
-INNER JOIN logininfo ON logininfo.UserID = managers.UserID 
-SET managers.FirstName = ?, 
-managers.LastName = ?, 
-managers.BirthDate = ?, 
-managers.Gender = ? 
-WHERE logininfo.Email = ?`;
-
-// update employee profile
-const update_employee_profile = `UPDATE employees 
-INNER JOIN logininfo ON logininfo.Email = employees.Email 
-SET employees.FirstName = ?, 
-employees.LastName = ?, 
-employees.BirthDate = ?, 
-employees.Gender = ? 
-WHERE logininfo.Email = ?`;
-
 // all the queries exported out
 module.exports = {
     user_exists_query,
@@ -350,7 +321,6 @@ module.exports = {
     reinstate_employee_info,
     remove_customer_profile,
     reinstate_customer_profile,
-	employee_acc_update,
     get_collections_query,
     get_specific_collection,
     get_exhibit_collections,
@@ -401,8 +371,5 @@ module.exports = {
     all_sales_aggregate,
     customer_report_info,
     change_history_report,
-    weekly_exhibit_cost,
-    get_manager_profile,
-    update_manager_profile,
-    update_employee_profile
+    weekly_exhibit_cost
 };

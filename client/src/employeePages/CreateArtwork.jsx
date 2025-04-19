@@ -6,7 +6,6 @@ import EmployeeNav from './EmployeeNav'
  import { useLocation } from 'react-router-dom'
  import axios from 'axios'
  import './EmployeeDashboard'
- import './CreateArtwork.css'
  
  const CreateArtwork = () => {
      console.log("CreateArtwork")
@@ -44,7 +43,7 @@ import EmployeeNav from './EmployeeNav'
          console.log(collectionTitle)
          console.log(artwork)
          try{
-             const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/artworks/`, {
+             const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/artworks/", {
                  artName: artwork.artName, 
                  artist: artwork.artist, 
                  dateMade: artwork.dateMade, 
@@ -70,34 +69,32 @@ import EmployeeNav from './EmployeeNav'
      }
      
      return(
-        <div className="create-artwork-container">
          <div className="managerView">
              <div>
                 <EmployeeNav/>
              </div>
              <div>
-                 <div className="create-artwork-form">
+                 <div className="form">
                      <h1>Add Artwork</h1>
-                     <input className="create-artwork-input" type="text" placeholder="name" onChange={handleChange} name="artName"/>
-                     <input className="create-artwork-input" type="text" placeholder="artist" onChange={handleChange} name="artist"/>
-                     <input className="create-artwork-input" type="text" placeholder="type" onChange={handleChange} name="type"/>
-                     <input className="create-artwork-input" type="number" step="0.01" placeholder="value" onChange={handleChange} name="artVal"/>
-                     <input className="create-artwork-input" type="text" placeholder="desc" onChange={handleChange} name="artDesc"/>
-                     <input className="create-artwork-input" type="text" placeholder="image" onChange={handleChange} name="artPic"/>
-                     <input className="create-artwork-input" type="date" onChange={handleChange} name="dateMade"/>
+                     <input type="text" placeholder="name" onChange={handleChange} name="artName"/>
+                     <input type="text" placeholder="artist" onChange={handleChange} name="artist"/>
+                     <input type="text" placeholder="type" onChange={handleChange} name="type"/>
+                     <input type="number" step="0.01" placeholder="value" onChange={handleChange} name="artVal"/>
+                     <input type="text" placeholder="desc" onChange={handleChange} name="artDesc"/>
+                     <input type="text" placeholder="image" onChange={handleChange} name="artPic"/>
+                     <input type="date" onChange={handleChange} name="dateMade"/>
                      <div>
                      On Display:
-                     <select className="create-artwork-input" onChange={handleChange} name="onDisplay">
+                     <select onChange={handleChange} name="onDisplay">
                          <option value="">---Choose an option---</option>
                          <option value="1">True</option>
                          <option value="0">False</option>
                      </select>
                      </div>
-                     <button className="create-artwork-formButton" onClick={handleClick} >Add</button>
+                     <button className="formButton" onClick={handleClick} >Add</button>
                  </div>
              </div>
              
-        </div>
          </div>
      )
  }

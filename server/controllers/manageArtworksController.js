@@ -24,13 +24,10 @@ const getCollectionArtwork = async (req, res, title) => {
             res.writeHead(400, { 'Content-Type': 'application/json' });
             return res.end(JSON.stringify({error: 'No title provided for collection to retrieve'}))
         }
-        console.log(title)
-        if(title == "null"){
-            title = null;
-        }
+
         // SQL Query - Return ALL artwork part of a collection
         // ASSUMPTION: We return ALL of the artwork information - frontend can decide what to show
-        const [rows] = await db.query(queries.get_collection_art, [title, title, title]);
+        const [rows] = await db.query(queries.get_collection_art, [title]);
 
         // can return 0 artwork, just as a worry
         res.writeHead(200, { 'Content-Type': 'application/json' });

@@ -14,12 +14,12 @@ const ManagerDashboard = () => {
 
             <div className='links'>
                 <ul className='dashLinks'>
-                    <li>
+                    {/*<li>
                         <a href='/manager-account-details'>Account Details</a>
                     </li>
                     <li>
                         <a href='/edit-manager-account'>Edit Manager Account</a>
-                    </li>
+                    </li>*/}
                     <li>
                         <a href='/manage-employees'>Manage Employees</a>
                     </li>
@@ -50,7 +50,7 @@ const ManagerDashboard = () => {
                                     <a href='/gift-shop-sales-report'>Gift Shop Sales Report</a>
                                 </li>
                                 <li>
-                                    <a href='/employee-exhibit-report'>Exhibit Spending Report</a>
+                                    <a href='/employee-exhibit-report'>Employee Exhibit Report</a>
                                 </li>
                                 <li>
                                     <a href='/edit-history-report'>Edit History Report</a>

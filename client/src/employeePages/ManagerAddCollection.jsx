@@ -5,7 +5,6 @@ import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
 import EmployeeNav from './EmployeeNav'
 import './EmployeeDashboard.css'
-import './ManagerAddCollection.css'
 
 const ManagerAddCollection = () => {
     console.log("ManagerAddCollection")
@@ -31,7 +30,7 @@ const ManagerAddCollection = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/collections`, {
+            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections", {
                 
                 title: collection.Title,
                 collectdesc: collection.CollectDesc,
@@ -54,22 +53,22 @@ const ManagerAddCollection = () => {
     }
 
     return(
-        <div className="manager-add-collection-container">
         <div className="managerView">
             <div>
                 <EmployeeNav/>
             </div>
             <div>
-                <div className="manager-add-collection-section">
-                    <h1 className="manager-add-collection-header">Create New Collection</h1>
-                    <input className="manager-add-collection-input" type="text" placeholder="title" onChange={handleChange} name="Title"/>
-                    <input className="manager-add-collection-input" type="text" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
-                    <input className="manager-add-collection-input" type="text" placeholder="image" onChange={handleChange} name="CollectPic"/>
-                    <input className="manager-add-collection-input" type="number" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
-                    <button className="manager-add-collection-formButton" onClick={handleClick} >Create</button>
+                Manager Add Collection
+                <div className="form">
+                    <h1>Create New Collection</h1>
+                    <input type="text" placeholder="title" onChange={handleChange} name="Title"/>
+                    <input type="text" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
+                    <input type="text" placeholder="image" onChange={handleChange} name="CollectPic"/>
+                    <input type="number" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
+                    <button className="formButton" onClick={handleClick} >Create</button>
                 </div>
             </div>
-        </div>     
+            
         </div>
     )
 }

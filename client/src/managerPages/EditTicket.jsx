@@ -7,7 +7,6 @@ import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
-import './EditTicket.css'
 
 const EditTicket = () => {
     console.log("EditTicket")
@@ -37,7 +36,7 @@ const EditTicket = () => {
         console.log(ticket.price)
         try{
             console.log("PUT Sent")
-            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
+            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/", {
                 itemid: ticketID,
                 itemprice: ticket.price,
                 email: email
@@ -50,7 +49,7 @@ const EditTicket = () => {
             console.log("PUT Completed")
             console.log(res.data)
             console.log("PUT Sent")
-            const res2 = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/restock`, {
+            const res2 = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/restock", {
                 itemid: ticketID,
                 amounttoadd: ticket.amounttoadd,
                 email: email
@@ -71,21 +70,21 @@ const EditTicket = () => {
 
     return(
         
-        <div className="edit-ticket-container">
+        
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
             <div>
-            <div className="edit-ticket-form">
+            <div className="form">
                 <h1>Edit Ticket</h1>
-                <input className="edit-ticket-input" type="number" step="0.01" min="0" placeholder="price" onChange={handleChange} name="price"/>
-                <input className="edit-ticket-input" type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
-                <button className="edit-ticket-formButton" onClick={handleClick} >Update</button>
+                <input type="number" step="0.01" min="0" placeholder="price" onChange={handleChange} name="price"/>
+                <input type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
+                <button className="formButton" onClick={handleClick} >Update</button>
                     
             </div>
             </div>
-        </div>    
+            
         </div>
     )
 }

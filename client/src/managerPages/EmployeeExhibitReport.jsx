@@ -33,7 +33,7 @@ const EmployeeExhibitReport = () => {
         
         try {
             console.log("GET Sent");
-            const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reports/exhibit-cost/${encodeURIComponent(email)}/${upper}/${lower}/${exhibitTypeFilter}`, {
+            const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/exhibit-cost/${encodeURIComponent(email)}/${upper}/${lower}/${exhibitTypeFilter}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },
@@ -58,7 +58,7 @@ const EmployeeExhibitReport = () => {
                 <ManagerNav />
             </div>
             <div className = "report-section">
-                <h1 className="header">Exhibit Spending Report</h1>
+                <h1 className="header">Exhibit Cost Report</h1>
 
                 
 
@@ -77,17 +77,17 @@ const EmployeeExhibitReport = () => {
                 </select>
 
                 <div>
-                    <button className="generate-report-button" onClick={fetchReport}>Generate Report</button>
+                    <button onClick={fetchReport}>Generate Report</button>
                 </div>
-                <div className="disclaimer">Hover your mouse over column headers with * for more information.</div>
+
                 <table className="info-table">
                     <thead>
                         <tr>
                             <th>Exhibit Name</th>
                             <th>Exhibit Type</th>
-                            <th className="tooltip" title="N/A for Main Exhibits. For shows status of limited time Special Exhibits.">*Running Status</th>
+                            <th>Running Status</th>
                             <th>Total Employees</th>
-                            <th className="tooltip" title="This is the total cost to pay all employees stationed at this exhibit per week.">*Weekly Cost</th>
+                            <th>Weekly Cost</th>
                             <th>Weeks Active</th>
                             <th>ID</th>
                         </tr>

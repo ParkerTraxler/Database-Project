@@ -33,7 +33,7 @@ const EditHistoryReport = () => {
         console.log("Action: " + actionType);
         try {
             console.log("GET Sent");
-            const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reports/change-history/${encodeURIComponent(email)}/${timeRange.startDate}/${timeRange.endDate}/${actionType}/${effectedTable}`, {
+            const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reports/change-history/${encodeURIComponent(email)}/${timeRange.startDate}/${timeRange.endDate}/${actionType}/${effectedTable}`, {
                 headers: {
                     'authorization': `Bearer ${token}`,
                 },

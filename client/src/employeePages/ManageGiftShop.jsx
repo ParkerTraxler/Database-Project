@@ -19,7 +19,7 @@ const ManageGiftShop = () => {
         const fetchItems = async () => {
             try {
                 console.log("GET Sent")
-                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items`);
+                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items");
                 console.log("GET Completed")
                 console.log(res.data)
                 setItems(res.data);  // Store the data once fetched
@@ -35,29 +35,24 @@ const ManageGiftShop = () => {
 
     const handleDelete = async (itemid)=>{
         console.log(itemid)
-        const confirmed = window.confirm("Are you sure you want to delete this item?");
-        if (!confirmed) return;
-        else{
-            try{
-                const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
-                    headers: {
-                        'authorization': `Bearer ${token}`
-                    },
-                    data: {itemid: itemid}
-                })
-                console.log(res.data)
-                window.location.reload() //refreshes the page
-            }
-            catch(err){
-                window.alert(err.response.data.error);
-            }
+        try{
+            const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/items/", {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+                data: {itemid: itemid}
+            })
+            console.log(res.data)
+            window.location.reload() //refreshes the page
         }
-        
+        catch(err){
+            window.alert(err.response.data.error);
+        }
     }
 
     return(
         
-        <div className="manage-gift-shop-container">    
+        
         <div className="managerView">
             <div>
                 <EmployeeNav/>
@@ -85,11 +80,11 @@ const ManageGiftShop = () => {
                     <p>No items found.</p>  // Handle case when tickets array is empty
                 ))}
                 </div>
-                <button className="manage-gift-shop-button">
+                <button>
                     <Link to="/add-item">Add Item</Link>
                 </button>
             </div>
-            </div>    
+            
         </div>
     )
 }

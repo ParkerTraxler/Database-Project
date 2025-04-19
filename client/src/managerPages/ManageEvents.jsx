@@ -19,7 +19,7 @@ const ManageEvents = () => {
         const fetchAllEvents = async ()=>{
             try{
                 console.log("GET Sent")
-                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/events`)
+                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events")
                 console.log("GET Completed")
                 console.log(res.data)
                 setEvents(res.data)
@@ -33,28 +33,22 @@ const ManageEvents = () => {
 
     const handleDelete = async (eventid)=>{
         console.log(eventid)
-        const confirmed = window.confirm("Are you sure you want to delete this event?");
-        if (!confirmed) return;
-        else{
-            try{
-                const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/events/`, {
-                    headers: {
-                        'authorization': `Bearer ${token}`
-                    },
-                    data: {eventid: eventid}
-                })
-                console.log(res.data)
-                window.location.reload() //refreshes the page
-            }
-            catch(err){
-                window.alert(err.response.data.error);
-            }
+        try{
+            const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/events/", {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+                data: {eventid: eventid}
+            })
+            console.log(res.data)
+            window.location.reload() //refreshes the page
         }
-        
+        catch(err){
+            window.alert(err.response.data.error);
+        }
     }
 
     return(
-        <div className="manage-events-container">
         <div className="managerView">
             <div>
                 <ManagerDashboard/>
@@ -75,12 +69,12 @@ const ManageEvents = () => {
                     ))}
                     </div>
                     <div>
-                    <button className="manage-events-create-button">
+                    <button>
                         <Link to="/add-event">Create Event</Link>
                     </button>
                     </div>
-                </div>         
-            </div>
+                    
+                </div>
             </div>
             
         </div>

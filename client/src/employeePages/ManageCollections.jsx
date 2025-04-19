@@ -19,7 +19,7 @@ const ManageCollections = () => {
     useEffect(()=>{
         const fetchAllCollections = async ()=>{
             try{
-                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/collections`)
+                const res = await axios.get("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections")
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){
@@ -31,29 +31,23 @@ const ManageCollections = () => {
 
     const handleDelete = async (title)=>{
         console.log(title)
-        const confirmed = window.confirm("Are you sure you want to delete this collection?");
-        if (!confirmed) return;
-        else{
-            try{
-                const res = await axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/collections/`, {
-                    headers: {
-                        'authorization': `Bearer ${token}`
-                    },
-                    data: {title: title}
-                })
-                console.log(res.data)
-                window.location.reload() //refreshes the page
-            }
-            catch(err){
-                window.alert(err.response.data.error);
-            }
+        try{
+            const res = await axios.delete("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/", {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+                data: {title: title}
+            })
+            console.log(res.data)
+            window.location.reload() //refreshes the page
         }
-        
+        catch(err){
+            window.alert(err.response.data.error);
+        }
     }
 
 
     return(
-        <div className= "manage-collections-container">
         <div className="managerView">
             <div>
                 <EmployeeNav/>
@@ -75,11 +69,11 @@ const ManageCollections = () => {
                     </div>
                 ))}
                 </div>
-                <button className="manageCollectionSectionButton">
+                <button>
                     <Link to="/add-collection">Create Collection</Link>
                 </button>
             </div>
-        </div>    
+            
         </div>
     )
 }

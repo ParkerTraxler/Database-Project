@@ -7,7 +7,6 @@ import { useLocation } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import { jwtDecode } from 'jwt-decode'
 import './ManagerDashboard.css'
-import './EditSpecialExhibits.css'
 
 const EditSpecialExhibit = () => {
     console.log("EditSpecialExhibit")
@@ -38,7 +37,7 @@ const EditSpecialExhibit = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/exhibits/`, {
+            const res = await axios.put("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits/", {
                 exhibitid: exhibitID,
                 exhibitname: specialExhibit.exhibitname, 
                 exhibitdesc: specialExhibit.exhibitdesc, 
@@ -64,25 +63,25 @@ const EditSpecialExhibit = () => {
 
     return(
         
-        <div className="edit-special-exhibit-container">
+        
         <div className="managerView">
             <div>
                 <ManagerNav/>
             </div>
             <div>
-            <div className="edit-special-exhibit-form">
+            <div className="form">
                 <h1>Edit Special Exhibit</h1>
-                <input className="edit-special-exhibit-input" type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
-                <input className="edit-special-exhibit-input" type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
-                <input className="edit-special-exhibit-input" type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/> 
-                <input className="edit-special-exhibit-input" type="date" onChange={handleChange} name="startdate"/>
-                <input className="edit-special-exhibit-input" type="date" onChange={handleChange} name="enddate"/>
-                <input className="edit-special-exhibit-input" type="number" placeholder="fee" onChange={handleChange} name="fee"/>
-                <button className="edit-special-exhibit-formButton" onClick={handleClick} >Update</button>
+                <input type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
+                <input type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
+                <input type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/> 
+                <input type="date" onChange={handleChange} name="startdate"/>
+                <input type="date" onChange={handleChange} name="enddate"/>
+                <input type="number" placeholder="fee" onChange={handleChange} name="fee"/>
+                <button className="formButton" onClick={handleClick} >Update</button>
                     
                 </div>
             </div>
-        </div>    
+            
         </div>
     )
 }

@@ -30,7 +30,7 @@ const AddEmployee = () => {
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}/employees`, {
+            const res = await axios.post("https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/employees", {
                 email: employee.email,
                 position: employee.position,
                 managerEmail: employee.managerEmail,

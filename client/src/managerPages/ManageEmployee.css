@@ -1,22 +1,20 @@
 .manage-employees-container {
-    background-image: url('../assets/abstract-background-image.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    
+    background-color: transparent;
 }
 
 .manage-employees-section {
-    width: 100%;
-    max-width: 920px;
-    margin: 2rem auto;
-    background-color: #ffffff;
-    padding: 2rem 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    border-radius: 16px;
 }
 
 .manage-employees-header {
@@ -30,13 +28,13 @@
 .manage-employees-section table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #333;
 }
 
 .manage-employees-section th,
 .manage-employees-section td {
-    padding: 8px 8px;
+    padding: 12px 16px;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
 }
@@ -115,7 +113,7 @@
     }
 
     .manage-employees-section table {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 
     .update,

@@ -285,67 +285,6 @@ const updateEmployee = (req, res) => {
     });
 }
 
-const updateSelfEmployee = (req, res) => {
-    let body = '';
-    req.on('data', (chunk) => {
-        body += chunk.toString();
-    });
-
-    req.on('end', async () => {
-        try {
-            var { firstname, lastname, birthdate, gender, email} = JSON.parse(body);
-
-            // If no email is provided, halt
-            if (!email) {
-                res.writeHead(400, { 'Content-Type':  'application/json' });
-                return res.end(JSON.stringify({ error: 'No employee email provided - try relogging.' }));
-            }
-
-            // SQL QUERY - Update an employee's information, by first checking if they exist
-            const [rows] = await db.query(queries.get_email_specific_emp, [email]);
-
-            if(rows.length == 0){
-                res.writeHead(400, {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({ error: 'Specified employee does not exist!'}));
-            }
-
-            if(firstname == null || firstname == ""){
-                firstname = rows[0].FirstName;
-            }
-
-            if(lastname == null || lastname == ""){
-                lastname = rows[0].LastName;
-            }
-
-            if(birthdate == null || birthdate == ""){
-                birthdate = rows[0].BirthDate;
-            }
-
-            if(gender == null || gender == ""){
-                gender = rows[0].Gender;
-            }
-            // Create the query to update the actual entry yippee
-            const [ result ] = await db.query(queries.employee_acc_update, [firstname, lastname, birthdate, gender, email]);
-
-            if(!result || result.affectedRows == 0){
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                return res.end(JSON.stringify({ error: 'Database could not update entry. Invalid input?' }));
-            }
-
-            await db.query(queries.new_history_log, [email, "Updated", "Employees", rows[0].EmployeeID, "An employee by the name of " + firstname + " " + lastname + " with email " + email + " updated their own information."]);
-
-            // Return success message
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ message: 'Employee updated successfully.' }));
-
-        } catch (err) {
-            console.log('Error updating employee: ', err);
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({ error: 'Failed to update employee.' }));
-        }
-    });
-}
-
 // REPORT INFORMATION - Employees in each exhibit
 const getExhibitEmployees = async (req, res) => {
     try {
@@ -364,4 +303,4 @@ const getExhibitEmployees = async (req, res) => {
     }
 }
 
-module.exports = { getAllEmployees, getEmployee, deleteEmployee, createEmployee, updateEmployee, updateSelfEmployee, getExhibitEmployees };
+module.exports = { getAllEmployees, getEmployee, deleteEmployee, createEmployee, updateEmployee, getExhibitEmployees };
