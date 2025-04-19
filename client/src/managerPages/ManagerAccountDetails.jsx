@@ -49,7 +49,7 @@ const ManagerAccountDetails = () => {
             <div className="manageraccount-details-Box">
                 <div className="manageraccount-details-detail"><strong>First Name:</strong> {details.FirstName}</div>
                 <div className="manageraccount-details-detail"><strong>Last Name:</strong> {details.LastName}</div>
-                <div className="manageraccount-details-detail"><strong>Date of Birth:</strong> {details.BirthDate ? new Date(details.BirthDate).toLocaleDateString() : "Not provided"}</div>
+                <div className="manageraccount-details-detail"><strong>Date of Birth:</strong> {details.BirthDate ? new Date(details.BirthDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</div>
                 <div className="manageraccount-details-detail"><strong>Gender:</strong> {details.Gender || "Not provided"}</div>
                 <div className="manageraccount-details-detail"><strong>Salary:</strong> {details.Salary || "Not assigned"}</div>
                 <div className="manageraccount-details-detail"><strong>Email:</strong> {email}</div>

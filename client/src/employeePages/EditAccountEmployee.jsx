@@ -99,7 +99,7 @@ const EditAccountEmployee = () => {
                 
                 <div className="detail">
                     <strong>Date of Birth:</strong>
-                    <input type="date" onChange={handleChange} value={details?.BirthDate ? new Date(details.BirthDate).toISOString().split("T")[0] : ""} name="BirthDate"></input>
+                    <input type="date" onChange={handleChange} value={details?.BirthDate ? new Date(details.BirthDate).toISOString('en-US', { timeZone: 'UTC' }).split("T")[0] : ""} name="BirthDate"></input>
                 </div>
                 <div className="detail">
                     <strong>Gender:  </strong>
