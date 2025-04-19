@@ -4,7 +4,7 @@
   "description": "Backend for museum application",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js --env-file=.env",
+    "start": "nodemon --env-file=.env",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
