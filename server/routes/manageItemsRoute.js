@@ -18,7 +18,7 @@ const manageItemsRoutes = (req, res) => {
         getItem(req, res, itemID);
     } else if (req.url.startsWith('/items/tickets') && req.method === 'PUT') {
         verifyToken('Manager', null) (req, res, () => {
-            updateTicket(req, res);
+            updateItem(req, res);
         });
     } else if (req.url.startsWith('/items/') && req.method === 'POST') {
         verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
