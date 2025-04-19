@@ -9,8 +9,8 @@ const manageCollectionsRoutes = (req, res) => {
     } else if (req.url.startsWith('/collections/exhibit/') && req.method === 'GET') {
         const urlParts = req.url.split('/');
         var exhibitID = urlParts[urlParts.length - 1];
-        if(!isNaN(exhibitID)){
-            exhibitID = parseInt(exhibitID);
+        if (exhibitID != "null"){
+            exhibitID = parseInt(urlParts[urlParts.length - 1]);
         }
         getExhibitCollections(req, res, exhibitID);
     } else if (req.url === '/collections' && req.method === 'POST') {
