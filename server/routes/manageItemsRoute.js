@@ -20,6 +20,10 @@ const manageItemsRoutes = (req, res) => {
         verifyToken('Manager', null) (req, res, () => {
             updateItem(req, res);
         });
+    }  else if (req.url.startsWith('/items/tickets/restock') && req.method === 'PUT') {
+        verifyToken('Manager', null) (req, res, () => {
+            updateItemQuantity(req, res);
+        });
     } else if (req.url.startsWith('/items/') && req.method === 'POST') {
         verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
             createItem(req, res);
@@ -28,7 +32,6 @@ const manageItemsRoutes = (req, res) => {
         verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
             deleteItem(req, res);
         });
-    // both tickets & items can have the bottom 2 done to it
     } else if (req.url.startsWith('/items/restock') && req.method === 'PUT'){
         verifyToken('Employee', 'GiftShopTeam') (req, res, () => {
             updateItemQuantity(req, res);
