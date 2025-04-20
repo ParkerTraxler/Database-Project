@@ -23,7 +23,7 @@ const EditReview = () => {
         const fetchReview = async ()=>{
             try{
                 console.log("GET Sent")
-                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reviews/${email}`)
+                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reviews/${email}`)
                 console.log(res.data)
                 console.log("GET Completed")
                 setReview(res.data)
@@ -52,7 +52,7 @@ const EditReview = () => {
     const handleSubmit = async e => {
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/reviews/`, {
+            const res = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reviews/`, {
                 email: email,
                 starcount: review.StarCount, 
                 reviewdesc: review.ReviewDesc
