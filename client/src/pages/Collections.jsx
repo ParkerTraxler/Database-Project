@@ -13,7 +13,7 @@ const Collections = () => {
     useEffect(()=>{
         const fetchAllCollections = async ()=>{
             try{
-                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections`)
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/collections`)
                 console.log(res.data)
                 setCollections(res.data)
             }catch(err){
@@ -39,7 +39,9 @@ const Collections = () => {
                                     <img src={collection.CollectPic} alt="" />
                                 </Link>
                             }
-                            <h2>{collection.Title}</h2>
+                            <Link to={`/collection-art/${collection.Title}`}>
+                                <h2>{collection.Title}</h2>
+                            </Link>
                             <p>{collection.CollectDesc}</p>
                             
                         </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../utils/AuthContext'
 import axios from 'axios'
@@ -13,12 +13,27 @@ const ManagerAddCollection = () => {
     const token = user.token
     console.log(token)
 
+    const [exhibits, setExhibits] = useState([])
     const [collection, setCollection] = useState({
         Title:"",
         CollectDesc:"",
         CollectPic:"",
         ExhibitID: null,
     })
+
+    useEffect(()=>{
+        const fetchAllExhibits = async ()=>{
+            try{
+                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits`)
+                console.log(res.data)
+                setExhibits(res.data);
+                
+            }catch(err){
+                window.alert(err.response.data.error);
+            }
+        }
+        fetchAllExhibits()
+    },[])
 
     const handleChange = (e) =>{ // given target to given value
         
@@ -65,7 +80,14 @@ const ManagerAddCollection = () => {
                     <input className="manager-add-collection-input" type="text" placeholder="title" onChange={handleChange} name="Title"/>
                     <input className="manager-add-collection-input" type="text" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
                     <input className="manager-add-collection-input" type="text" placeholder="image" onChange={handleChange} name="CollectPic"/>
-                    <input className="manager-add-collection-input" type="number" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
+                    <select className="manager-add-collection-input" value={collection.ExhibitID || ""} onChange={handleChange} name="ExhibitID">
+                        <option value="">--- Select an Exhibit ---</option>
+                        {exhibits.map((exhibit) => (
+                            <option key={exhibit.ExhibitID} value={exhibit.ExhibitID}>
+                                {exhibit.ExhibitName}
+                            </option>
+                        ))}
+                    </select>
                     <button className="manager-add-collection-formButton" onClick={handleClick} >Create</button>
                 </div>
             </div>

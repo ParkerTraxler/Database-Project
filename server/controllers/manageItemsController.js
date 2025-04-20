@@ -223,8 +223,8 @@ const getItem = async(req, res, itemID) =>{
         }
 
         // Return success message
-        res.writeHead(204, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify(JSON.stringify(result[0])));
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(result[0]));
     } catch (err) {
         console.error('Error updating item quantity.');
         res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -255,7 +255,7 @@ const getTicket =  async(req, res, itemID) => {
             return res.end(JSON.stringify({ error: 'No ticket ID supplied to search for' }));
         }
 
-        if(!([1, 2, 3, 4].includes(itemid))){
+        if(!([1, 2, 3, 4].includes(itemID))){
             res.writeHead(400, { 'Content-Type':  'application/json' });
             return res.end(JSON.stringify({ error: 'Item being asked for is not a ticket' }));
         }
@@ -269,10 +269,10 @@ const getTicket =  async(req, res, itemID) => {
         }
 
         // Return success message
-        res.writeHead(204, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify(JSON.stringify(result[0])));
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(result[0]));
     } catch (err) {
-        console.error('Error updating item quantity.');
+        console.error('Error updating item quantity: ', err);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ error: 'Error updating item quantity.' }));
     }

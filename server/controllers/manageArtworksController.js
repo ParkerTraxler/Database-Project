@@ -18,6 +18,26 @@ const getAllArtworks = async (req, res) => {
     }
 }
 
+const getSpecificArtwork = async(req, res, id) =>{
+    try{
+        if(!id){
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            return res.end(JSON.stringify({error: 'No id provided for artwork to retrieve'}))
+        }
+
+        const [rows] = await db.query(queries.get_specific_art, [id]);
+
+        // can return 0 artwork, just as a worry
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows[0]));
+        
+    } catch(err){
+        console.error('Error fetching artwork: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Failed to retrieve specific artwork.' }));
+    }
+}
+
 const getCollectionArtwork = async (req, res, title) => {
     try {
         if(!title){
@@ -218,4 +238,4 @@ const updateArtwork = (req, res) => {
     });
 }
 
-module.exports = { getAllArtworks, getCollectionArtwork, createArtwork, deleteArtwork, updateArtwork };
+module.exports = { getAllArtworks, getSpecificArtwork, getCollectionArtwork, createArtwork, deleteArtwork, updateArtwork };

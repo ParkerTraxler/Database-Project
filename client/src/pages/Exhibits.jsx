@@ -15,7 +15,7 @@ const Exhibits = () => {
     useEffect(()=>{
         const fetchAllExhibits = async ()=>{
             try{
-                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/exhibits`)
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/exhibits`)
                 console.log(res.data)
                 const regularExhibits = res.data.filter(exhibit => exhibit.IsSpecial !== 1);
                 const specialExhibits = res.data.filter(exhibit => exhibit.IsSpecial === 1);
@@ -45,7 +45,9 @@ const Exhibits = () => {
                                     <img src={exhibit.ExhibitPic} alt="" />
                                 </Link>
                         }
-                        <h2>{exhibit.ExhibitName}</h2>
+                        <Link to={`/exhibit-collections/${exhibit.ExhibitID}`}>
+                            <h2>{exhibit.ExhibitName}</h2>
+                        </Link>
                         <p>{exhibit.ExhibitDesc}</p>
                         
                     </div>
@@ -57,11 +59,16 @@ const Exhibits = () => {
                 {specialExhibits.map(specialExhibit=>(
                     <div className="exhibitC" key={specialExhibit.ExhibitID}>
                         {specialExhibit.ExhibitPic && 
-                                <Link to={`/exhibit-collections/${specialExhibit.ExhibitID}`}>
-                                    <img src={specialExhibit.ExhibitPic} alt="" />
-                                </Link>
+                            <Link to={`/exhibit-collections/${specialExhibit.ExhibitID}`}>
+                                <img src={specialExhibit.ExhibitPic} alt="" />
+                            </Link>
                         }
-                        <h2>{specialExhibit.ExhibitName}</h2>
+                        <Link to={`/exhibit-collections/${specialExhibit.ExhibitID}`}>
+                            <h2>{specialExhibit.ExhibitName}</h2>
+                        </Link>
+                        <div>Start Date: {specialExhibit.StartDate ? new Date(specialExhibit.StartDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</div>
+                        <div>End Date: {specialExhibit.EndDate ? new Date(specialExhibit.EndDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</div>
+                        <div>Fee: {specialExhibit.Fee ? ("$" + specialExhibit.Fee)  : "None"}</div>
                         <p>{specialExhibit.ExhibitDesc}</p>
                         
                     </div>

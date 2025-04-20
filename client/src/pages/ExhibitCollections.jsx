@@ -16,7 +16,7 @@ const ExhibitCollections = () => {
         const fetchCollections = async ()=>{
             console.log("ID: " + ExhibitID)
             try{
-                const res = await axios.get(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/collections/exhibit/${ExhibitID}`);
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/collections/exhibit/${ExhibitID}`);
                 console.log(res.data)
                 setCollections(res.data)
                 console.log(collections.data)
@@ -39,7 +39,9 @@ const ExhibitCollections = () => {
                                 <img src={collection.CollectPic} alt="" />
                             </Link>
                         }
-                        <h2>{collection.Title}</h2>
+                        <Link to={`/collection-art/${collection.Title}`}>
+                            <h2>{collection.Title}</h2>
+                        </Link>
                         <p>{collection.CollectDesc}</p>
                     </div>
                 ))}

@@ -17,6 +17,30 @@ const getAllCollections = async (req, res) => {
     }
 }
 
+const getSpecificCollection = async(req, res, title) => {
+    try {
+        if(!title){
+            res.writeHead(400, {'Content-Type': 'application/json'});
+            return res.end(JSON.stringify({ error: 'No title supplied to search for'}));
+        }
+
+        console.log(title);
+
+        // SQL QUERY - Retrieve collection from database
+        const [rows] = await db.query(queries.get_specific_collection, [title]);
+
+        console.log(rows);
+
+        // may return empty if exhibit hsa no collections in it
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows[0]));
+    } catch (err) {
+        console.error('Error fetching collection: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Failed to retrieve specific collection.' }));
+    }
+}
+
 const getExhibitCollections = async (req, res, exhibitID) => {
     try {
         if(!exhibitID){
@@ -186,4 +210,4 @@ const updateCollection = (req, res) => {
     });
 }
 
-module.exports = { getAllCollections, getExhibitCollections, createCollection, deleteCollection, updateCollection };
+module.exports = { getAllCollections, getSpecificCollection, getExhibitCollections, createCollection, deleteCollection, updateCollection };

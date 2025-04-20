@@ -68,7 +68,9 @@ const ManageCollections = () => {
                                 <img src={collection.CollectPic} alt="" />
                             </Link>
                         }
-                        <h2>{collection.Title}</h2>
+                        <Link to={`/manage-collection-art/${collection.Title}`}>
+                            <h2>{collection.Title}</h2>
+                        </Link>
                         <p>{collection.CollectDesc}</p>
                         <button className="delete" onClick={()=>handleDelete(collection.Title)}>Delete</button>
                         <button className="update"><Link to={`/edit-collection/${collection.Title}`}>Update</Link></button>

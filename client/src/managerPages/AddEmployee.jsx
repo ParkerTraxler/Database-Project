@@ -61,7 +61,7 @@ const AddEmployee = () => {
             <div>
                 <div className="add-employee-form">
                     <h1 className="add-employee-header">Add Employee</h1>
-                    <input type="text" placeholder="email" onChange={handleChange} name="email"/>
+                    <input type="text" placeholder="employee email" onChange={handleChange} name="email"/>
                     {/*<input type="text" placeholder="first name" onChange={handleChange} name="firstName"/>
                     <input type="text" placeholder="last name" onChange={handleChange} name="lastName"/>*/}
                     <div>

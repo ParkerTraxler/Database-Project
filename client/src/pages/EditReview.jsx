@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../utils/AuthContext";
@@ -8,9 +8,8 @@ import "./EditReview.css";
 
 const EditReview = () => {
     const [review, setReview] = useState({
-        email:"",
-        starcount:"", 
-        reviewdesc:""
+        StarCount: "",
+        ReviewDesc: ""
     });
     const { user } = useAuth();
     const token = user.token;
@@ -20,8 +19,24 @@ const EditReview = () => {
 
     const [hover, setHover] = useState(0);
 
+    useEffect(()=>{
+        const fetchReview = async ()=>{
+            try{
+                console.log("GET Sent")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reviews/${email}`)
+                console.log(res.data)
+                console.log("GET Completed")
+                setReview(res.data)
+                console.log(review)
+            }catch(err){
+                window.alert(err.response.data.error);
+            }
+        }
+        fetchReview()
+    },[])
+
     const handleClick = (index, isHalf) => {
-        setReview({ ...review, starcount: isHalf ? index + 0.5 : index + 1 });
+        setReview({ ...review, StarCount: isHalf ? index + 0.5 : index + 1 });
     };
 
     const handleHover = (index, isHalf) => {
@@ -37,10 +52,10 @@ const EditReview = () => {
     const handleSubmit = async e => {
         e.preventDefault()  //prevents page refresh on button click
         try{
-            const res = await axios.put(`https://mfa-backend-chh3dph8gjbtd2h5.canadacentral-01.azurewebsites.net/reviews/`, {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/reviews/`, {
                 email: email,
-                starcount: review.starcount, 
-                reviewdesc: review.reviewdesc
+                starcount: review.StarCount, 
+                reviewdesc: review.ReviewDesc
             },
             {
                 headers: {
@@ -64,8 +79,8 @@ const EditReview = () => {
                     {/* Star Rating Section */}
                     <div className="starReview" onMouseLeave={handleMouseLeave}>
                         {[...Array(5)].map((_, index) => {
-                            const fullStar = (hover || review.starcount) > index + 0.5;
-                            const halfStar = (hover || review.starcount) > index && (hover || review.starcount) < index + 1;
+                            const fullStar = (hover || review.StarCount) > index + 0.5;
+                            const halfStar = (hover || review.StarCount) > index && (hover || review.StarCount) < index + 1;
 
                             return (
                                 <span key={index} style={{ cursor: "pointer", position: "relative" }}>
@@ -114,7 +129,8 @@ const EditReview = () => {
                         placeholder="What should other customers know?" 
                         maxLength="650"
                         name="review"
-                        onChange={(e) => setReview({ ...review, reviewdesc: e.target.value })}
+                        value={review.ReviewDesc}
+                        onChange={(e) => setReview({ ...review, ReviewDesc: e.target.value })}
                     ></textarea>
                 </div>
                 <button className="submitWriteReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
