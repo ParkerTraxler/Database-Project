@@ -39,7 +39,9 @@ const Collections = () => {
                                     <img src={collection.CollectPic} alt="" />
                                 </Link>
                             }
-                            <h2>{collection.Title}</h2>
+                            <Link to={`/collection-art/${collection.Title}`}>
+                                <h2>{collection.Title}</h2>
+                            </Link>
                             <p>{collection.CollectDesc}</p>
                             
                         </div>

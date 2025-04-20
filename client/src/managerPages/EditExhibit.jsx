@@ -1,6 +1,6 @@
 import React from 'react'
 import ManagerNav from './ManagerNav'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
@@ -13,9 +13,9 @@ const EditExhibit = () => {
     const { user } = useAuth()
     const token = user.token
     const [exhibit, setExhibit] = useState({
-        exhibitname:"", 
-        exhibitdesc:"", 
-        exhibitpic:"",
+        ExhibitName:"", 
+        ExhibitDesc:"", 
+        ExhibitPic:"",
     })
     
     const navigate = useNavigate()
@@ -29,14 +29,33 @@ const EditExhibit = () => {
     const exhibitID = location.pathname.split("/")[2]
     console.log(exhibitID)
 
+    useEffect(()=>{
+        const fetchExhibit = async ()=>{
+            try{
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/exhibits/${exhibitID}`,
+                    {
+                        headers: {
+                            'authorization': `Bearer ${token}`
+                        },
+                    }
+                )
+                console.log(res.data)
+                setExhibit(res.data);
+            }catch(err){
+                console.log(err)
+            }
+        }
+        fetchExhibit()
+    },[])
+
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         try{
             const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/exhibits/`, {
                 exhibitid: exhibitID,
-                exhibitname: exhibit.exhibitname, 
-                exhibitdesc: exhibit.exhibitdesc, 
-                exhibitpic: exhibit.exhibitpic,
+                exhibitname: exhibit.ExhibitName, 
+                exhibitdesc: exhibit.ExhibitDesc, 
+                exhibitpic: exhibit.ExhibitPic,
             },
             {
                 headers: {
@@ -62,11 +81,11 @@ const EditExhibit = () => {
             <div>
             <div className="edit-exhibit-form">
                 <h1>Edit Exhibit</h1>
-                <input className="edit-exhibit-input" type="text" placeholder="name" onChange={handleChange} name="exhibitname"/>
-                <input className="edit-exhibit-input" type="text" placeholder="desc" onChange={handleChange} name="exhibitdesc"/>
-                <input className="edit-exhibit-input" type="text" placeholder="image" onChange={handleChange} name="exhibitpic"/> 
+                <input className="edit-exhibit-input" type="text" value={exhibit.ExhibitName} placeholder="name" onChange={handleChange} name="ExhibitName"/>
+                <input className="edit-exhibit-input" type="text" value={exhibit.ExhibitDesc} placeholder="desc" onChange={handleChange} name="ExhibitDesc"/>
+                <input className="edit-exhibit-input" type="text" value={exhibit.ExhibitPic} placeholder="image" onChange={handleChange} name="ExhibitPic"/> 
                 <button className="edit-exhibit-formButton" onClick={handleClick} >Update</button>
-                    
+                
             </div>
             </div>
         </div>  

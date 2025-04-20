@@ -2,6 +2,21 @@ const http = require('http');
 const queries = require('../querylist.js')
 const db = require('../db/db');
 
+const getAllManagers = async(req, res) =>{
+    try{
+        // get managers
+        const [rows] = await db.query(queries.get_all_managers);
+
+        // Return collections to the frontend
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify(rows));
+    } catch (err) {
+        console.error('Error fetching all managers: ', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({ error: 'Failed to retrieve managers.' }));
+    }
+}
+
 const getManagerProfile = async (req, res, email) => {
     try {
         if(!email){
@@ -83,4 +98,4 @@ const updateManagerProfile = (req, res) => {
     });
 }
 
-module.exports = { getManagerProfile, updateManagerProfile};
+module.exports = { getAllManagers, getManagerProfile, updateManagerProfile};

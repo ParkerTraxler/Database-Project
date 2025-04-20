@@ -1,6 +1,6 @@
 import React from 'react'
 import EmployeeNav from './EmployeeNav'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
@@ -12,6 +12,7 @@ const ManagerEditCollection = () => {
     console.log("ManagerEditCollection")
     const { user } = useAuth()
     const token = user.token
+    const [exhibits, setExhibits] = useState([])
     const [collection, setCollection] = useState({
 
         CollectDesc:"",
@@ -25,6 +26,41 @@ const ManagerEditCollection = () => {
     const urlTitle = location.pathname.split("/")[2]
     const collectionTitle = urlTitle.replaceAll("%20", " ");
     console.log(collectionTitle)
+
+    useEffect(()=>{
+        const fetchCollection = async ()=>{
+            try{
+                console.log("GET Sent")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/collections/${collectionTitle}`,
+                    {
+                        headers: {
+                            'authorization': `Bearer ${token}`
+                        },
+                    }
+                )
+                console.log("GET Completed")
+                console.log(res.data)
+                setCollection(res.data);
+            }catch(err){
+                console.log(err)
+            }
+        }
+        fetchCollection()
+    },[])
+
+    useEffect(()=>{
+        const fetchAllExhibits = async ()=>{
+            try{
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/exhibits`)
+                console.log(res.data)
+                setExhibits(res.data);
+                
+            }catch(err){
+                window.alert(err.response.data.error);
+            }
+        }
+        fetchAllExhibits()
+    },[])
     
 
     const handleChange = (e) =>{ // given target to given value
@@ -64,9 +100,16 @@ const ManagerEditCollection = () => {
             <div>
                 <div className="manager-edit-collection-form">
                     <h1>Edit Collection</h1>
-                    <input type="text" className="manager-edit-collection-input" placeholder="desc" onChange={handleChange} name="CollectDesc"/>
-                    <input type="text"  className="manager-edit-collection-input" placeholder="image" onChange={handleChange} name="CollectPic"/>
-                    <input type="number"  className="manager-edit-collection-input" placeholder="exhibit id" onChange={handleChange} name="ExhibitID"/>
+                    <input type="text" className="manager-edit-collection-input"  value={collection.CollectDesc} placeholder="desc" onChange={handleChange} name="CollectDesc"/>
+                    <input type="text"  className="manager-edit-collection-input" value={collection.CollectPic} placeholder="image" onChange={handleChange} name="CollectPic"/>
+                    <select className="manager-edit-collection-input" value={collection.ExhibitID || ""} onChange={handleChange} name="ExhibitID">
+                        <option value="">--- Select an Exhibit ---</option>
+                        {exhibits.map((exhibit) => (
+                            <option key={exhibit.ExhibitID} value={exhibit.ExhibitID}>
+                                {exhibit.ExhibitName}
+                            </option>
+                        ))}
+                    </select>
                     <button className="manager-edit-collection-formButton" onClick={handleClick} >Update</button>
                 </div>
             </div>

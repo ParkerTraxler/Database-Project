@@ -298,6 +298,8 @@ LEFT JOIN
 ON
 	ah.ActionType = "Created" AND ah.EffectedTable = "Exhibits" AND  ex.ExhibitID = CAST(ah.EffectedEntry AS SIGNED)`;
 
+const get_all_managers = "SELECT ManagerID, concat(FirstName, ' ', LastName) AS Name FROM managers";
+
 // get manager account info:
 const get_manager_profile = `SELECT 
 managers.FirstName, 
@@ -402,6 +404,7 @@ module.exports = {
     customer_report_info,
     change_history_report,
     weekly_exhibit_cost,
+    get_all_managers,
     get_manager_profile,
     update_manager_profile,
     update_employee_profile

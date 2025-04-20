@@ -62,6 +62,9 @@ const ManageExhibits = () => {
                     <div className="exhibitM" key={specialExhibit.ExhibitID}>
                         {specialExhibit.ExhibitPic && <img src={specialExhibit.ExhibitPic} alt="" />}
                         <h2>{specialExhibit.ExhibitName}</h2>
+                        <div>Start Date: {specialExhibit.StartDate ? new Date(specialExhibit.StartDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</div>
+                        <div>End Date: {specialExhibit.EndDate ? new Date(specialExhibit.EndDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</div>
+                        <div>Fee: {specialExhibit.Fee ? ("$" + specialExhibit.Fee)  : "None"}</div>
                         <p>{specialExhibit.ExhibitDesc}</p>
                         <button className="update"><Link to={`/edit-special-exhibit/${specialExhibit.ExhibitID}`}>Update</Link></button>
                     </div>

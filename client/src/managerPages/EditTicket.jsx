@@ -1,6 +1,6 @@
 import React from 'react'
 import ManagerNav from './ManagerNav'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
@@ -17,8 +17,7 @@ const EditTicket = () => {
     const decoded = jwtDecode(token)
     const email = decoded.email
     const [ticket, setTicket] = useState({
-        price:"",
-        amounttoadd:""
+        ItemPrice:""
     })
     const navigate = useNavigate()
     const location = useLocation()
@@ -31,15 +30,34 @@ const EditTicket = () => {
     const ticketID = location.pathname.split("/")[2]
     console.log("ID: " + ticketID)
 
+    useEffect(()=>{
+        const fetchTicket = async ()=>{
+            try{
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items/tickets/${ticketID}`,
+                    {
+                        headers: {
+                            'authorization': `Bearer ${token}`
+                        },
+                    }
+                )
+                console.log(res.data)
+                setTicket(res.data);
+            }catch(err){
+                console.log(err)
+            }
+        }
+        fetchTicket()
+    },[])
+
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         console.log(ticketID)
-        console.log(ticket.price)
+        console.log(ticket.Price)
         try{
             console.log("PUT Sent")
-            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/tickets/${ticketID}`, {
                 itemid: ticketID,
-                itemprice: ticket.price,
+                itemprice: ticket.ItemPrice,
                 email: email
             },
             {
@@ -49,17 +67,6 @@ const EditTicket = () => {
             })
             console.log("PUT Completed")
             console.log(res.data)
-            console.log("PUT Sent")
-            const res2 = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/restock`, {
-                itemid: ticketID,
-                amounttoadd: ticket.amounttoadd,
-                email: email
-            },
-            {
-                headers: {
-                    'authorization': `Bearer ${token}`
-                },
-            })
             
             
             navigate("/manage-tickets")
@@ -79,8 +86,7 @@ const EditTicket = () => {
             <div>
             <div className="edit-ticket-form">
                 <h1>Edit Ticket</h1>
-                <input className="edit-ticket-input" type="number" step="0.01" min="0" placeholder="price" onChange={handleChange} name="price"/>
-                <input className="edit-ticket-input" type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
+                <input className="edit-ticket-input" type="number" value={ticket.ItemPrice} step="0.01" min="0" placeholder="price" onChange={handleChange} name="ItemPrice"/>
                 <button className="edit-ticket-formButton" onClick={handleClick} >Update</button>
                     
             </div>

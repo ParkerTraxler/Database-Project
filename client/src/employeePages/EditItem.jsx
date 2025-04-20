@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -14,11 +14,12 @@ const EditItem = () => {
     const token = user.token
     console.log(token)
 
+    
     const [item, setItem] = useState({ 
-        itemname:"", 
-        itemprice:"", 
-        amounttoadd:"0",
-        itemimage: ""
+        ItemName:"", 
+        ItemPrice:"", 
+        AmountToAdd:"0",
+        ItemImage: ""
     })
 
     const handleChange = (e) =>{ // given target to given value
@@ -35,6 +36,24 @@ const EditItem = () => {
     console.log(GiftShopName)
     console.log(ItemID)
 
+    useEffect(()=>{
+        const fetchItem = async ()=>{
+            console.log("ID: " + ItemID)
+            try{
+                console.log("GET Sent")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/items/${ItemID}`)
+                console.log(res.data)
+                console.log("GET Completed")
+                setItem(res.data)
+                console.log(item)
+            }catch(err){
+                window.alert(err.response.data.error);
+            }
+        }
+        fetchItem()
+    },[])
+
+
     const handleClick = async e =>{ //do async for api requests
         e.preventDefault()  //prevents page refresh on button click
         console.log("ID: " + ItemID)
@@ -42,9 +61,9 @@ const EditItem = () => {
             console.log("PUT Sent")
             const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/`, {
                 itemid: ItemID, 
-                itemname: item.itemname, 
-                itemprice: item.itemprice, 
-                itemimage: item.itemimage,
+                itemname: item.ItemName, 
+                itemprice: item.ItemPrice, 
+                itemimage: item.ItemImage,
                 giftshopname: GiftShopName
             },
             {
@@ -55,16 +74,19 @@ const EditItem = () => {
             console.log("PUT Completed")
             console.log(res.data)
 
-            console.log("PUT Sent")
-            const res2 = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/restock`, {
-                itemid: ItemID,
-                amounttoadd: item.amounttoadd
-            },
-            {
-                headers: {
-                    'authorization': `Bearer ${token}`
+            if(item.AmountToAdd > 0){
+                console.log("PUT Sent")
+                const res2 = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/items/restock`, {
+                    itemid: ItemID,
+                    amounttoadd: item.AmountToAdd
                 },
-            })
+                {
+                    headers: {
+                        'authorization': `Bearer ${token}`
+                    },
+                })
+            }
+            
             
             
             navigate("/manage-gift-shop")
@@ -84,10 +106,10 @@ const EditItem = () => {
             <div>
                 <div className="edit-item-form">
                     <h1 className="edit-item-header">Edit Item</h1>
-                    <input className="edit-item-input" type="text" placeholder="name" onChange={handleChange} name="itemname"/>
-                    <input className="edit-item-input" type="text" placeholder="image url" onChange={handleChange} name="itemimage"/>
-                    <input className="edit-item-input" type="text" min="0" placeholder="price" onChange={handleChange} name="itemprice"/>
-                    <input className="edit-item-input" type="number" min="0" placeholder="amount to restock" onChange={handleChange} name="amounttoadd"/>
+                    <input className="edit-item-input" type="text" value={item.ItemName} placeholder="name" onChange={handleChange} name="ItemName"/>
+                    <input className="edit-item-input" type="text" value={item.ItemImage} placeholder="image url" onChange={handleChange} name="ItemImage"/>
+                    <input className="edit-item-input" type="number" value={item.ItemPrice} step=".01"  min="0" placeholder="price" onChange={handleChange} name="ItemPrice"/>
+                    <input className="edit-item-input" type="number" min="0" value={item.AmountToAdd} placeholder="amount to restock" onChange={handleChange} name="AmountToAdd"/>
                     <div>
                         <button className="edit-item-formButton" onClick={handleClick} >Save Changes</button>
                     </div>
