@@ -100,7 +100,7 @@ const EmployeeExhibitReport = () => {
                                     <td>{info.Running_Status}</td>
                                     <td>{info.Total_Employees}</td>
                                     <td>${info.Weekly_Exhibit_Cost ? info.Weekly_Exhibit_Cost : 0}</td>
-                                    <td>${info.Weeks_Active}</td>
+                                    <td>{info.Weeks_Active}</td>
                                     <td>{info.Exhibit_ID}</td>
                                 </tr>
                             ))}
