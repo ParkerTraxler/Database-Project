@@ -12,6 +12,8 @@ This file will take you through the steps to running the project locally.
 
 The GitHub is split into branches for each individual user which includes all of our work, and then the PROD branch which is directly linked to our [hosted web application](https://green-ground-0dc4ce31e.6.azurestaticapps.net/). For those interested in running locally, it is important to use the MASTER branch, as that is configured for local deployment. Attempting to run what is on PROD locally will most likely result in errors.
 
+NOTE: The dump comes with tickets and a gift shop already, but if you are starting from a fresh database then the tickets expected to be the first 4 IDs in the "items" table (1, 2, 3, 4), and a Gift Shop will need to be made as well. Both of these are done via the DBMS.
+
 ## Installation & Local Running
 Begin by cloning the project from the repository:
 
