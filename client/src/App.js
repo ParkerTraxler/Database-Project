@@ -22,7 +22,7 @@ import ManageExhibits from './managerPages/ManageExhibits.jsx';
 import ManagerAccountDetails from './managerPages/ManagerAccountDetails.jsx';
 import EditAccountEmployee from './employeePages/EditAccountEmployee'
 import ViewAccountEmployee from './employeePages/AccountDetailsEmployee'
-import EmployeeManageExhibits from './employeePages/ManageExhibits'
+
 import ManageCollections from './employeePages/ManageCollections.jsx';
 import ManagerAddCollection from './employeePages/ManagerAddCollection.jsx'
 import ManagerEditCollection from './employeePages/ManagerEditCollection.jsx';
@@ -107,7 +107,7 @@ function App() {
 			      <Route path="/employee-dashboard" element={<EmployeeDashboard/>}/> 
             <Route path="/edit-employee-account" element={<EditAccountEmployee/>}/>
             <Route path="/employee-account-details" element={<ViewAccountEmployee/>}/>
-            <Route path="/employee-exhibits" element={<EmployeeManageExhibits/>}/>
+            
             <Route path="/manage-collections" element={<ManageCollections/>}/>
             <Route path="/add-collection" element={<ManagerAddCollection/>}/>
             <Route path="/edit-collection/:Title" element={<ManagerEditCollection/>}/>
