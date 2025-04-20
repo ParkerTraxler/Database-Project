@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-function verifyToken(requiredRole) {
+function verifyToken(requiredRole, requiredPosition) {
 
     return (req, res, next) => {
 
@@ -32,6 +32,11 @@ function verifyToken(requiredRole) {
             if (requiredRole && req.user.role !== requiredRole) {
                 res.writeHead(403, { 'Content-Type': 'application/json' });
                 return res.end(JSON.stringify({ error: 'Forbidden: Insufficient privileges' }));
+            }
+
+            if(requiredPosition != null && req.user.position !== requiredPosition){
+                res.writeHead(403, { 'Content-Type': 'application/json' });
+                return res.end(JSON.stringify({ error: 'Forbidden: Insufficient privileges' }));  
             }
 
             // Proceed if authorized

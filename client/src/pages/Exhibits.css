@@ -1,0 +1,57 @@
+.exhibitsBanner {
+    background-image: url('../assets/exhibitsBanner.jpg');
+    background-size: cover;
+    width: 100%;
+    background-position: center;
+    height: 80vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.exhibitsBanner h1{
+    font-weight: 300;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.exhibitsC, .specialExhibitsC {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.exhibitC {
+    background-color: rgb(245, 245, 245);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.exhibitC img {
+    width: 400px;
+    height: 290px;
+    border-radius: 5px;
+}
+
+@media (max-width: 1050px) {
+    .exhibitsC, .specialExhibitsC {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 680px) {
+    .exhibitsC, .specialExhibitsC {
+        grid-template-columns: 1fr;
+    }
+}

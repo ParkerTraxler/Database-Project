@@ -1,0 +1,85 @@
+.manage-collections-art-container{
+    background-image: url('../assets/abstract-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.manageCollectionArtSectionEm {
+    width: 100%;
+    max-width: 920px;
+    margin: 2rem auto;
+    background-color: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.artworkEm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.artEm {
+    background-color: rgb(245, 245, 245);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 420px;
+}
+
+.artEm img {
+    width: 400px;
+    height: 290px;
+    border-radius: 5px;
+    background-color: black;/*replace this with image*/
+}
+
+.delete{
+    border: none;
+    padding: 3px 6px;
+    background-color: white;
+    cursor: pointer;
+    border: 1px solid rgb(245, 191, 191);
+    color: red;
+}
+
+.update{
+    border: none;
+    padding: 3px 6px;
+    background-color: white;
+    cursor: pointer;
+    border: 1px solid rgb(245, 191, 191);
+    color: blueviolet;
+}
+
+.manage-collections-art-add-button{
+    background-color: #bbbbbb;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.manage-collections-art-add-button:hover{
+    background-color: #afafaf;
+}
+
+@media (max-width: 1000px) {
+    .artworkEm {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

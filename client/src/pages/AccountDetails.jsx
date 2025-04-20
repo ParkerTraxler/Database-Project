@@ -1,59 +1,125 @@
-import React from 'react'
-import { useState } from 'react'
-import axios from 'axios' //api calls
-import './Account.css'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // API calls
+import './Account.css';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../utils/AuthContext';
+import { jwtDecode } from "jwt-decode";
 
 const AccountDetails = () => {
-    console.log("AccountDetails")
-    const [loginInfo, setLoginInfo] = useState({
-        email: "",
-        password: "",
-    })
+    console.log("AccountDetails");
+    const { user } = useAuth();
+    const token = user.token;
+    const decoded = jwtDecode(token);
+    const email = decoded.email;
 
-    const [details, setDetails] = useState({
-        membership: false,
-        firstName: "",
-        lastName: "",
-        birthDate: null,
-        gender: null,
-        address: null,
-    })
+    const [info, setInfo] = useState({
+        FirstName: null,
+        LastName: "",
+        Membership: "",
+        BirthDate: "",
+        Gender: "",
+    });
 
-    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(true); // Track loading status
 
-    const handleClick = e => {
-        try{
+    useEffect(() => {
+        const fetchAccount = async () => {
+            console.log(encodeURIComponent(email));
+            axios.get(`${process.env.REACT_APP_API_ENDPOINT}/profile/${encodeURIComponent(email)}`, 
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+                .then((res) => {
+                    console.log(res.data);
+                    setInfo(res.data);
+                    setIsLoading(false); // Set loading to false when done
+                })
+                .catch((err) => {
+                    window.alert(err.response.data.error);
+                    setIsLoading(false); // Even on error, stop loading
+                });
+        };
+        fetchAccount();
+    }, [email]);
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        try {
             navigate("/account-details/edit");
+        } catch (err) {
+            window.alert(err.response.data.error);
         }
-        catch(err){
-            console.log(err);
+    };
+    const subscribeNow = async e => {
+        e.preventDefault()  //prevents page refresh on button click
+        try{
+            console.log("PUT Sent")
+            const res2 = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/profile/membership`, {
+                email: email
+            },
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+            console.log(res2)
+            console.log("PUT Completed")
+            window.location.reload()
+        } catch (err){
+            window.alert(err.response.data.error);
         }
-
+        
     }
 
-    return(
-        <div className="AccountPage">
-        <div className="AccountDetails">
+    if (isLoading) {
+        return <div>Loading account details...</div>; // Display while loading
+    }
+
+    return (
+        <div className="AccountPageC">
+            <div className="AccountDetailsC">
+                <h1>Account Details</h1>
+                {!info.FirstName && (
+                    <div>Loading Info...</div>
+                )}
+                <div className="detailsBoxC">
+                    <div className="detailC"><strong>First Name:</strong> {info.FirstName}</div>
+                    <div className="detailC"><strong>Last Name:</strong> {info.LastName}</div>
+                    <div className="detailC"><strong>Date of Birth:</strong> {info.BirthDate ? new Date(info.BirthDate).toLocaleDateString('en-US', { timeZone: 'UTC' }) : "Not provided"}</div>
+                    <div className="detailC"><strong>Gender:</strong> {info.Gender || "Not provided"}</div>
+                    <div className="detailC"><strong>Membership Status:</strong> {info.isMember ? "Member" : "Not a Member"}</div>
+                    {info.isMember == "1" && (
+                        <div className="detailC"><strong>Renewing Membership:</strong> {info.isRenewing ? "Yes" : "No"}</div>
+                    )}
+                    {info.isMember == "1" && (
+                        <div className="detailC"><strong>Years as a Member:</strong> {info.YearsOfMembership}</div>
+                    )}
+                    {info.isMember == "1" && (
+                        <div className="detailC"><strong>Membership End/Renewal Date:</strong> {new Date(info.DateOfExpiration).toLocaleDateString() || "Not provided"}</div>
+                    )}
+                    <div className="detailC"><strong>Email:</strong> {email}</div>
+                    <div className="detailC"><strong>Password:</strong> ********</div>
+                </div>
+                <div>
+                    <button className="saveButtonC" onClick={handleClick}>Edit Account</button>
+                </div>
+                
+                <div className='accountMembershipDetailsContainer'>
+                    {info.isMember == "0" &&(
+                        <div className='accountMembershipDetailsArea'>
+                            <p>Not a Member?</p>
+                            <button className="membershipSubscribeButton" onClick={subscribeNow}>Subscribe Now</button>
+                        </div>
+                    )}
+                </div>
+
+            </div>
             
-            <h1>Account Details</h1>
-
-            <div className="detailsBox">
-                <div className="detail"><strong>First Name:</strong> {details.firstName}</div>
-                <div className="detail"><strong>Last Name:</strong> {details.lastName}</div>
-                <div className="detail"><strong>Address:</strong> {details.address}</div>
-                <div className="detail"><strong>Date of Birth:</strong> {details.birthDate}</div>
-                <div className="detail"><strong>Gender:</strong> {details.gender}</div>
-                <div className="detail"><strong>Email:</strong> {details.email}</div>
-                <div className="detail"><strong>Password:</strong> ********</div>
-            </div>
-            <div>
-                <button className="saveButton" onClick={handleClick}>Edit Account</button>
-            </div>
         </div>
-        </div>
-    )
-}
+    );
+};
 
-export default AccountDetails
+export default AccountDetails;

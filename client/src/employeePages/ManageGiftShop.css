@@ -1,0 +1,64 @@
+.manage-gift-shop-container{
+    background-image: url('../assets/abstract-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.giftshopSectionEm {
+    width: 100%;
+    max-width: 900px;
+    margin: 2rem auto;
+    background-color: #ffffff;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.giftshopEm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.itemEm {
+    background-color: rgb(245, 245, 245);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.itemEm img {
+    width: 400px;
+    height: 290px;
+    border-radius: 5px;
+}
+
+.manage-gift-shop-button{
+    background-color: rgb(203, 207, 206);
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.manage-gift-shop-button:hover{
+    background-color: rgb(147, 147, 147);
+}
+@media (max-width: 1000px) {
+    .giftshopEm {
+        grid-template-columns: 1fr;
+    }
+}

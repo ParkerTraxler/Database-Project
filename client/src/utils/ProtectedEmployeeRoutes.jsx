@@ -31,7 +31,7 @@ const ProtectedEmployeeRoutes = () => {
         return <Navigate to="/"/>
     }
 
-    return role === 'employee' ? <Outlet /> : <Navigate to="/" />;
+    return role === 'Employee' ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default ProtectedEmployeeRoutes;

@@ -1,0 +1,84 @@
+.manage-exhibits-container {
+    background-image: url('../assets/abstract-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.manage-exhibits-section{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.exhibitsM, .specialExhibitsM {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.exhibitM {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.exhibitM img {
+    width: 400px;
+    height: 290px;
+    border-radius: 5px;
+}
+
+.create-exhibit-button,
+.add-special-exhibit-button {
+    display: block;
+    margin: 20px auto 0;
+    background-color: rgb(90, 131, 118);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.create-exhibit-button:hover,
+.add-special-exhibit-button:hover {
+    background-color: rgb(68, 89, 82);
+}
+
+.create-exhibit-button a,
+.add-special-exhibit-button a {
+    text-decoration: none;
+    color: inherit;
+}
+
+@media (max-width: 1000px) {
+    .exhibitsM, .specialExhibitsM {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}

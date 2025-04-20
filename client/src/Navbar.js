@@ -34,6 +34,11 @@ const Navbar = () => {
                     <li>
                         <a href="/reviews">Reviews</a>
                     </li>
+                    {role == 'Customer' && (<>
+                        <li>
+                            <a href="/make-donation">Donate</a>
+                        </li>
+                    </>)}
                 </ul>
             </div>
             <div className="navbar-right">
@@ -41,15 +46,15 @@ const Navbar = () => {
                     <a href="/log-in">Log In</a>
                     <a href="/sign-up">Sign Up</a>
                 </>)}
-                {role == 'customer' && (<>
+                {role == 'Customer' && (<>
                     <a href="/" onClick={logout}>Log Out</a>
                     <a href="/account-details">Account</a>
                 </>)}
-                {role == 'employee' && (<>
+                {role == 'Employee' && (<>
                     <a href="/" onClick={logout}>Log Out</a>
-                    <a href="/employee-account-details">Dashboard</a>
+                    <a href="/employee-dashboard">Dashboard</a>
                 </>)}
-                {role == 'manager' && (<>
+                {role == 'Manager' && (<>
                     <a href="/" onClick={logout}>Log Out</a>
                     <a href="/manager-dashboard">Dashboard</a>
                 </>)}

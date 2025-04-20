@@ -1,0 +1,89 @@
+.manage-events-container{
+    background-image: url('../assets/abstract-background-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.manageEventsSectionM {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.eventsM {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.eventM {
+    background-color: rgb(245, 245, 245);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 420px;
+}
+
+.eventM img {
+    width: 400px;
+    height: 290px;
+    border-radius: 5px;
+}
+
+
+.manage-events-delete{
+    background-color: #ef4444;
+    color: #ffffff;
+    padding: 0.5rem .5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.manage-events-delete:hover{
+    background-color: #dc2626;
+}
+
+.manage-events-create-button{
+    display: block;
+    margin: 20px auto 0;
+    background-color: rgb(203, 207, 206);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.manage-events-create-button:hover{
+    background-color: rgb(147, 147, 147);
+}
+
+@media (max-width: 1000px) {
+    .eventsM {
+        grid-template-columns: 1fr;
+    }
+}

@@ -4,7 +4,7 @@
   "description": "Backend for museum application",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon --env-file=.env",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -16,7 +16,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.13.0",
+    "multer": "^1.4.5-lts.2",
+    "mysql2": "^3.14.0",
     "nodemon": "^3.1.9"
   }
 }

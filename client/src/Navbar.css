@@ -1,44 +1,81 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #333;
-    color: #fff;
-    padding: 1rem;
-    border-bottom: 6px  #5e5858;
-    border-bottom-style:inset;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #434343, #262626);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
+
+
+.navbar.scrolled {
+  background: linear-gradient(135deg, rgba(67,67,67,0.9), rgba(38,38,38,0.9));
+  transform: translateY(-5px);
+}
+
 
 .nav-links {
-    display: flex; /* Arrange items in a row */
-    gap: 15px; /* Adds space between links */
-    list-style: none; /* Remove default bullets */
-    padding: 0; /* Remove default padding */
-  }
-  
-  .nav-links li {
-    margin: 0;
-  }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-  }
-  
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+
+.nav-links li a,
+.navbar-right a,
+.navbar-left a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+
+.nav-links li a::after,
+.navbar-right a::after,
+.navbar-left a::after {
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background-color: #f0c040;
+  transition: width 0.3s ease-in-out;
+}
+
+
+.nav-links li a:hover::after,
+.navbar-right a:hover::after,
+.navbar-left a:hover::after {
+  width: 100%;
+}
+
+
+.nav-links li a:hover,
+.navbar-right a:hover,
+.navbar-left a:hover {
+  color: #f0c040;
+  transform: translateY(-3px);
+}
+
+
 .navbar-right {
-    display: flex;
-    align-items: center;
-    gap: 10px
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
-.navbar-right a{
-    text-decoration: none;
-    color: white;
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.navbar-left a{
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-}

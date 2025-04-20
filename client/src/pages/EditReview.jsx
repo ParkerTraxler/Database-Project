@@ -1,18 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../utils/AuthContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./EditReview.css";
 
 const EditReview = () => {
     const [review, setReview] = useState({
-        rating: 0,
-        description: "",
-        reviewDate: null,
+        StarCount: "",
+        ReviewDesc: ""
     });
+    const { user } = useAuth();
+    const token = user.token;
+    const decoded = jwtDecode(token);
+    const email = decoded.email;
+    
 
     const [hover, setHover] = useState(0);
 
+    useEffect(()=>{
+        const fetchReview = async ()=>{
+            try{
+                console.log("GET Sent")
+                const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/reviews/${email}`)
+                console.log(res.data)
+                console.log("GET Completed")
+                setReview(res.data)
+                console.log(review)
+            }catch(err){
+                window.alert(err.response.data.error);
+            }
+        }
+        fetchReview()
+    },[])
+
     const handleClick = (index, isHalf) => {
-        setReview({ ...review, rating: isHalf ? index + 0.5 : index + 1 });
+        setReview({ ...review, StarCount: isHalf ? index + 0.5 : index + 1 });
     };
 
     const handleHover = (index, isHalf) => {
@@ -23,21 +47,40 @@ const EditReview = () => {
         setHover(0);
     };
 
+    const navigate = useNavigate()
+
+    const handleSubmit = async e => {
+        e.preventDefault()  //prevents page refresh on button click
+        try{
+            const res = await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/reviews/`, {
+                email: email,
+                starcount: review.StarCount, 
+                reviewdesc: review.ReviewDesc
+            },
+            {
+                headers: {
+                    'authorization': `Bearer ${token}`
+                },
+            })
+            navigate("/reviews")
+        }
+        catch(err){
+            window.alert(err.response.data.error);
+        }
+    };
+
+
     return (
-        <div className="container">
-            <div className="Review-box">
+        <div className="editReviewPage">
+            <div className="editReview-box">
                 <h1 className="Header">Edit your Review</h1>
-                <div className="input-group">
-                    <label>First Name:</label>
-                    <input className="names" type="text" placeholder="First Name" maxLength="30" name="firstname" />
-                    <label>Last Name:</label>
-                    <input className="names" type="text" placeholder="Last Name" maxLength="30" name="lastname" />
+                <div className="input-groupWriteReview">
 
                     {/* Star Rating Section */}
                     <div className="starReview" onMouseLeave={handleMouseLeave}>
                         {[...Array(5)].map((_, index) => {
-                            const fullStar = (hover || review.rating) > index + 0.5;
-                            const halfStar = (hover || review.rating) > index && (hover || review.rating) < index + 1;
+                            const fullStar = (hover || review.StarCount) > index + 0.5;
+                            const halfStar = (hover || review.StarCount) > index && (hover || review.StarCount) < index + 1;
 
                             return (
                                 <span key={index} style={{ cursor: "pointer", position: "relative" }}>
@@ -82,14 +125,15 @@ const EditReview = () => {
 
                     {/* Review Input */}
                     <label>Write a Review:</label>
-                    <textarea className="Review"
+                    <textarea className="writingReviewArea"
                         placeholder="What should other customers know?" 
-                        maxLength="300"
+                        maxLength="650"
                         name="review"
-                        onChange={(e) => setReview({ ...review, description: e.target.value })}
+                        value={review.ReviewDesc}
+                        onChange={(e) => setReview({ ...review, ReviewDesc: e.target.value })}
                     ></textarea>
                 </div>
-                <button onClick={handleClick}>Submit Review</button> {/*TEMPORARY*/ }
+                <button className="submitWriteReviewButton" onClick={handleSubmit}>Submit Review</button> {/*TEMPORARY*/ }
             </div>
         </div>
     );
